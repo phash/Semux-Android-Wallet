@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.IntentService
 import android.content.Intent
 import android.os.AsyncTask
-import android.os.IBinder
 import okhttp3.*
 import java.io.IOException
 import java.net.URL
@@ -14,7 +13,7 @@ class APIService : IntentService("SemuxService") {
     companion object {
     val TYP = "type"
     val ADDRESS = "address"
-    val RESULT = "result";
+        val RESULT = "result"
         val JSON = "json"
     val NOTIFICATION = "de.phash.manuel.asw.semux"
 
@@ -43,8 +42,8 @@ class APIService : IntentService("SemuxService") {
 
     fun getBalance(intent: Intent?) {
         val address = intent?.getStringExtra(ADDRESS)
-        var task = JsonTask();
-        var result = task.execute(address);
+        var task = JsonTask()
+        var result = task.execute(address)
 
         val client = OkHttpClient()
         val request = Request.Builder()

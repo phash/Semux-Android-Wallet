@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.gson.Gson
+import com.idescout.sql.SqlScoutServer
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,12 +21,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    val service = APIService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        SqlScoutServer.create(this, packageName)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -36,24 +36,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.getItemId()) {
-            R.id.sendMenu -> sendActivity()
-
+        when (item.itemId) {
+            R.id.balancesMenu -> balanceActivity()
             R.id.receiveMenu -> receiveActivity()
-
             R.id.createAccout -> createActivity()
 
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun balanceActivity() {
+        val intent = Intent(this, BalancesActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun createActivity() {
-        val intent = Intent(this, CreateAccountActivity::class.java);
+        val intent = Intent(this, CreateAccountActivity::class.java)
         startActivity(intent)
     }
 
     private fun receiveActivity() {
-        val intent = Intent(this, MainActivity::class.java);
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
@@ -101,9 +104,9 @@ class MainActivity : AppCompatActivity() {
                     Log.i("RES", account.message)
                     Log.i("RES", account.result.available)
 
-                    balanceAvailable.setText("${account.result.available}")
-                    balanceLocked.setText("${account.result.locked}")
-                    balancePendingTx.setText("${account.result.pendingTransactionCount}")
+                    balanceAvailable.text = "${account.result.available}"
+                    balanceLocked.text = "${account.result.locked}"
+                    balancePendingTx.text = "${account.result.pendingTransactionCount}"
                 } else {
                     Toast.makeText(this@MainActivity, "check failed",
                             Toast.LENGTH_LONG).show()

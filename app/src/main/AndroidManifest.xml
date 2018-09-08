@@ -24,7 +24,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".CreateAccountActivity"></activity>
+        <activity android:name=".CreateAccountActivity" />
+        <activity android:name=".BalancesActivity"></activity>
     </application>
 
 </manifest>
