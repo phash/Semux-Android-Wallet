@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ASW</string>
+    <string name="balance">Balance</string>
+    <string name="address">Address</string>
+    <string name="Available">Available</string>
+    <string name="locked">Locked</string>
+    <string name="pending">Pending TX</string>
+    <string name="check">Check</string>
+    <string name="receive">Receive</string>
+    <string name="send">Send</string>
+    <string name="publicKey">Public Key</string>
+    <string name="privateKey">Private Key</string>
+    <string name="newAccount">new Account</string>
+</resources>
