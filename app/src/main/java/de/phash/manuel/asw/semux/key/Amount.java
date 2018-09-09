@@ -17,7 +17,7 @@ public final class Amount {
     public static final Amount ZERO = new Amount(0);
     private final long nano;
 
-    private Amount(long nano) {
+    public Amount(long nano) {
         this.nano = nano;
     }
 

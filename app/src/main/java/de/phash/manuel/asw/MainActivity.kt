@@ -13,7 +13,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.gson.Gson
-import com.idescout.sql.SqlScoutServer
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        SqlScoutServer.create(this, packageName)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -38,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         when (item.itemId) {
             R.id.balancesMenu -> balanceActivity()
-            R.id.receiveMenu -> receiveActivity()
             R.id.createAccout -> createActivity()
 
         }
@@ -55,14 +52,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun receiveActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun sendActivity() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun onResume() {
         super.onResume()

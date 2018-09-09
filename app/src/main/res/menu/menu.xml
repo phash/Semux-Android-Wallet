@@ -3,10 +3,7 @@
 
     <item
         android:id="@+id/balancesMenu"
-        android:title="@string/send" />
-    <item
-        android:id="@+id/receiveMenu"
-        android:title="@string/receive" />
+        android:title="@string/accounts" />
     <item
         android:id="@+id/createAccout"
         android:title="@string/newAccount" />

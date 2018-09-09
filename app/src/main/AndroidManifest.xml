@@ -3,6 +3,7 @@
     package="de.phash.manuel.asw">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +26,11 @@
             android:exported="true" />
 
         <activity android:name=".CreateAccountActivity" />
-        <activity android:name=".BalancesActivity"></activity>
+        <activity android:name=".BalancesActivity" />
+        <activity android:name=".SingleBalanceActivity" />
+        <activity android:name=".QrViewActivity" />
+        <activity android:name=".SendActivity" />
+        <activity android:name=".BarcodeCaptureActivity"></activity>
     </application>
 
 </manifest>
