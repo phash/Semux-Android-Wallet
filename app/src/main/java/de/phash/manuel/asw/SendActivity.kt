@@ -73,10 +73,9 @@ class SendActivity : AppCompatActivity() {
         val fee = Amount(5000000)
         var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), Date().time, ByteArray(0))
 
-        val txToSend = transaction.sign(senderPkey)
+        val signedTx = transaction.sign(senderPkey)
 
-        //senderPkey.sign(transaction.toBytes())
-        sendTransaction(txToSend.encoded)
+        sendTransaction(signedTx)
         /*  } catch (e: Exception) {
               Log.e("SIGN", e.localizedMessage)
               Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
@@ -84,11 +83,12 @@ class SendActivity : AppCompatActivity() {
     }
 
 
-    private fun sendTransaction(sign: ByteArray) {
-        Log.i("SEND", Hex.encode0x(sign))
+    private fun sendTransaction(transaction: Transaction) {
+        var raw = Hex.encode0x(transaction.encoded)
+        Log.i("SEND", raw)
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
-        intent.putExtra(APIService.TRANSACTION_RAW, Hex.encode0x(sign))
+        intent.putExtra(APIService.TRANSACTION_RAW, raw)
         intent.putExtra(APIService.TYP,
                 APIService.transfer)
         startService(intent)
