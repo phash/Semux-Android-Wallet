@@ -24,7 +24,6 @@ import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.util.*
 
 
 class SendActivity : AppCompatActivity() {
@@ -71,9 +70,11 @@ class SendActivity : AppCompatActivity() {
         val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
         val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
         val fee = Amount(5000000)
-        var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), Date().time, ByteArray(0))
+
+        var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
         val signedTx = transaction.sign(senderPkey)
+        Log.i("SEND", signedTx.toString())
 
         sendTransaction(signedTx)
         /*  } catch (e: Exception) {
