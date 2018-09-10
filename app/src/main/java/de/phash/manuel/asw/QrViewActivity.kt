@@ -25,4 +25,6 @@ class QrViewActivity : AppCompatActivity() {
         qrAddressBigImageView.setImageBitmap(bitmap)
 
     }
+
+
 }

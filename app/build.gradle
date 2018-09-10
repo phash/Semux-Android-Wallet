@@ -45,7 +45,7 @@ dependencies {
 // https://mvnrepository.com/artifact/net.i2p.crypto/eddsa
     implementation group: 'net.i2p.crypto', name: 'eddsa', version: '0.3.0'
 // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.60'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
     implementation 'com.rfksystems:blake2b:1.0.0'
 // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8'

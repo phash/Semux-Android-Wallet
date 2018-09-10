@@ -3,6 +3,7 @@ package de.phash.manuel.asw
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.google.zxing.BarcodeFormat
@@ -58,25 +59,20 @@ class SingleBalanceActivity : AppCompatActivity() {
         qrAddressImageView.setImageBitmap(bitmap)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity()
-            R.id.createAccout -> createActivity()
+            R.id.balancesMenu -> balanceActivity(this)
+            R.id.createAccout -> createActivity(this)
 
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun balanceActivity() {
-        val intent = Intent(this, BalancesActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun createActivity() {
-        val intent = Intent(this, CreateAccountActivity::class.java)
-        startActivity(intent)
-    }
-
 
 }

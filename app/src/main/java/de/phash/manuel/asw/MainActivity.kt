@@ -35,23 +35,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity()
-            R.id.createAccout -> createActivity()
+            R.id.balancesMenu -> balanceActivity(this)
+            R.id.createAccout -> createActivity(this)
 
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun balanceActivity() {
-        val intent = Intent(this, BalancesActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun createActivity() {
-        val intent = Intent(this, CreateAccountActivity::class.java)
-        startActivity(intent)
-    }
-
 
     override fun onResume() {
         super.onResume()

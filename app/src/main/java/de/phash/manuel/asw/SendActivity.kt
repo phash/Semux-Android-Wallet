@@ -8,6 +8,8 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.gson.Gson
@@ -70,12 +72,26 @@ class SendActivity : AppCompatActivity() {
         val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
         val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
         val fee = Amount(5000000)
-
         var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+
+        Log.i("BEFS", "senderadresse " + senderPkey.toAddressString())
+        Log.i("BEFS", "receiver " + Hex.encode0x(receiver))
+
+        Log.i("BEFS", "amount " + amount.toString())
+        Log.i("BEFS", "fee " + fee.toString())
+        Log.i("BEFS", "nonce " + nonce.toLong())
+        Log.i("BEFS", "time " + System.currentTimeMillis())
+        Log.i("BEFS", "data " + Bytes.EMPTY_BYTES)
 
         val signedTx = transaction.sign(senderPkey)
         Log.i("SEND", transaction.toString())
+        Log.i("SEND", "senderadresse " + senderPkey.toAddressString())
+        Log.i("SEND", "receiver " + Hex.encode0x(receiver))
 
+        Log.i("SEND", "amount " + amount.toString())
+        Log.i("SEND", "fee " + fee.toString())
+        Log.i("SEND", "nonce " + nonce.toLong())
+        Log.i("SEND", "time " + System.currentTimeMillis())
         sendTransaction(transaction)
         /*  } catch (e: Exception) {
               Log.e("SIGN", e.localizedMessage)
@@ -181,4 +197,19 @@ class SendActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        when (item.itemId) {
+            R.id.balancesMenu -> balanceActivity(this)
+            R.id.createAccout -> createActivity(this)
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

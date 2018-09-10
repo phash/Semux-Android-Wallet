@@ -10,7 +10,6 @@ package de.phash.manuel.asw.semux.key;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-
 import de.phash.semux.Key;
 
 
@@ -240,7 +239,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction [type=" + type + ", from=" + Hex.encode(getFrom()) + ", to=" + Hex.encode(to) + ", value="
+        return "Transaction [type=" + type + ", from=" + signature != null && getFrom() != null ? Hex.encode(getFrom()) : "NO FROM" + ", to=" + Hex.encode(to) + ", value="
                 + value + ", fee=" + fee + ", nonce=" + nonce + ", timestamp=" + timestamp + ", data="
                 + Hex.encode(data) + ", hash=" + Hex.encode(hash) + "]";
     }

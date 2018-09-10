@@ -3,6 +3,8 @@ package de.phash.manuel.asw
 import android.content.ContentValues
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
@@ -37,4 +39,19 @@ class CreateAccountActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        when (item.itemId) {
+            R.id.balancesMenu -> balanceActivity(this)
+            R.id.createAccout -> createActivity(this)
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

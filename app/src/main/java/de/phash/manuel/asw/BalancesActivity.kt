@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
@@ -17,22 +19,27 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import kotlinx.android.synthetic.main.activity_balances.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
 class BalancesActivity : AppCompatActivity() {
     val rowParser = classParser<SemuxAddress>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
-    private var balancesList = ArrayList<CheckBalance>()
-
+    val df = DecimalFormat("0.#########")
+    private var balancesMap = HashMap<String, CheckBalance>()
+    var balancesList = ArrayList<CheckBalance>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balances)
         viewManager = LinearLayoutManager(this)
+
+
         viewAdapter = SemuxBalanceAdapter(balancesList)
 
         var adresses = getAdresses(database)
@@ -93,11 +100,23 @@ class BalancesActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG).show()
                     Log.i("RES", account.message)
                     Log.i("RES", account.result.available)
-                    Log.i("JSON", "${account.result.address}")
-                    Log.i("JSON", "${account.result.available}")
-                    Log.i("JSON", "${account.result.locked}")
-                    Log.i("JSON", "${account.result.pendingTransactionCount}")
-                    balancesList.add(account)
+                    Log.i("JSON", "addr: ${account.result.address}")
+                    Log.i("JSON", "avbl: ${account.result.available}")
+                    Log.i("JSON", "lock: ${account.result.locked}")
+                    Log.i("JSON", "pend: ${account.result.pendingTransactionCount}")
+
+                    balancesMap.put(account.result.address, account)
+                    Log.i("MAP", "size: " + balancesMap.size)
+                    var total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    var totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+                    balancesTotalAvailable.text = df.format(total.divide(APIService.SEMUXMULTIPLICATOR))
+                    balancesTotalLocked.text = df.format(totallocked.divide(APIService.SEMUXMULTIPLICATOR))
+                    balancesList.clear()
+                    balancesList.addAll(balancesMap.values)
+                    Log.i("BAL", "" + balancesList.size)
+                    //balancesList.sortBy { it.result.available }
+
                     viewAdapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(this@BalancesActivity, "check failed",
@@ -116,4 +135,22 @@ class BalancesActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        when (item.itemId) {
+            R.id.balancesMenu -> balanceActivity(this)
+            R.id.createAccout -> createActivity(this)
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
 }

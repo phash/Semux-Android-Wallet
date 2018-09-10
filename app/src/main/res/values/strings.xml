@@ -16,4 +16,6 @@
     <string name="AmountTOSend">Amount to Send</string>
     <string name="ReceivingAddress">Receiving Address</string>
     <string name="feeExplain">The fee for sending a transaction is 0.005 SEM</string>
+    <string name="Total">Total:</string>
+    <string name="TotalLocked">Locked:</string>
 </resources>
