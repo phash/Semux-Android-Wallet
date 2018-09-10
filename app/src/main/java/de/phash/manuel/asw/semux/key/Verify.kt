@@ -12,7 +12,7 @@ import net.i2p.crypto.eddsa.EdDSAEngine
  * signature
  * @return True if the signature is valid, otherwise false
  */
-fun verify(message: ByteArray?, signature: Key.Signature?): Boolean {
+fun verify(message: ByteArray, signature: Key.Signature?): Boolean {
     if (message != null && signature != null) { // avoid null pointer exception
         try {
 

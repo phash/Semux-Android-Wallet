@@ -101,7 +101,7 @@ class KeyUnitTest {
         val addressReceiver = to.toAddress()
         //   val receiver = Hex.decode0x(addressReceiver)
         val nonce = 1L
-
+        val network = Network.MAINNET
         val transaction = TransactionBuilder(account)
                 .withFrom(Hex.encode0x(account.toAddress()))
                 .withFee(fee.nano.toString())
@@ -109,21 +109,21 @@ class KeyUnitTest {
                 .withData(Hex.encode0x(Bytes.of("data")))
                 .withNonce("1")
                 .withType(TransactionType.TRANSFER)
-                .withNetwork(Network.MAINNET)
+                .withNetwork(network.name)
                 .withTimestamp(System.currentTimeMillis().toString())
                 .withTo(Hex.encode(addressReceiver))
                 .buildSigned()
 
         println(transaction.toString())
-        println("validTX unsigned: ${transaction.validate(Network.MAINNET)}")
+        println("validTX unsigned: ${transaction.validate(network)}")
         println("raw: ${Hex.encode0x(transaction.encoded)}")
         println("tb: ${Hex.encode0x(transaction.toBytes())}")
         val endoded = Hex.encode0x(transaction.encoded)
 
         val tx = Transaction.fromEncoded(Hex.decode0x(endoded)).sign(account)
         println("raw: ${Hex.encode0x(tx.toBytes())}")
-        println("validTX signed: ${tx.validate(Network.MAINNET)}")
-        assertTrue("Transaktion invalid", transaction.validate(Network.MAINNET))
+        println("validTX signed: ${tx.validate(network)}")
+        assertTrue("Transaktion invalid", transaction.validate(network))
     }
 
     @Test
@@ -136,20 +136,20 @@ class KeyUnitTest {
         val addressReceiver = to.toAddress()
         //   val receiver = Hex.decode0x(addressReceiver)
         val nonce = 1L
-
+        val network = Network.MAINNET
         val transaction = TransactionBuilder(account)
+                .withNetwork(network.name)
                 .withFrom(Hex.encode0x(account.toAddress()))
                 .withFee(fee.nano.toString())
                 .withValue(fee.nano.toString())
                 .withData(Hex.encode0x(Bytes.of("data")))
                 .withNonce("1")
                 .withType(TransactionType.TRANSFER)
-                .withNetwork(Network.MAINNET)
                 .withTimestamp(System.currentTimeMillis().toString())
                 .withTo(Hex.encode(addressReceiver))
                 .buildUnsigned()
 
-        println("validTX unsigned: ${transaction.validate(Network.MAINNET)}")
+        println("validTX unsigned: ${transaction.validate(network)}")
         println("raw: ${Hex.encode0x(transaction.encoded)}")
 
         val endoded = Hex.encode0x(transaction.encoded)
@@ -157,7 +157,9 @@ class KeyUnitTest {
         val tx = Transaction.fromEncoded(Hex.decode0x(endoded)).sign(account)
 
         println("raw: ${Hex.encode0x(tx.toBytes())}")
-        println("validTX signed: ${tx.validate(Network.MAINNET)}")
-        assertTrue("Transaktion invalid", tx.validate(Network.MAINNET))
+        println("validTX signed: ${tx.validate(network)}")
+        assertTrue("Transaktion invalid", tx.validate(network))
     }
+
+
 }

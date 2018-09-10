@@ -83,12 +83,12 @@ public class TransactionBuilder {
         return this;
     }
 
-    public TransactionBuilder withNetwork(Network network) {
+    public TransactionBuilder withNetwork(String network) {
         if (network == null) {
             throw new IllegalArgumentException("Parameter `network` is required");
         }
 
-        this.network = network;
+        this.network = Network.valueOf(network);
         return this;
     }
 

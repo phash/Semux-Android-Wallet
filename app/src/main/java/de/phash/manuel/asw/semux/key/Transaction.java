@@ -100,7 +100,6 @@ public class Transaction {
      * <p>
      * <p>
      * NOTE: this method does not check transaction validity over the state. Use
-     * {@link TransactionExecutor} for that purpose
      * </p>
      *
      * @param network
