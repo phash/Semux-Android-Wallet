@@ -9,7 +9,7 @@ import android.view.View
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.SemuxAddress
-import de.phash.semux.Key
+import de.phash.manuel.asw.semux.key.Key
 import kotlinx.android.synthetic.main.activity_create_account.*
 import org.bouncycastle.util.encoders.Hex
 
@@ -23,15 +23,15 @@ class CreateAccountActivity : AppCompatActivity() {
 
     fun onCreateKey(view: View) {
         val key = Key()
-        val pk = key.getPrivateKey()
+        val pk = key.privateKey
         privateKey.text = Hex.toHexString(pk)
-        publicKey.text = Hex.toHexString(key.getPublicKey())
+        publicKey.text = Hex.toHexString(key.publicKey)
         createdaddress.text = key.toAddressString()
 
-        val semuxAddress = SemuxAddress(null, key.toAddressString(), Hex.toHexString(pk), Hex.toHexString(key.getPublicKey()))
+        val semuxAddress = SemuxAddress(null, key.toAddressString(), Hex.toHexString(pk), Hex.toHexString(key.publicKey))
         val values = ContentValues()
         values.put("address", key.toAddressString())
-        values.put("publickey", Hex.toHexString(key.getPublicKey()))
+        values.put("publickey", Hex.toHexString(key.publicKey))
         values.put("privatekey", Hex.toHexString(pk))
 
 

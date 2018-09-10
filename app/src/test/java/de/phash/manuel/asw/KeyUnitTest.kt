@@ -1,7 +1,6 @@
 package de.phash.manuel.asw
 
 import de.phash.manuel.asw.semux.key.*
-import de.phash.semux.Key
 import okhttp3.*
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -34,7 +33,7 @@ class KeyUnitTest {
         val key = Key()
 
         transaction.sign(key)
-        println(transaction.toString())
+        println("tx to string: " + transaction.toString())
 
         println("valid tx: ${transaction.validate(Network.MAINNET)}")
 
@@ -55,15 +54,15 @@ class KeyUnitTest {
         println("tx to String " + transaction.toString())
 
         val transactionRaw = Hex.encode0x(transaction.encoded)
-        println("valid tx: ${transaction.validate(Network.MAINNET)}")
 
         val fromEncoded = Transaction.fromEncoded(Hex.decode0x(transactionRaw))
         val signed = fromEncoded.sign(Key())
 
+        println("valid tx: ${signed.validate(Network.MAINNET)}")
         val client = OkHttpClient()
 
         val signedTxRaw = Hex.encode0x(signed.toBytes())
-        println("Encoded: " + Hex.encode0x(transaction.encoded))
+        println("Encoded: " + Hex.encode0x(signed.encoded))
         println("transactionRaw: $transactionRaw")
         println("signedTxRaw: $signedTxRaw")
 
@@ -149,17 +148,30 @@ class KeyUnitTest {
                 .withTo(Hex.encode(addressReceiver))
                 .buildUnsigned()
 
-        println("validTX unsigned: ${transaction.validate(network)}")
+
+
         println("raw: ${Hex.encode0x(transaction.encoded)}")
 
         val endoded = Hex.encode0x(transaction.encoded)
 
         val tx = Transaction.fromEncoded(Hex.decode0x(endoded)).sign(account)
 
+
         println("raw: ${Hex.encode0x(tx.toBytes())}")
         println("validTX signed: ${tx.validate(network)}")
         assertTrue("Transaktion invalid", tx.validate(network))
     }
+    // "0x00031409c5f2794d69717d538bfcc150644f7685945cfa00000002540be40000000000004c4b40000000000000000100000165c4f4f54700"
 
+    @Test
+    fun signRawtest() {
+        val raw = "0x00031409c5f2794d69717d538bfcc150644f7685945cfa00000002540be40000000000004c4b40000000000000000100000165c4f4f54700"
+        val key = Key()
+
+        val tx = Transaction.fromEncoded(Hex.decode0x(raw))
+        val sig = key.sign(tx.hash)
+        println(sig.equals(tx.sign(key).signature))
+        println(Hex.encode0x(tx.toBytes()))
+    }
 
 }

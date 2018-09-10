@@ -7,10 +7,10 @@ import org.junit.Test;
 import de.phash.manuel.asw.semux.key.Amount;
 import de.phash.manuel.asw.semux.key.Bytes;
 import de.phash.manuel.asw.semux.key.Hex;
+import de.phash.manuel.asw.semux.key.Key;
 import de.phash.manuel.asw.semux.key.Network;
 import de.phash.manuel.asw.semux.key.Transaction;
 import de.phash.manuel.asw.semux.key.TransactionType;
-import de.phash.semux.Key;
 
 import static de.phash.manuel.asw.semux.key.Amount.Unit.MILLI_SEM;
 

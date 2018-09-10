@@ -9,7 +9,6 @@ package de.phash.manuel.asw.semux.key;
 
 import java.security.spec.InvalidKeySpecException;
 
-import de.phash.semux.Key;
 
 public class Constants {
 

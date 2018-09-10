@@ -6,9 +6,6 @@ package de.phash.manuel.asw.semux.key;
  * LICENSE or https://opensource.org/licenses/mit-license.php
  */
 
-
-import de.phash.semux.Key;
-
 /**
  * This is a builder class for building transactions required by Semux API with
  * provided inputs. The builder expects raw inputs from a HTTP request.

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2017-2018 The Semux Developers
- *
+ * <p>
  * Distributed under the MIT software license, see the accompanying file
  * LICENSE or https://opensource.org/licenses/mit-license.php
  */
@@ -11,8 +11,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Arrays;
-
-import de.phash.semux.Key;
 
 import static de.phash.manuel.asw.semux.key.VerifyKt.verify;
 
@@ -54,7 +52,7 @@ public class Transaction {
      * @param data
      */
     public Transaction(Network network, TransactionType type, byte[] to, Amount value, Amount fee, long nonce,
-            long timestamp, byte[] data) {
+                       long timestamp, byte[] data) {
         this.networkId = network.id();
         this.type = type;
         this.to = to;
@@ -76,7 +74,6 @@ public class Transaction {
         this.encoded = enc.toBytes();
         this.hash = Hash.h256(encoded);
     }
-
 
 
     /**
@@ -106,27 +103,32 @@ public class Transaction {
      * @return true if success, otherwise false
      */
     public boolean validate(Network network) {
-        return hash != null && hash.length == Hash.HASH_LEN
-                && networkId == network.id()
-                && type != null
-                && to != null && to.length == ADDRESS_LEN
-                && value.gte0()
-                && fee.gte0()
-                && nonce >= 0
-                && timestamp > 0
-                && data != null
-                && encoded != null
-                && signature != null && !Arrays.equals(signature.getAddress(), Bytes.EMPTY_ADDRESS)
 
-                && Arrays.equals(Hash.h256(encoded), hash)
-                && verify(hash, signature)
 
-                // The coinbase key is publicly available. People can use it for transactions.
-                // It won't introduce any fundamental loss to the system but could potentially
-                // cause confusion for block explorer, and thus are prohibited.
-                && (type == TransactionType.COINBASE
+        boolean resHash = hash != null && hash.length == Hash.HASH_LEN;
+        boolean resNw = networkId == network.id();
+        boolean resType = type != null;
+        boolean resTo = to != null && to.length == ADDRESS_LEN;
+        boolean resVal = value.gte0();
+        boolean resFee = fee.gte0();
+        boolean resNonce = nonce >= 0;
+        boolean resTime = timestamp > 0;
+        boolean resData = data != null;
+        boolean resEncode = encoded != null;
+        boolean resSinature = signature != null && !Arrays.equals(signature.getAddress(), Bytes.EMPTY_ADDRESS);
+
+        boolean resEncHash = Arrays.equals(Hash.h256(encoded), hash);
+        boolean resHashSig = verify(hash, signature);
+
+        // The coinbase key is publicly available. People can use it for transactions.
+        // It won't introduce any fundamental loss to the system but could potentially
+        // cause confusion for block explorer, and thus are prohibited.
+        boolean resTypeCoinbase = (type == TransactionType.COINBASE
                 || (!Arrays.equals(signature.getAddress(), Constants.COINBASE_ADDRESS) &&
                 !Arrays.equals(to, Constants.COINBASE_ADDRESS)));
+
+        return (resHash && resNw && resTime && resTo && resType && resSinature && resEncHash && resEncode && resVal && resFee && resNonce && resData && resHashSig && resTypeCoinbase);
+
     }
 
 

@@ -30,7 +30,6 @@
         <activity android:name=".SingleBalanceActivity" />
         <activity android:name=".QrViewActivity" />
         <activity android:name=".SendActivity" />
-        <activity android:name=".BarcodeCaptureActivity"></activity>
     </application>
 
 </manifest>
