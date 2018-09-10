@@ -108,9 +108,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button3" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/qrAddressImageView"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginEnd="8dp"

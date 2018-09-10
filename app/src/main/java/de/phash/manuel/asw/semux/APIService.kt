@@ -50,7 +50,7 @@ class APIService : IntentService("SemuxService") {
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("raw", transactionRaw)
                 .build()
-
+        Log.i("SEND", "http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
         val request = Request.Builder()
                 .url("http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
                 .addHeader("content-type", "application/json")
