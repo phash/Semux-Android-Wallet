@@ -45,12 +45,22 @@ class APIService : IntentService("SemuxService") {
 
         Log.i("RAW", transactionRaw)
 
+
+        val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("raw", transactionRaw)
+                .build()
+
         val request = Request.Builder()
                 .url("http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
                 .addHeader("content-type", "application/json")
                 .addHeader("cache-control", "no-cache")
-
+                .post(requestBody)
                 .build()
+
+        //val request = Request.Builder()
+        //.url("http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
+//                .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println(call.toString())
