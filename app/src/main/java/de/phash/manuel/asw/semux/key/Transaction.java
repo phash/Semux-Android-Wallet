@@ -10,7 +10,11 @@ package de.phash.manuel.asw.semux.key;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Arrays;
+
 import de.phash.semux.Key;
+
+import static de.phash.manuel.asw.semux.key.VerifyKt.verify;
 
 
 public class Transaction {
@@ -86,6 +90,45 @@ public class Transaction {
         return this;
     }
 
+    public static final int PUBLIC_KEY_LEN = 44;
+    public static final int PRIVATE_KEY_LEN = 48;
+    public static final int ADDRESS_LEN = 20;
+
+    /**
+     * <p>
+     * Validate transaction format and signature. </>
+     * <p>
+     * <p>
+     * NOTE: this method does not check transaction validity over the state. Use
+     * {@link TransactionExecutor} for that purpose
+     * </p>
+     *
+     * @param network
+     * @return true if success, otherwise false
+     */
+    public boolean validate(Network network) {
+        return hash != null && hash.length == Hash.HASH_LEN
+                && networkId == network.id()
+                && type != null
+                && to != null && to.length == ADDRESS_LEN
+                && value.gte0()
+                && fee.gte0()
+                && nonce >= 0
+                && timestamp > 0
+                && data != null
+                && encoded != null
+                && signature != null && !Arrays.equals(signature.getAddress(), Bytes.EMPTY_ADDRESS)
+
+                && Arrays.equals(Hash.h256(encoded), hash)
+                && verify(hash, signature)
+
+                // The coinbase key is publicly available. People can use it for transactions.
+                // It won't introduce any fundamental loss to the system but could potentially
+                // cause confusion for block explorer, and thus are prohibited.
+                && (type == TransactionType.COINBASE
+                || (!Arrays.equals(signature.getAddress(), Constants.COINBASE_ADDRESS) &&
+                !Arrays.equals(to, Constants.COINBASE_ADDRESS)));
+    }
 
 
     /**

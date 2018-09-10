@@ -6,10 +6,11 @@
  */
 package de.phash.manuel.asw.semux.key;
 
-import org.bouncycastle.crypto.digests.Blake2bDigest;
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
+import org.bouncycastle.jcajce.provider.digest.Blake2s;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.security.MessageDigest;
 import java.security.Security;
 
 /**
@@ -36,11 +37,12 @@ public class Hash {
 
 
         try {
-
-            Blake2bDigest digest = new Blake2bDigest();//MessageDigest.getInstance(Constants.HASH_ALGORITHM);
+            MessageDigest digest = new Blake2s.Blake2s256();
+           /* Blake2bDigest digest = new Blake2bDigest();//MessageDigest.getInstance(Constants.HASH_ALGORITHM);
 
             digest.update(input, 0, input.length);
-            return input;
+*/
+            return digest.digest(input);
 
         } catch (Exception e) {
             throw new CryptoException(e);

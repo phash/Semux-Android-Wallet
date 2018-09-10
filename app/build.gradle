@@ -51,6 +51,10 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8'
 // https://mvnrepository.com/artifact/org.jetbrains.anko/anko-sqlite
     implementation group: 'org.jetbrains.anko', name: 'anko-sqlite', version: '0.10.5'
+// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
+// https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.6.2'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.x.x'

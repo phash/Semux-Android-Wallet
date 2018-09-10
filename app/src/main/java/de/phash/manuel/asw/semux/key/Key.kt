@@ -3,19 +3,21 @@ package de.phash.semux
 import de.phash.manuel.asw.semux.key.Bytes
 import de.phash.manuel.asw.semux.key.Hash
 import de.phash.manuel.asw.semux.key.Hex
+import net.i2p.crypto.eddsa.EdDSAEngine
 import net.i2p.crypto.eddsa.EdDSAPrivateKey
 import net.i2p.crypto.eddsa.EdDSAPublicKey
 import net.i2p.crypto.eddsa.KeyPairGenerator
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec
+import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.HashCodeBuilder
 import java.security.spec.InvalidKeySpecException
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import net.i2p.crypto.eddsa.EdDSAEngine
 
 
 class Key {
+
+
     private val gen = KeyPairGenerator()
     var sk: EdDSAPrivateKey
     var pk: EdDSAPublicKey
@@ -187,7 +189,7 @@ class Key {
             return EqualsBuilder()
                     .append(s, signature!!.s)
                     .append(a, signature.a)
-                    .isEquals()
+                    .isEquals
         }
 
         override fun hashCode(): Int {
