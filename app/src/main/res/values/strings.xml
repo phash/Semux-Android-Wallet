@@ -1,10 +1,4 @@
 <resources>
-    <!-- parseServer-->
-    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
-
-    <string name="back4app_app_id">PASTE_YOUR_APPLICATION_ID_HERE</string>
-    <string name="back4app_client_key">PASTE_YOUR_CLIENT_KEY_HERE</string>
-    <!-- /parseServer-->
 
     <string name="app_name">ASW</string>
     <string name="balance">Balance</string>
@@ -28,5 +22,7 @@
     <string name="storeSecure">Write down your private key!</string>
     <string name="generate">Generate</string>
     <string name="viewTransactions">Transactions</string>
+    <string name="AmountTOVote">Amount to vote/unvote</string>
+    <string name="delegatesAddress">Delegate\'s address</string>
 
 </resources>

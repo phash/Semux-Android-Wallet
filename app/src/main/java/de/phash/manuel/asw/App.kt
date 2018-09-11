@@ -10,7 +10,7 @@ class App : Application() {
         Parse.initialize(Parse.Configuration.Builder(this)
                 .applicationId("")
                 .clientKey("")
-                .server("")
+                .server("https://parseapi.back4app.com/")
                 .build())
         ParseInstallation.getCurrentInstallation().saveInBackground()
 
