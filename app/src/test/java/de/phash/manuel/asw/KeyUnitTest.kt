@@ -159,7 +159,7 @@ class KeyUnitTest {
         println("raw: ${Hex.encode0x(tx.toBytes())}")
         println("validTX signed: ${tx.validate(network)}")
         assertTrue("Transaktion invalid", tx.validate(network))
+      
+
     }
-
-
 }
