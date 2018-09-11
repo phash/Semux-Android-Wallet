@@ -56,6 +56,8 @@ dependencies {
 // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.6.2'
 // https://mvnrepository.com/artifact/com.muquit.libsodiumjna/libsodium-jna
+// https://mvnrepository.com/artifact/com.parse/parse-android
+    implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.x.x'

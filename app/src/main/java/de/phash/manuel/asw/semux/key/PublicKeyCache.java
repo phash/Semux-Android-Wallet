@@ -26,7 +26,7 @@ public final class PublicKeyCache {
      * <p>
      * The cache is a concurrent hash map of ByteArray.of(pubKey) -> EdDSAPublicKey
      */
-    private static final Cache<ByteArray, EdDSAPublicKey> pubKeyCache = Caffeine.newBuilder()
+    private static final Cache<SemuxByteArray, EdDSAPublicKey> pubKeyCache = Caffeine.newBuilder()
             .maximumSize(MAX_CACHE_SIZE).build();
 
     private PublicKeyCache() {
@@ -39,7 +39,7 @@ public final class PublicKeyCache {
      * @return
      */
     public static EdDSAPublicKey computeIfAbsent(byte[] pubKey) {
-        return pubKeyCache.get(ByteArray.of(pubKey), input -> {
+        return pubKeyCache.get(SemuxByteArray.of(pubKey), input -> {
             try {
                 return new EdDSAPublicKey(new X509EncodedKeySpec(pubKey));
             } catch (InvalidKeySpecException e) {

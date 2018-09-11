@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.journeyapps.barcodescanner.BarcodeEncoder
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.util.createQRCode
 import kotlinx.android.synthetic.main.activity_single_balance.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -49,14 +47,20 @@ class SingleBalanceActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun onVoteClick(view: View) {
+        val intent = Intent(this, VoteActivity::class.java)
+        intent.putExtra("address", address)
+        startActivity(intent)
+    }
+
+    fun onTransactionsClick(view: View) {
+        val intent = Intent(this, TransactionsActivity::class.java)
+        intent.putExtra("address", address)
+        startActivity(intent)
+    }
+
     private fun createQR() {
-        val multiFormatWriter = MultiFormatWriter()
-
-        val bitMatrix = multiFormatWriter.encode(address, BarcodeFormat.QR_CODE, 200, 200)
-        val barcodeEncoder = BarcodeEncoder()
-        val bitmap = barcodeEncoder.createBitmap(bitMatrix)
-
-        qrAddressImageView.setImageBitmap(bitmap)
+        qrAddressImageView.setImageBitmap(createQRCode(address, 200))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

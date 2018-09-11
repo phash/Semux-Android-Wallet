@@ -11,11 +11,11 @@ import com.fasterxml.jackson.databind.KeyDeserializer;
 
 import org.bouncycastle.util.Arrays;
 
-public class ByteArray implements Comparable<ByteArray> {
+public class SemuxByteArray implements Comparable<SemuxByteArray> {
     private final byte[] data;
     private final int hash;
 
-    public ByteArray(byte[] data) {
+    public SemuxByteArray(byte[] data) {
         if (data == null) {
             throw new IllegalArgumentException("Input data can not be null");
         }
@@ -23,8 +23,8 @@ public class ByteArray implements Comparable<ByteArray> {
         this.hash = Arrays.hashCode(data);
     }
 
-    public static ByteArray of(byte[] data) {
-        return new ByteArray(data);
+    public static SemuxByteArray of(byte[] data) {
+        return new SemuxByteArray(data);
     }
 
     public int length() {
@@ -37,7 +37,7 @@ public class ByteArray implements Comparable<ByteArray> {
 
     @Override
     public boolean equals(Object other) {
-        return (other instanceof ByteArray) && Arrays.areEqual(data, ((ByteArray) other).data);
+        return (other instanceof SemuxByteArray) && Arrays.areEqual(data, ((SemuxByteArray) other).data);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ByteArray implements Comparable<ByteArray> {
     }
 
     @Override
-    public int compareTo(ByteArray o) {
+    public int compareTo(SemuxByteArray o) {
         return Arrays.compareUnsigned(data, o.data);
     }
 
@@ -59,7 +59,7 @@ public class ByteArray implements Comparable<ByteArray> {
 
         @Override
         public Object deserializeKey(String key, DeserializationContext context) {
-            return new ByteArray(Hex.decode0x(key));
+            return new SemuxByteArray(Hex.decode0x(key));
         }
     }
 }

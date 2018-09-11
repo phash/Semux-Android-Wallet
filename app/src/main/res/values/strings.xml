@@ -1,4 +1,11 @@
 <resources>
+    <!-- parseServer-->
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+
+    <string name="back4app_app_id">PASTE_YOUR_APPLICATION_ID_HERE</string>
+    <string name="back4app_client_key">PASTE_YOUR_CLIENT_KEY_HERE</string>
+    <!-- /parseServer-->
+
     <string name="app_name">ASW</string>
     <string name="balance">Balance</string>
     <string name="address">Address</string>
@@ -18,4 +25,8 @@
     <string name="feeExplain">The fee for sending a transaction is 0.005 SEM</string>
     <string name="Total">Total:</string>
     <string name="TotalLocked">Locked:</string>
+    <string name="storeSecure">Write down your private key!</string>
+    <string name="generate">Generate</string>
+    <string name="viewTransactions">Transactions</string>
+
 </resources>
