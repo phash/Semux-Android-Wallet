@@ -27,10 +27,11 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 
 class BalancesActivity : AppCompatActivity() {
-    val rowParser = classParser<SemuxAddress>()
+    private val rowParser = classParser<SemuxAddress>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
     val df = DecimalFormat("0.#########")
 
     private var balancesMap = HashMap<String, CheckBalance>()
@@ -39,10 +40,11 @@ class BalancesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balances)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         viewManager = LinearLayoutManager(this)
         viewAdapter = SemuxBalanceAdapter(balancesList)
 
-        var adresses = getAdresses(database)
+        val adresses = getAdresses(database)
         adresses.forEach { Log.i("ADDR", "Address ${it.address}") }
 
         updateBalanceList(adresses)
@@ -82,7 +84,7 @@ class BalancesActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
+        Toast.makeText(this, "service started", Toast.LENGTH_SHORT).show()
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -107,8 +109,8 @@ class BalancesActivity : AppCompatActivity() {
 
                     balancesMap.put(account.result.address, account)
                     Log.i("MAP", "size: " + balancesMap.size)
-                    var total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
-                    var totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
                     balancesTotalAvailable.text = df.format(total.divide(APIService.SEMUXMULTIPLICATOR))
                     balancesTotalLocked.text = df.format(totallocked.divide(APIService.SEMUXMULTIPLICATOR))
@@ -141,11 +143,7 @@ class BalancesActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity(this)
-            R.id.createAccout -> createActivity(this)
-
-        }
+        startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
     }
 

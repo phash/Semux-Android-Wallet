@@ -17,7 +17,6 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<CheckBalance>) :
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
         val address = itemView.findViewById<TextView>(R.id.listbalanceaddress)
         val available = itemView.findViewById<TextView>(R.id.listbalanceavailable)
         val locked = itemView.findViewById<TextView>(R.id.listbalancelocked)
@@ -35,7 +34,7 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<CheckBalance>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val df = DecimalFormat("0.#########")
-
+        Log.i("TRX", "DatasetSize: ${myDataset.size}")
         holder.address?.text = myDataset[position].result.address
         holder.available?.text = df.format(BigDecimal(myDataset[position].result.available).divide(APIService.SEMUXMULTIPLICATOR))
         holder.locked?.text = df.format(BigDecimal(myDataset[position].result.locked).divide(APIService.SEMUXMULTIPLICATOR))

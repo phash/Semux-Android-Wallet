@@ -17,8 +17,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_create_account)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
     }
 
     fun onCreateKey(view: View) {
@@ -47,11 +47,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity(this)
-            R.id.createAccout -> createActivity(this)
-
-        }
+        startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
     }
 }

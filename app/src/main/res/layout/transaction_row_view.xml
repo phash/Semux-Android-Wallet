@@ -12,42 +12,116 @@
         card_view:cardCornerRadius="2dp"
         card_view:contentPadding="10dp">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/transactionsConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/listtransactionsfrom"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="abs"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textColor="#000000"
+                android:textSize="14sp"
+                card_view:layout_constraintStart_toEndOf="@+id/textView19"
+                card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/listtransactionsto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:layout_width="250dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toEndOf="@+id/textView20"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsfrom" />
 
             <TextView
                 android:id="@+id/listtransactionsamount"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textSize="14sp"
+                card_view:layout_constraintStart_toEndOf="@+id/textView21"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsto" />
 
             <TextView
                 android:id="@+id/listtransactionsdate"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="#D3D3D3" />
-        </LinearLayout>
+                android:textSize="14sp"
+                card_view:layout_constraintStart_toEndOf="@+id/textView22"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsamount" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/from"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/to"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsfrom" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/amount"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsto" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/date"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/type"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+            <TextView
+                android:id="@+id/listtransactionstype"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                card_view:layout_constraintStart_toEndOf="@+id/textView23"
+                card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsdate" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

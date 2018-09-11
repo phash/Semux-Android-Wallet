@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
@@ -23,18 +25,38 @@ class TransactionsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
     val df = DecimalFormat("0.#########")
+
     var transactionsList = ArrayList<Result>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
-        loadTransactions(intent.getStringExtra("address"))
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         viewManager = LinearLayoutManager(this)
-        viewAdapter = SemuxTransactionAdapter(transactionsList)
+        viewAdapter = TransactionAdapter(transactionsList)
+        loadTransactions(intent.getStringExtra("address"))
+        recyclerView = findViewById<RecyclerView>(R.id.transactionsRecyclerView).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
 
+        }
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        startNewActivity(item, this)
+        return super.onOptionsItemSelected(item)
+    }
     private fun loadTransactions(address: String?) {
         val intent = Intent(this, APIService::class.java)
         address?.let {
@@ -57,9 +79,10 @@ class TransactionsActivity : AppCompatActivity() {
                 val resultCode = bundle.getInt(APIService.RESULT)
                 if (resultCode == Activity.RESULT_OK) {
                     val transactionsResult = Gson().fromJson(json, TransactionsResult::class.java)
-                    Log.i("RES", json)
+                    Log.i("TRX", json)
+                    Log.i("JSON", "transactions: ${transactionsResult.result.size}")
                     transactionsList.addAll(transactionsResult.result)
-                    Log.i("BAL", "" + transactionsList.size)
+                    Log.i("TRX", "" + transactionsList.size)
                     viewAdapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(this@TransactionsActivity, "check failed",
@@ -83,3 +106,5 @@ class TransactionsActivity : AppCompatActivity() {
 
 
 }
+
+

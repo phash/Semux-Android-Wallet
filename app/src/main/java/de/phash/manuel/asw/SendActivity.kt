@@ -36,6 +36,7 @@ class SendActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         locked = intent.getStringExtra("locked")
         available = intent.getStringExtra("available")
@@ -71,7 +72,7 @@ class SendActivity : AppCompatActivity() {
             val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
             val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
             val fee = Amount(5000000)
-            var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
             val signedTx = transaction.sign(senderPkey)
 
@@ -188,11 +189,7 @@ class SendActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity(this)
-            R.id.createAccout -> createActivity(this)
-
-        }
+        startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
     }
 }

@@ -24,5 +24,13 @@
     <string name="viewTransactions">Transactions</string>
     <string name="AmountTOVote">Amount to vote/unvote</string>
     <string name="delegatesAddress">Delegate\'s address</string>
+    <string name="from">from:</string>
+    <string name="to">to:</string>
+    <string name="amount">amount:</string>
+    <string name="date">Date</string>
+    <string name="type">Type:</string>
+    <string name="importText">Import</string>
+    <string name="unvote">Unvote</string>
+    <string name="importKey">Import Key</string>
 
 </resources>

@@ -6,35 +6,12 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
-import com.parse.ParseObject
-import com.parse.ParseQuery
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Network
 import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
 
-private val API_ENDPOINT = getApiEndPoint() //"http://45.32.185.200/api"
-
-fun getApiEndPoint(): String {
-    var apiEndPoint = "heinz"
-    val query = ParseQuery.getQuery<ParseObject>("settings")
-    query.whereEqualTo("name", "base")
-    query.findInBackground { objects, e ->
-        if (e == null) {
-            if (objects.size > 0) {
-                apiEndPoint = objects.get(0).getString("endpoint")
-            } else {
-                val defaultEndpoint = ParseObject("endpoints")
-                defaultEndpoint.put("name", "base")
-                defaultEndpoint.put("endpoint", "http://45.32.185.200/api")
-                defaultEndpoint.saveInBackground()
-                apiEndPoint = "http://45.32.185.200/api"
-            }
-        }
-    }
-    return apiEndPoint
-
-}
 
 class APIService : IntentService("SemuxService") {
 
@@ -52,6 +29,12 @@ class APIService : IntentService("SemuxService") {
         const val unvote = "unvote"
         const val transfer = "transfer"
         const val transactions = "transactions"
+        //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
+        //   val NETWORK = Network.TESTNET
+
+        private var API_ENDPOINT = "http://45.32.185.200/api"
+        val NETWORK = Network.MAINNET
+        //Network.TESTNET
 
     }
 
@@ -64,14 +47,17 @@ class APIService : IntentService("SemuxService") {
             check -> getBalance(intent)
             transfer -> doTransfer(intent)
             transactions -> loadTransactions(intent)
-            "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT)
+            "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
         }
 
     }
 
     //This only works for addresses given
     private fun loadTransactions(intent: Intent?) {
-        var address = intent?.getStringExtra(ADDRESS)
+        val address = intent?.getStringExtra(ADDRESS)
+
+        Log.i("TRX", "address: $address")
+
         val client = OkHttpClient()
 
         val request = Request.Builder()
@@ -97,25 +83,25 @@ class APIService : IntentService("SemuxService") {
                     endVal = account.result.transactionCount - 20
                 }
 
-                val request = Request.Builder()
-                        .url("$API_ENDPOINT/account/transactions?address=${address}&start=${startVal}&end=${endVal}")
+                val transactionRequest = Request.Builder()
+                        .url("$API_ENDPOINT/account/transactions?address=$address&start=$startVal&end=$endVal")
                         .addHeader("content-type", "application/json")
                         .addHeader("cache-control", "no-cache")
                         .build()
 
-                client.newCall(request).enqueue(object : Callback {
+                client.newCall(transactionRequest).enqueue(object : Callback {
                     override fun onFailure(call: Call, e: IOException) {
                         println(call.toString())
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        val res = response.body()?.string()
-
-                        val intent = Intent(NOTIFICATION)
-                        intent.putExtra(TYP, transactions)
-                        intent.putExtra(RESULT, Activity.RESULT_OK)
-                        intent.putExtra(JSON, res)
-                        sendBroadcast(intent)
+                        val innerResult = response.body()?.string()
+                        Log.i("TRX", "result-> $innerResult")
+                        val notificationIntent = Intent(NOTIFICATION)
+                        notificationIntent.putExtra(TYP, transactions)
+                        notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                        notificationIntent.putExtra(JSON, innerResult)
+                        sendBroadcast(notificationIntent)
                     }
                 })
             }
@@ -169,7 +155,7 @@ class APIService : IntentService("SemuxService") {
 
         val client = OkHttpClient()
         val request = Request.Builder()
-                .url("$API_ENDPOINT/account?address=${address}")
+                .url("$API_ENDPOINT/account?address=$address")
                 .addHeader("content-type", "application/json")
                 .addHeader("cache-control", "no-cache")
 
@@ -182,13 +168,44 @@ class APIService : IntentService("SemuxService") {
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
 
-                val intent = Intent(NOTIFICATION)
-                intent.putExtra(TYP, check)
-                intent.putExtra(RESULT, Activity.RESULT_OK)
-                intent.putExtra(JSON, res)
-                sendBroadcast(intent)
+                val notificationIntent = Intent(NOTIFICATION)
+                notificationIntent.putExtra(TYP, check)
+                notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                notificationIntent.putExtra(JSON, res)
+                sendBroadcast(notificationIntent)
             }
         })
 
     }
+
+/*    fun getApiEndPoint() {
+
+
+        val query = ParseQuery.getQuery<ParseObject>("settings")
+        query.whereEqualTo("name", "base").whereEqualTo("network", "testnet")
+        query.findInBackground { objects, e ->
+            if (e == null) {
+                if (objects.size > 0) {
+                    API_ENDPOINT = objects.get(0).getString("endpoint")
+                    NETWORK = if(objects.get(0).getString("network").equals("mainnet"))Network.MAINNET else
+                        Network.TESTNET
+                } else {
+                    val defaultEndpoint = ParseObject("endpoints")
+                    defaultEndpoint.put("name", "base")
+                    defaultEndpoint.put("endpoint", "http://45.32.185.200/api")
+                    defaultEndpoint.put("network", "mainnet")
+                    defaultEndpoint.saveInBackground()
+                    API_ENDPOINT = "http://45.32.185.200/api"
+                    NETWORK = Network.MAINNET
+                    val testEndpoint = ParseObject("endpoints")
+                    testEndpoint.put("name", "base")
+                    testEndpoint.put("endpoint", "http://localhost/api")
+                    testEndpoint.put("network", "testnet")
+                    testEndpoint.saveInBackground()
+                }
+            }
+        }
+
+    }
+*/
 }

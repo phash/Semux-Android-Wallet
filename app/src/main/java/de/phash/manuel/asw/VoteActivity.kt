@@ -38,6 +38,7 @@ class VoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         locked = intent.getStringExtra("locked")
         available = intent.getStringExtra("available")
@@ -83,7 +84,7 @@ class VoteActivity : AppCompatActivity() {
             val amount = Amount(voteAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
             val fee = Amount(5000000)
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
-            var transaction = Transaction(Network.MAINNET, type, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            var transaction = Transaction(APIService.NETWORK, type, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
             val signedTx = transaction.sign(voterPkey)
 
@@ -194,11 +195,7 @@ class VoteActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity(this)
-            R.id.createAccout -> createActivity(this)
-
-        }
+        startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
     }
 }

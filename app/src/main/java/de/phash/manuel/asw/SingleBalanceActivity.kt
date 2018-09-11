@@ -13,13 +13,14 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 
 class SingleBalanceActivity : AppCompatActivity() {
-    val df = DecimalFormat("0.#########")
+    private val df = DecimalFormat("0.#########")
     var locked = ""
     var address = ""
     var available = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_balance)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         available = intent.getStringExtra("available")
         locked = intent.getStringExtra("locked")
@@ -50,6 +51,8 @@ class SingleBalanceActivity : AppCompatActivity() {
     fun onVoteClick(view: View) {
         val intent = Intent(this, VoteActivity::class.java)
         intent.putExtra("address", address)
+        intent.putExtra("available", available)
+        intent.putExtra("locked", locked)
         startActivity(intent)
     }
 
@@ -71,11 +74,7 @@ class SingleBalanceActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        when (item.itemId) {
-            R.id.balancesMenu -> balanceActivity(this)
-            R.id.createAccout -> createActivity(this)
-
-        }
+        startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
     }
 
