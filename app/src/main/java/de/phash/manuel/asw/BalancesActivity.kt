@@ -32,14 +32,14 @@ class BalancesActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     val df = DecimalFormat("0.#########")
+
     private var balancesMap = HashMap<String, CheckBalance>()
     var balancesList = ArrayList<CheckBalance>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balances)
         viewManager = LinearLayoutManager(this)
-
-
         viewAdapter = SemuxBalanceAdapter(balancesList)
 
         var adresses = getAdresses(database)
@@ -128,12 +128,9 @@ class BalancesActivity : AppCompatActivity() {
     }
 
     fun getAdresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
-
         select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).exec {
             parseList(rowParser)
-
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

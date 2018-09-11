@@ -63,39 +63,23 @@ class SendActivity : AppCompatActivity() {
     }
 
     private fun createTransaction() {
-        //try {
+        try {
 
-        val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
-        val semuxAddressList = getSemuxAddress(database)
-        Log.i("PKEY", semuxAddressList.get(0).privateKey)
-        val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
-        val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
-        val fee = Amount(5000000)
-        var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
+            val semuxAddressList = getSemuxAddress(database)
+            Log.i("PKEY", semuxAddressList.get(0).privateKey)
+            val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
+            val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
+            val fee = Amount(5000000)
+            var transaction = Transaction(Network.MAINNET, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
-        Log.i("BEFS", "senderadresse " + senderPkey.toAddressString())
-        Log.i("BEFS", "receiver " + Hex.encode0x(receiver))
+            val signedTx = transaction.sign(senderPkey)
 
-        Log.i("BEFS", "amount " + amount.toString())
-        Log.i("BEFS", "fee " + fee.toString())
-        Log.i("BEFS", "nonce " + nonce.toLong())
-        Log.i("BEFS", "time " + System.currentTimeMillis())
-        Log.i("BEFS", "data " + Bytes.EMPTY_BYTES)
-
-        val signedTx = transaction.sign(senderPkey)
-        Log.i("SEND", transaction.toString())
-        Log.i("SEND", "senderadresse " + senderPkey.toAddressString())
-        Log.i("SEND", "receiver " + Hex.encode0x(receiver))
-
-        Log.i("SEND", "amount " + amount.toString())
-        Log.i("SEND", "fee " + fee.toString())
-        Log.i("SEND", "nonce " + nonce.toLong())
-        Log.i("SEND", "time " + System.currentTimeMillis())
-        sendTransaction(transaction)
-        /*  } catch (e: Exception) {
-              Log.e("SIGN", e.localizedMessage)
-              Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
-          }*/
+            sendTransaction(transaction)
+        } catch (e: Exception) {
+            Log.e("SIGN", e.localizedMessage)
+            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
+        }
     }
 
 

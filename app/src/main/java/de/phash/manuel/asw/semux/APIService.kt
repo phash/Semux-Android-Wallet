@@ -5,9 +5,13 @@ import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.google.gson.Gson
+import de.phash.manuel.asw.semux.json.CheckBalance
 import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
+
+private val API_ENDPOINT = "http://45.32.185.200/api"
 
 class APIService : IntentService("SemuxService") {
 
@@ -22,6 +26,7 @@ class APIService : IntentService("SemuxService") {
 
         val check = "check"
         val transfer = "transfer"
+        val transactions = "transactions"
 
     }
 
@@ -33,8 +38,64 @@ class APIService : IntentService("SemuxService") {
         when (typ) {
             check -> getBalance(intent)
             transfer -> doTransfer(intent)
+            transactions -> loadTransactions(intent)
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT)
         }
+
+    }
+
+    //This only works for addresses given
+    private fun loadTransactions(intent: Intent?) {
+        var address = intent?.getStringExtra(ADDRESS)
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+                .url("$API_ENDPOINT/account?address=${address}")
+                .addHeader("content-type", "application/json")
+                .addHeader("cache-control", "no-cache")
+
+                .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println(call.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body()?.string()
+                val account = Gson().fromJson(res, CheckBalance::class.java)
+                var startVal = 0
+                var endVal = 20
+                if (account.result.transactionCount < 20) {
+                    endVal = account.result.transactionCount
+                } else if (account.result.transactionCount > 20) {
+                    startVal = account.result.transactionCount
+                    endVal = account.result.transactionCount - 20
+                }
+
+                val request = Request.Builder()
+                        .url("$API_ENDPOINT/account/transactions?address=${address}&start=${startVal}&end=${endVal}")
+                        .addHeader("content-type", "application/json")
+                        .addHeader("cache-control", "no-cache")
+                        .build()
+
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        println(call.toString())
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val res = response.body()?.string()
+
+                        val intent = Intent(NOTIFICATION)
+                        intent.putExtra(TYP, transactions)
+                        intent.putExtra(RESULT, Activity.RESULT_OK)
+                        intent.putExtra(JSON, res)
+                        sendBroadcast(intent)
+                    }
+                })
+            }
+        })
+
 
     }
 
@@ -45,14 +106,13 @@ class APIService : IntentService("SemuxService") {
 
         Log.i("RAW", transactionRaw)
 
-
         val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("raw", transactionRaw)
                 .build()
-        Log.i("SEND", "http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
+        Log.i("SEND", "$API_ENDPOINT/transaction/raw?raw=${transactionRaw}")
         val request = Request.Builder()
-                .url("http://45.32.185.200/api/transaction/raw?raw=${transactionRaw}")
+                .url("$API_ENDPOINT/transaction/raw?raw=${transactionRaw}")
                 .addHeader("content-type", "application/json")
                 .addHeader("cache-control", "no-cache")
                 .post(requestBody)
@@ -80,13 +140,12 @@ class APIService : IntentService("SemuxService") {
     }
 
 
-
     fun getBalance(intent: Intent?) {
         val address = intent?.getStringExtra(ADDRESS)
 
         val client = OkHttpClient()
         val request = Request.Builder()
-                .url("http://45.32.185.200/api/account?address=${address}")
+                .url("$API_ENDPOINT/account?address=${address}")
                 .addHeader("content-type", "application/json")
                 .addHeader("cache-control", "no-cache")
 
@@ -98,7 +157,6 @@ class APIService : IntentService("SemuxService") {
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
-
 
                 val intent = Intent(NOTIFICATION)
                 intent.putExtra(TYP, check)
