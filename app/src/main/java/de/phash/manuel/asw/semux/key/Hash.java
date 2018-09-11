@@ -7,7 +7,7 @@
 package de.phash.manuel.asw.semux.key;
 
 import org.bouncycastle.crypto.digests.RIPEMD160Digest;
-import org.bouncycastle.jcajce.provider.digest.Blake2s;
+import org.bouncycastle.jcajce.provider.digest.Blake2b;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.MessageDigest;
@@ -37,7 +37,7 @@ public class Hash {
 
 
         try {
-            MessageDigest digest = new Blake2s.Blake2s256();
+            MessageDigest digest = new Blake2b.Blake2b256();
            /* Blake2bDigest digest = new Blake2bDigest();//MessageDigest.getInstance(Constants.HASH_ALGORITHM);
 
             digest.update(input, 0, input.length);
