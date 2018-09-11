@@ -1,6 +1,5 @@
 package de.phash.manuel.asw.semux.key
 
-import de.phash.semux.Key
 import net.i2p.crypto.eddsa.EdDSAEngine
 
 /**
@@ -22,7 +21,7 @@ fun verify(message: ByteArray, signature: Key.Signature?): Boolean {
             return engine.verifyOneShot(message, signature.s)
 
         } catch (e: Exception) {
-            // do nothing
+            println(e.localizedMessage)
         }
 
     }

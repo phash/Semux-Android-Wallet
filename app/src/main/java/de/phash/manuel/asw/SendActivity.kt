@@ -19,7 +19,6 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.*
-import de.phash.semux.Key
 import kotlinx.android.synthetic.main.activity_send.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
