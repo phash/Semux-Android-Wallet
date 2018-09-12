@@ -24,7 +24,7 @@
 
 <resources>
 
-    <string name="app_name">ASW</string>
+    <string name="app_name">SEMUX</string>
     <string name="balance">Balance</string>
     <string name="address">Address</string>
     <string name="Available">Available</string>
