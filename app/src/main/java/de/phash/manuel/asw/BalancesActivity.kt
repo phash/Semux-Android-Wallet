@@ -67,6 +67,8 @@ class BalancesActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         viewManager = LinearLayoutManager(this)
         viewAdapter = SemuxBalanceAdapter(balancesList)
+        balancesTotalAvailable.text = "0 SEM"
+        balancesTotalLocked.text = "0 SEM"
 
         val adresses = getAdresses(database)
         adresses.forEach { Log.i("ADDR", "Address ${it.address}") }
@@ -125,7 +127,8 @@ class BalancesActivity : AppCompatActivity() {
                             "checked: ${account.message}",
                             Toast.LENGTH_LONG).show()
                     Log.i("RES", account.message)
-                    Log.i("RES", account.result.available)
+                    Log.i(
+                            "RES", account.result.available)
                     Log.i("JSON", "addr: ${account.result.address}")
                     Log.i("JSON", "avbl: ${account.result.available}")
                     Log.i("JSON", "lock: ${account.result.locked}")
@@ -136,8 +139,8 @@ class BalancesActivity : AppCompatActivity() {
                     val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                     val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-                    balancesTotalAvailable.text = df.format(total.divide(APIService.SEMUXMULTIPLICATOR))
-                    balancesTotalLocked.text = df.format(totallocked.divide(APIService.SEMUXMULTIPLICATOR))
+                    balancesTotalAvailable.text = "${df.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    balancesTotalLocked.text = "${df.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesList.clear()
                     balancesList.addAll(balancesMap.values)
                     Log.i("BAL", "" + balancesList.size)
