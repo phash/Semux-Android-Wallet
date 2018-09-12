@@ -74,7 +74,6 @@ class SendActivity : AppCompatActivity() {
     }
 
     fun onSendTransactionClick(view: View) {
-        val semuxAddressList = getSemuxAddress(database)
 
         if (sendReceivingAddressEditView.text.toString().isNotEmpty() && sendAmountEditView.text.toString().isNotEmpty()) {
             createTransaction()
@@ -117,7 +116,6 @@ class SendActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.transfer)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
 
     }
 
@@ -150,7 +148,6 @@ class SendActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
 
     }
 

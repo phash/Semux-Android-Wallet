@@ -33,7 +33,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -118,18 +117,8 @@ class BalancesActivity : AppCompatActivity() {
                 val resultCode = bundle.getInt(APIService.RESULT)
                 if (resultCode == Activity.RESULT_OK) {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
-                    Log.i("RES", json)
-
-                    Log.i("RES", account.message)
-                    Log.i(
-                            "RES", account.result.available)
-                    Log.i("JSON", "addr: ${account.result.address}")
-                    Log.i("JSON", "avbl: ${account.result.available}")
-                    Log.i("JSON", "lock: ${account.result.locked}")
-                    Log.i("JSON", "pend: ${account.result.pendingTransactionCount}")
 
                     balancesMap.put(account.result.address, account)
-                    Log.i("MAP", "size: " + balancesMap.size)
                     val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                     val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
@@ -137,8 +126,6 @@ class BalancesActivity : AppCompatActivity() {
                     balancesTotalLocked.text = "${df.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesList.clear()
                     balancesList.addAll(balancesMap.values)
-                    Log.i("BAL", "" + balancesList.size)
-                    //balancesList.sortBy { it.result.available }
 
                     viewAdapter.notifyDataSetChanged()
                 } else {
