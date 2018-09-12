@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="MIT_LICENSE">
+    <module2copyright>
+      <element module="All" copyright="MIT_LICENSE" />
+    </module2copyright>
+  </settings>
+</component>
