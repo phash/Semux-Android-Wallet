@@ -110,7 +110,6 @@ class BalancesActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT).show()
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -123,9 +122,7 @@ class BalancesActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
                     Log.i("RES", json)
-                    Toast.makeText(this@BalancesActivity,
-                            "checked: ${account.message}",
-                            Toast.LENGTH_LONG).show()
+                   
                     Log.i("RES", account.message)
                     Log.i(
                             "RES", account.result.available)
