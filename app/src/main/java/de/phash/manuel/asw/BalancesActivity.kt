@@ -44,15 +44,12 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 class BalancesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
-    val df = DecimalFormat("0.#########")
 
     private var balancesMap = HashMap<String, CheckBalance>()
     var balancesList = ArrayList<CheckBalance>()
@@ -122,8 +119,8 @@ class BalancesActivity : AppCompatActivity() {
                     val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                     val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-                    balancesTotalAvailable.text = "${df.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
-                    balancesTotalLocked.text = "${df.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    balancesTotalAvailable.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    balancesTotalLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesList.clear()
                     balancesList.addAll(balancesMap.values)
 

@@ -40,6 +40,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.APIService.Companion.unvote
 import de.phash.manuel.asw.semux.APIService.Companion.vote
 import de.phash.manuel.asw.semux.SemuxAddress
@@ -50,7 +51,6 @@ import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 class VoteActivity : AppCompatActivity() {
 
@@ -58,7 +58,6 @@ class VoteActivity : AppCompatActivity() {
     var address = ""
     var available = ""
     var nonce = ""
-    val df = DecimalFormat("0.#########")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
@@ -67,10 +66,10 @@ class VoteActivity : AppCompatActivity() {
         locked = intent.getStringExtra("locked")
         available = intent.getStringExtra("available")
         checkAccount()
-        val addressText = "${df.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+        val addressText = "${SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
         voteAddressTextView.text = intent.getStringExtra("address")
         voteAvailableTextView.text = addressText
-        val lockText = "${df.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+        val lockText = "${SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
         voteLockedTextView.text = lockText
     }
 
@@ -129,7 +128,6 @@ class VoteActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.transfer)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
     }
 
     fun getSemuxAddress(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
@@ -158,7 +156,6 @@ class VoteActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
 
     }
 
@@ -183,9 +180,7 @@ class VoteActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 //  val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
-                Toast.makeText(this@VoteActivity,
-                        "transfer done",
-                        Toast.LENGTH_LONG).show()
+
             } else {
                 Toast.makeText(this@VoteActivity, "transfer failed",
                         Toast.LENGTH_LONG).show()
@@ -200,9 +195,7 @@ class VoteActivity : AppCompatActivity() {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
                 nonce = account.result.nonce
-                Toast.makeText(this@VoteActivity,
-                        "checked: ${account.message}",
-                        Toast.LENGTH_LONG).show()
+
             } else {
                 Toast.makeText(this@VoteActivity, "check failed",
                         Toast.LENGTH_LONG).show()

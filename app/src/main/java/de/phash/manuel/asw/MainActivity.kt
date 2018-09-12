@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
 
     }
 

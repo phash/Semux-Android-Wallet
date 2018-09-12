@@ -34,10 +34,8 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.util.createQRCode
 import kotlinx.android.synthetic.main.activity_single_balance.*
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 class SingleBalanceActivity : AppCompatActivity() {
-    private val df = DecimalFormat("0.#########")
     var locked = ""
     var address = ""
     var available = ""
@@ -50,8 +48,8 @@ class SingleBalanceActivity : AppCompatActivity() {
         locked = intent.getStringExtra("locked")
 
         singleBalanceAddress.text = address
-        singleBalanceAvailable.text = df.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))
-        singleBalanceLocked.text = df.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))
+        singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))
+        singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))
         createQR()
 
     }

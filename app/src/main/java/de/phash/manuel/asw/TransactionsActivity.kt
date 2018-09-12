@@ -41,7 +41,6 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.transactions.Result
 import de.phash.manuel.asw.semux.json.transactions.TransactionsResult
-import java.text.DecimalFormat
 
 
 class TransactionsActivity : AppCompatActivity() {
@@ -49,8 +48,6 @@ class TransactionsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
-    val df = DecimalFormat("0.#########")
 
     var transactionsList = ArrayList<Result>()
 
@@ -90,7 +87,7 @@ class TransactionsActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.transactions)
         startService(intent)
-        Toast.makeText(this, "service started", Toast.LENGTH_SHORT)
+
 
     }
 

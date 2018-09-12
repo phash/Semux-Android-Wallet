@@ -48,7 +48,6 @@ import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 
 class SendActivity : AppCompatActivity() {
@@ -56,7 +55,6 @@ class SendActivity : AppCompatActivity() {
     var address = ""
     var available = ""
     var nonce = ""
-    val df = DecimalFormat("0.#########")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
@@ -65,10 +63,10 @@ class SendActivity : AppCompatActivity() {
         locked = intent.getStringExtra("locked")
         available = intent.getStringExtra("available")
         checkAccount()
-        val addressText = "${df.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+        val addressText = "${APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
         sendAddressTextView.text = intent.getStringExtra("address")
         sendAvailableTextView.text = addressText
-        val lockText = "${df.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+        val lockText = "${APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
         sendLockedTextView.text = lockText
 
     }

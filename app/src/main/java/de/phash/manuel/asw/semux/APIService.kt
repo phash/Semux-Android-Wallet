@@ -35,11 +35,14 @@ import de.phash.manuel.asw.semux.key.Network
 import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
 
 class APIService : IntentService("SemuxService") {
 
     companion object {
+
+        val SEMUXFORMAT = DecimalFormat("0.#########")
         val SEMUXMULTIPLICATOR = BigDecimal("1000000000")
         const val TYP = "type"
         const val ADDRESS = "address"

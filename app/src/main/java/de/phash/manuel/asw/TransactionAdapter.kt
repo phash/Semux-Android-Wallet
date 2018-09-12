@@ -33,7 +33,6 @@ import android.widget.TextView
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.transactions.Result
 import java.math.BigDecimal
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,10 +58,9 @@ class TransactionAdapter(private val myDataset: ArrayList<Result>) :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         Log.i("TRX", "DatasetSize: ${myDataset.size}")
-        val df = DecimalFormat("0.#########")
 
         holder.from.text = myDataset[position].from
-        holder.amount?.text = df.format(BigDecimal(myDataset[position].value).divide(APIService.SEMUXMULTIPLICATOR)) + "SEM"
+        holder.amount?.text = "${APIService.SEMUXFORMAT.format(BigDecimal(myDataset[position].value).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
         holder.to?.text = myDataset[position].to
         holder.type?.text = myDataset[position].type
         holder.txdate?.text = getDateTime(myDataset[position].timestamp)
@@ -73,7 +71,7 @@ class TransactionAdapter(private val myDataset: ArrayList<Result>) :
     override fun getItemCount() = myDataset.size
     private fun getDateTime(date: String): String? {
         try {
-            val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm:ss z")
+            val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm:ss z", Locale.getDefault())
             val netDate = Date(date.toLong())
             return sdf.format(netDate)
         } catch (e: Exception) {

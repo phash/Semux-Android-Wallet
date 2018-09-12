@@ -45,10 +45,8 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import java.math.BigDecimal
-import java.text.DecimalFormat
 
 class DashBoardActivity : AppCompatActivity() {
-    val df = DecimalFormat("0.#########")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
@@ -113,8 +111,8 @@ class DashBoardActivity : AppCompatActivity() {
                     val total = balancesList.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                     val totallocked = balancesList.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
-                    dashTotal.text = "${df.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
-                    dashLocked.text = "${df.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    dashTotal.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    dashLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
 
                     Log.i("BAL", "" + balancesList.size)
                     //balancesList.sortBy { it.result.available }
