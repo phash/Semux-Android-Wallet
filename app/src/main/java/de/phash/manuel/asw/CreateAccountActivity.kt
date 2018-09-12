@@ -52,6 +52,7 @@ class CreateAccountActivity : AppCompatActivity() {
         publicKey.text = Hex.toHexString(key.publicKey)
         createdaddress.text = key.toAddressString()
 
+
         val semuxAddress = SemuxAddress(null, key.toAddressString(), Hex.toHexString(pk), Hex.toHexString(key.publicKey))
         val values = ContentValues()
         values.put("address", key.toAddressString())

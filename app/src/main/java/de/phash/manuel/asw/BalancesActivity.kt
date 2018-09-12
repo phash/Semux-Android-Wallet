@@ -38,20 +38,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
 class BalancesActivity : AppCompatActivity() {
-    private val rowParser = classParser<SemuxAddress>()
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -71,7 +68,7 @@ class BalancesActivity : AppCompatActivity() {
         balancesTotalLocked.text = "0 SEM"
 
         val adresses = getAdresses(database)
-        adresses.forEach { Log.i("ADDR", "Address ${it.address}") }
+
 
         updateBalanceList(adresses)
 
@@ -122,7 +119,7 @@ class BalancesActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
                     Log.i("RES", json)
-                   
+
                     Log.i("RES", account.message)
                     Log.i(
                             "RES", account.result.available)
@@ -153,11 +150,6 @@ class BalancesActivity : AppCompatActivity() {
         }
     }
 
-    fun getAdresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
-        select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).exec {
-            parseList(rowParser)
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater

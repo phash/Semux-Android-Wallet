@@ -56,5 +56,13 @@
     <string name="importText">Import</string>
     <string name="unvote">Unvote</string>
     <string name="importKey">Import Key</string>
+    <string name="dashboardHead">SEMUX</string>
+    <string name="lightweight">LIGHTWEIGHT WALLET</string>
+    <string name="free">The use of this wallet is absolutely free of charge!</string>
+    <string name="semux">Semux is a revolutionary, experimental crypto-blockchain. This wallet enables you to interact with this blockchain! Keep all your secret keys private! Save them! And never tell anyone about your keys!</string>
+    <string name="onlyAddress">Only share addresses! Period!</string>
+    <string name="createIfEmpty">you do not have an account here:</string>
+    <string name="createAcc">Create Account</string>
+    <string name="balances">Balances</string>
 
 </resources>

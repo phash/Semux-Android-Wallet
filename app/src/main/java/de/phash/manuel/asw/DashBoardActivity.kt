@@ -24,18 +24,36 @@
 
 package de.phash.manuel.asw
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.Toast
+import com.google.gson.Gson
+import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.util.checkBalanceForWallet
+import kotlinx.android.synthetic.main.activity_dash_board.*
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
 class DashBoardActivity : AppCompatActivity() {
-
+    val df = DecimalFormat("0.#########")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-
+        checkBalanceForWallet(database, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,5 +66,78 @@ class DashBoardActivity : AppCompatActivity() {
         // Handle item selection
         startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
+    }
+
+    fun onCreateClick(view: View) {
+        val intent = Intent(this, CreateAccountActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun onImportClick(view: View) {
+        val intent = Intent(this, ImportKeyActivity::class.java)
+        startActivity(intent)
+
+    }
+
+    fun onBalancesClick(view: View) {
+
+        val intent = Intent(this, BalancesActivity::class.java)
+        startActivity(intent)
+    }
+
+
+    private val balancesList = ArrayList<CheckBalance>()
+    private val receiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val bundle = intent.extras
+            if (bundle != null) {
+                val json = bundle.getString(APIService.JSON)
+                val resultCode = bundle.getInt(APIService.RESULT)
+                if (resultCode == Activity.RESULT_OK) {
+                    val account = Gson().fromJson(json, CheckBalance::class.java)
+                    Log.i("RES", json)
+
+                    balancesList.add(account)
+
+                    dashboardCreate.visibility = INVISIBLE
+                    dashboardImport.visibility = INVISIBLE
+                    noAccountsText.visibility = INVISIBLE
+
+                    dashLocked.visibility = VISIBLE
+                    dashTotal.visibility = VISIBLE
+                    viewAccountsButton.visibility = VISIBLE
+                    dashLockedtextView.visibility = VISIBLE
+                    dashTotaltextView.visibility = VISIBLE
+
+                    val total = balancesList.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    val totallocked = balancesList.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+                    dashTotal.text = "${df.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                    dashLocked.text = "${df.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+
+                    Log.i("BAL", "" + balancesList.size)
+                    //balancesList.sortBy { it.result.available }
+
+
+                } else {
+                    Toast.makeText(this@DashBoardActivity, "check failed",
+                            Toast.LENGTH_LONG).show()
+
+                }
+            }
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(receiver)
     }
 }

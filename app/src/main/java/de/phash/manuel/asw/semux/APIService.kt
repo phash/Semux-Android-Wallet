@@ -202,34 +202,5 @@ class APIService : IntentService("SemuxService") {
 
     }
 
-/*    fun getApiEndPoint() {
 
-
-        val query = ParseQuery.getQuery<ParseObject>("settings")
-        query.whereEqualTo("name", "base").whereEqualTo("network", "testnet")
-        query.findInBackground { objects, e ->
-            if (e == null) {
-                if (objects.size > 0) {
-                    API_ENDPOINT = objects.get(0).getString("endpoint")
-                    NETWORK = if(objects.get(0).getString("network").equals("mainnet"))Network.MAINNET else
-                        Network.TESTNET
-                } else {
-                    val defaultEndpoint = ParseObject("endpoints")
-                    defaultEndpoint.put("name", "base")
-                    defaultEndpoint.put("endpoint", "http://45.32.185.200/api")
-                    defaultEndpoint.put("network", "mainnet")
-                    defaultEndpoint.saveInBackground()
-                    API_ENDPOINT = "http://45.32.185.200/api"
-                    NETWORK = Network.MAINNET
-                    val testEndpoint = ParseObject("endpoints")
-                    testEndpoint.put("name", "base")
-                    testEndpoint.put("endpoint", "http://localhost/api")
-                    testEndpoint.put("network", "testnet")
-                    testEndpoint.saveInBackground()
-                }
-            }
-        }
-
-    }
-*/
 }
