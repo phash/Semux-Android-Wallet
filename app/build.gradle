@@ -24,10 +24,10 @@
 
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+
+
 
 android {
     compileSdkVersion 28
@@ -54,18 +54,18 @@ android {
 }
 
 dependencies {
-    def androidSupport = "v7:26.1.0"
+    def androidSupport = "28.0.0-rc02"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
-    implementation group: 'com.android.support', name: 'appcompat-v7', version: '28.0.0-rc02'
+    implementation group: 'com.android.support', name: 'appcompat-v7', version: androidSupport
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
-    implementation group: 'com.android.support', name: 'support-v4', version: '28.0.0-rc02'
+    implementation group: 'com.android.support', name: 'support-v4', version: androidSupport
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
-    implementation group: 'com.android.support', name: 'recyclerview-v7', version: '28.0.0-rc02'
+    implementation group: 'com.android.support', name: 'recyclerview-v7', version: androidSupport
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
-    implementation group: 'com.android.support', name: 'cardview-v7', version: '28.0.0-rc02'
+    implementation group: 'com.android.support', name: 'cardview-v7', version: androidSupport
 
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

@@ -33,6 +33,7 @@ import android.view.View
 import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.key.CryptoException
 import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.semux.key.Key
 import kotlinx.android.synthetic.main.activity_import_key.*
@@ -51,16 +52,21 @@ class ImportKeyActivity : AppCompatActivity() {
             Toast.makeText(this, "Key may not be empty", Toast.LENGTH_LONG).show()
         else {
 
-            val key = Key(Hex.decode0x(pkey))
-            importAddress.text = key.toAddressString()
-            importPubKey.text = Hex.encode0x(key.publicKey)
 
-            val values = ContentValues()
-            values.put("address", key.toAddressString())
-            values.put("publickey", org.bouncycastle.util.encoders.Hex.toHexString(key.publicKey))
-            values.put("privatekey", org.bouncycastle.util.encoders.Hex.toHexString(key.privateKey))
+            try {
+                val key = Key(Hex.decode0x(pkey))
+                importAddress.text = key.toAddressString()
+                importPubKey.text = Hex.encode0x(key.publicKey)
 
-            database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
+                val values = ContentValues()
+                values.put("address", key.toAddressString())
+                values.put("publickey", org.bouncycastle.util.encoders.Hex.toHexString(key.publicKey))
+                values.put("privatekey", org.bouncycastle.util.encoders.Hex.toHexString(key.privateKey))
+
+                database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
+            } catch (e: CryptoException) {
+                Toast.makeText(this, "not a valid private key", Toast.LENGTH_LONG)
+            }
 
         }
     }
