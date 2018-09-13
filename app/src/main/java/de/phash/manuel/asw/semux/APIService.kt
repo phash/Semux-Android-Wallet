@@ -29,6 +29,7 @@ import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.Network
@@ -59,9 +60,13 @@ class APIService : IntentService("SemuxService") {
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
-        private var API_ENDPOINT = "http://45.32.185.200/api"
+        private var API_ENDPOINT = "https://sempy.online/api"
+
+
         val NETWORK = Network.MAINNET
         //Network.TESTNET
+        val firebase = FirebaseDatabase.getInstance()
+        val firebaseReference = firebase.reference
 
     }
 

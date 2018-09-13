@@ -33,9 +33,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
@@ -44,6 +46,7 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
+import java.util.*
 
 class BalancesActivity : AppCompatActivity() {
 
@@ -62,11 +65,9 @@ class BalancesActivity : AppCompatActivity() {
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-
-        val adresses = getAdresses(database)
-
-
-        updateBalanceList(adresses)
+        timer = Timer()
+        timer.scheduleAtFixedRate(UpdateBalTask(), 30000, 30000)
+        updateBalances()
 
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
@@ -74,6 +75,31 @@ class BalancesActivity : AppCompatActivity() {
             adapter = viewAdapter
 
         }
+    }
+
+    private var timer = Timer()
+
+    inner class UpdateBalTask : TimerTask() {
+        override fun run() {
+            Log.i("TIMER", "timer runs")
+            updateBalances()
+        }
+    }
+
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
+    private fun updateBalances() {
+
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
+        val adresses = getAdresses(database)
+
+        updateBalanceList(adresses)
     }
 
     private fun updateBalanceList(adresses: List<SemuxAddress>) {

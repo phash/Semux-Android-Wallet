@@ -38,6 +38,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
@@ -46,12 +47,21 @@ import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import java.math.BigDecimal
 
+
 class DashBoardActivity : AppCompatActivity() {
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(database, this)
+// Obtain the FirebaseAnalytics instance.
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "dashboard")
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -36,6 +36,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
@@ -84,9 +85,15 @@ class SendActivity : AppCompatActivity() {
 
     }
 
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
     private fun createTransaction() {
         try {
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
 
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+            mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
             Log.i("PKEY", semuxAddressList.get(0).privateKey)

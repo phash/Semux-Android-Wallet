@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "805480791178",
+    "firebase_url": "https://aswfirebaseproject-dc790.firebaseio.com",
+    "project_id": "aswfirebaseproject-dc790",
+    "storage_bucket": "aswfirebaseproject-dc790.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805480791178:android:b0b668d13f0275a1",
+        "android_client_info": {
+          "package_name": "de.phash.manuel.asw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805480791178-rqkhops7n9bcrsk3mg30fhq09a2j5r9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuEQGy7FD1T6f6f2M9F2Y-sOGS8yIiYvQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
