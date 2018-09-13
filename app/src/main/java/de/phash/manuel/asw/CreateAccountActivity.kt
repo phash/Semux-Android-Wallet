@@ -32,36 +32,39 @@ import android.view.MenuItem
 import android.view.View
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
-import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Key
 import kotlinx.android.synthetic.main.activity_create_account.*
 import org.bouncycastle.util.encoders.Hex
 
 class CreateAccountActivity : AppCompatActivity() {
 
+    var key = Key()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        updateViews()
+    }
+
+    fun updateViews() {
+        privateKey.text = Hex.toHexString(key.privateKey)
+        publicKey.text = Hex.toHexString(key.publicKey)
+        createdaddress.text = key.toAddressString()
     }
 
     fun onCreateKey(view: View) {
-        val key = Key()
-        val pk = key.privateKey
-        privateKey.text = Hex.toHexString(pk)
-        publicKey.text = Hex.toHexString(key.publicKey)
-        createdaddress.text = key.toAddressString()
+        key = Key()
 
+    }
 
-        val semuxAddress = SemuxAddress(null, key.toAddressString(), Hex.toHexString(pk), Hex.toHexString(key.publicKey))
+    fun onSaveKey(view: View) {
         val values = ContentValues()
         values.put("address", key.toAddressString())
         values.put("publickey", Hex.toHexString(key.publicKey))
-        values.put("privatekey", Hex.toHexString(pk))
-
+        values.put("privatekey", Hex.toHexString(key.privateKey))
 
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
-
+        balanceActivity(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

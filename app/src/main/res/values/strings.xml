@@ -64,5 +64,6 @@
     <string name="createIfEmpty">you do not have an account here:</string>
     <string name="createAcc">Create Account</string>
     <string name="balances">Balances</string>
+    <string name="save">save</string>
 
 </resources>
