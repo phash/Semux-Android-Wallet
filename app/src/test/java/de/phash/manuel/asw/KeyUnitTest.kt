@@ -26,8 +26,9 @@ package de.phash.manuel.asw
 
 import de.phash.manuel.asw.semux.key.*
 import okhttp3.*
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import java.io.IOException
 
 
@@ -146,7 +147,7 @@ class KeyUnitTest {
         val tx = Transaction.fromEncoded(Hex.decode0x(endoded)).sign(account)
         println("raw: ${Hex.encode0x(tx.toBytes())}")
         println("validTX signed: ${tx.validate(network)}")
-        assertTrue("Transaktion invalid", transaction.validate(network))
+        Assertions.assertTrue(transaction.validate(network), { "Transaktion invalid" })
     }
 
     @Test
@@ -158,7 +159,6 @@ class KeyUnitTest {
         val to = Key()
         val addressReceiver = to.toAddress()
         //   val receiver = Hex.decode0x(addressReceiver)
-        val nonce = 1L
         val network = Network.MAINNET
         val transaction = TransactionBuilder(account)
                 .withNetwork(network.name)
@@ -183,7 +183,7 @@ class KeyUnitTest {
 
         println("raw: ${Hex.encode0x(tx.toBytes())}")
         println("validTX signed: ${tx.validate(network)}")
-        assertTrue("Transaktion invalid", tx.validate(network))
+        assertTrue(tx.validate(network), { "Transaktion invalid" })
 
     }
     // "0x00031409c5f2794d69717d538bfcc150644f7685945cfa00000002540be40000000000004c4b40000000000000000100000165c4f4f54700"

@@ -33,6 +33,7 @@ import android.view.View
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.key.Key
+import de.phash.manuel.asw.util.EnCryptor
 import kotlinx.android.synthetic.main.activity_create_account.*
 import org.bouncycastle.util.encoders.Hex
 
@@ -58,10 +59,20 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     fun onSaveKey(view: View) {
+
+
+        val encryptorp = EnCryptor()
+        val encryptors = EnCryptor()
+        val encryptedPrivK = encryptors.encryptText(key.toAddressString() + "s", de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey))
+        val encryptedPublK = encryptorp.encryptText(key.toAddressString() + "p", de.phash.manuel.asw.semux.key.Hex.encode0x(key.publicKey))
+
+
         val values = ContentValues()
         values.put("address", key.toAddressString())
-        values.put("publickey", Hex.toHexString(key.publicKey))
-        values.put("privatekey", Hex.toHexString(key.privateKey))
+        values.put("publickey", Hex.toHexString(encryptedPublK))
+        values.put("privatekey", Hex.toHexString(encryptedPrivK))
+        values.put("ivs", Hex.toHexString(encryptors.iv))
+        values.put("ivp", Hex.toHexString(encryptorp.iv))
 
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
         balanceActivity(this)

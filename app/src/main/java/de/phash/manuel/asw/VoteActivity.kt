@@ -46,6 +46,7 @@ import de.phash.manuel.asw.semux.APIService.Companion.vote
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.*
+import de.phash.manuel.asw.util.DeCryptor
 import kotlinx.android.synthetic.main.activity_vote.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
@@ -102,14 +103,18 @@ class VoteActivity : AppCompatActivity() {
 
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
-            Log.i("PKEY", semuxAddressList.get(0).privateKey)
-            val voterPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
+
+            val account = semuxAddressList.get(0)
+            val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
+
+            val senderPkey = Key(Hex.decode0x(decryptedKey))
+
             val amount = Amount(voteAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
             val fee = Amount(5000000)
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
             var transaction = Transaction(APIService.NETWORK, type, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
-            val signedTx = transaction.sign(voterPkey)
+            val signedTx = transaction.sign(senderPkey)
 
             voteTransaction(signedTx)
         } catch (e: Exception) {
@@ -141,6 +146,8 @@ class VoteActivity : AppCompatActivity() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
                 APIService.NOTIFICATION_TRANSFER))
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION))
     }
 
     override fun onPause() {
