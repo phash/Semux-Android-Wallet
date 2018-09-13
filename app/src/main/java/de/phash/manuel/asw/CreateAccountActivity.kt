@@ -32,7 +32,6 @@ import android.view.MenuItem
 import android.view.View
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
-import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Key
 import kotlinx.android.synthetic.main.activity_create_account.*
 import org.bouncycastle.util.encoders.Hex
@@ -52,13 +51,10 @@ class CreateAccountActivity : AppCompatActivity() {
         publicKey.text = Hex.toHexString(key.publicKey)
         createdaddress.text = key.toAddressString()
 
-
-        val semuxAddress = SemuxAddress(null, key.toAddressString(), Hex.toHexString(pk), Hex.toHexString(key.publicKey))
         val values = ContentValues()
         values.put("address", key.toAddressString())
         values.put("publickey", Hex.toHexString(key.publicKey))
         values.put("privatekey", Hex.toHexString(pk))
-
 
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
 
