@@ -102,7 +102,7 @@ class APIService : IntentService("SemuxService") {
                 .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println(call.toString())
+                Log.i("TRX", call.toString())
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -125,7 +125,7 @@ class APIService : IntentService("SemuxService") {
 
                 client.newCall(transactionRequest).enqueue(object : Callback {
                     override fun onFailure(call: Call, e: IOException) {
-                        println(call.toString())
+                        Log.i("TRX", call.toString())
                     }
 
                     override fun onResponse(call: Call, response: Response) {
@@ -167,7 +167,7 @@ class APIService : IntentService("SemuxService") {
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    println(call.toString())
+                    Log.i("TRX", call.toString())
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -196,7 +196,7 @@ class APIService : IntentService("SemuxService") {
                 .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                println(call.toString())
+                Log.i("TRX", call.toString())
             }
 
             override fun onResponse(call: Call, response: Response) {

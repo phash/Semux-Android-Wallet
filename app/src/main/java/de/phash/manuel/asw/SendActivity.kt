@@ -44,6 +44,7 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.*
+import de.phash.manuel.asw.util.DeCryptor
 import kotlinx.android.synthetic.main.activity_send.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
@@ -89,6 +90,8 @@ class SendActivity : AppCompatActivity() {
     private fun createTransaction() {
         try {
             val bundle = Bundle()
+
+            Log.i("CRYPT", "create")
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
 
@@ -96,17 +99,20 @@ class SendActivity : AppCompatActivity() {
             mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
-            Log.i("PKEY", semuxAddressList.get(0).privateKey)
-            val senderPkey = Key(Hex.decode0x(semuxAddressList.get(0).privateKey))
+            val account = semuxAddressList.get(0)
+            val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
+
+            val senderPkey = Key(Hex.decode0x(decryptedKey))
             val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
             val fee = Amount(5000000)
             var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
             val signedTx = transaction.sign(senderPkey)
 
-            sendTransaction(transaction)
+            sendTransaction(signedTx)
         } catch (e: Exception) {
-            Log.e("SIGN", e.localizedMessage)
+            e.printStackTrace()
+            Log.e("SIGN", e.localizedMessage ?: "NIX")
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
         }
     }
@@ -138,6 +144,8 @@ class SendActivity : AppCompatActivity() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
                 APIService.NOTIFICATION_TRANSFER))
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION))
     }
 
     override fun onPause() {

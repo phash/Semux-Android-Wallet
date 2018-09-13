@@ -49,12 +49,15 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDa
                 "id" to INTEGER + PRIMARY_KEY + UNIQUE,
                 "address" to TEXT,
                 "publickey" to TEXT,
-                "privatekey" to TEXT)
+                "privatekey" to TEXT,
+                "ivs" to TEXT,
+                "ivp" to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Here you can upgrade tables, as usual
         db.dropTable("SemuxAddress", true)
+
     }
 }
 

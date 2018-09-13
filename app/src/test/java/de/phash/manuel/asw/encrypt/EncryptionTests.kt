@@ -22,34 +22,20 @@
  * SOFTWARE.
  */
 
-package de.phash.manuel.asw.semux.key
+package de.phash.manuel.asw.encrypt
 
-import android.util.Log
-import net.i2p.crypto.eddsa.EdDSAEngine
+import de.phash.manuel.asw.semux.key.Hex
+import de.phash.manuel.asw.semux.key.Key
+import org.junit.jupiter.api.Test
 
-/**
- * Verifies a signature.
- *
- * @param message
- * message
- * @param signature
- * signature
- * @return True if the signature is valid, otherwise false
- */
-fun verify(message: ByteArray, signature: Key.Signature?): Boolean {
-    if (message != null && signature != null) { // avoid null pointer exception
-        try {
 
-            val engine = EdDSAEngine()
-            engine.initVerify(PublicKeyCache.computeIfAbsent(signature.publicKey))
+class EncryptionTests {
 
-            return engine.verifyOneShot(message, signature.s)
 
-        } catch (e: Exception) {
-            Log.i("VERIFY", e.localizedMessage)
-        }
-
+    @Test
+    fun testEncryption() {
+        val encrypted = "9d543d36b9b78e88ac31188ec3d3c365dad772eb4add9a2031b485ac7250457441ee2b78f58947700c239b44f45bf4b99ddc6f0c345209dcff85d1f413cddc91cda70898d34a2864b6bded50c7016b2998a281651025cd0f1a7ffe4d0dac1db4fe410046db2bdaab7b8200b83e933e22f17a"
+        val key = Key(Hex.decode0x(encrypted))
+        println("der Key: ${key.toAddressString()} - ${Hex.encode(key.privateKey)}")
     }
-
-    return false
 }
