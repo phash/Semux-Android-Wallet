@@ -56,10 +56,10 @@ class DashBoardActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(database, this)
 // Obtain the FirebaseAnalytics instance.
+
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "dashboard")
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
     }
@@ -148,4 +148,6 @@ class DashBoardActivity : AppCompatActivity() {
         super.onPause()
         unregisterReceiver(receiver)
     }
+
+
 }
