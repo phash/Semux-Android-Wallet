@@ -50,6 +50,8 @@ class APIService : IntentService("SemuxService") {
         const val RESULT = "result"
         const val JSON = "json"
         const val NOTIFICATION = "de.phash.manuel.asw.semux"
+        const val NOTIFICATION_TRANSACTION = "de.phash.manuel.asw.semux.transaction"
+        const val NOTIFICATION_TRANSFER = "de.phash.manuel.asw.semux.transfer"
         const val TRANSACTION_RAW = "transactionraw"
 
         const val check = "check"
@@ -129,7 +131,7 @@ class APIService : IntentService("SemuxService") {
                     override fun onResponse(call: Call, response: Response) {
                         val innerResult = response.body()?.string()
                         Log.i("TRX", "result-> $innerResult")
-                        val notificationIntent = Intent(NOTIFICATION)
+                        val notificationIntent = Intent(NOTIFICATION_TRANSACTION)
                         notificationIntent.putExtra(TYP, transactions)
                         notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
                         notificationIntent.putExtra(JSON, innerResult)
@@ -171,7 +173,7 @@ class APIService : IntentService("SemuxService") {
                 override fun onResponse(call: Call, response: Response) {
                     val res = response.body()?.string()
 
-                    val responseIntent = Intent(NOTIFICATION)
+                    val responseIntent = Intent(NOTIFICATION_TRANSFER)
                     responseIntent.putExtra(TYP, transfer)
                     responseIntent.putExtra(RESULT, Activity.RESULT_OK)
                     responseIntent.putExtra(JSON, res)

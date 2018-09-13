@@ -137,7 +137,7 @@ class SendActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
-                APIService.NOTIFICATION))
+                APIService.NOTIFICATION_TRANSFER))
     }
 
     override fun onPause() {

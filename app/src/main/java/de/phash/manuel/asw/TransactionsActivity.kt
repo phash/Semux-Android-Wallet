@@ -103,6 +103,10 @@ class TransactionsActivity : AppCompatActivity() {
                     val transactionsResult = Gson().fromJson(json, TransactionsResult::class.java)
                     Log.i("TRX", json)
                     Log.i("JSON", "transactions: ${transactionsResult.result.size}")
+                    if (transactionsResult.result.isEmpty()) {
+
+                    }
+                    transactionsList.clear()
                     transactionsList.addAll(transactionsResult.result)
                     Log.i("TRX", "" + transactionsList.size)
                     viewAdapter.notifyDataSetChanged()
@@ -118,7 +122,7 @@ class TransactionsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
-                APIService.NOTIFICATION))
+                APIService.NOTIFICATION_TRANSACTION))
     }
 
     override fun onPause() {

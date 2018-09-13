@@ -65,5 +65,6 @@
     <string name="createAcc">Create Account</string>
     <string name="balances">Balances</string>
     <string name="save">save</string>
+    <string name="infoNoTxTextView">There are no transactions for this address!</string>
 
 </resources>
