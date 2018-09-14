@@ -40,11 +40,11 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
-import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_dash_board.*
+import org.jetbrains.anko.alert
 import java.math.BigDecimal
 import java.util.*
 
@@ -58,8 +58,8 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        checkBalanceForWallet(database, this)
-// Obtain the FirebaseAnalytics instance.
+        // checkBalanceForWallet(database, this)
+        // Obtain the FirebaseAnalytics instance.
 
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
@@ -101,6 +101,7 @@ class DashBoardActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
+            Log.i("RECEIVE", "DashBoard received Broadcast")
             val bundle = intent.extras
             if (bundle != null) {
                 val json = bundle.getString(APIService.JSON)
@@ -110,6 +111,14 @@ class DashBoardActivity : AppCompatActivity() {
                     Log.i("RES", json)
 
                     showRecycler()
+                    if (balancesMap.containsKey(account.result.address)) {
+                        val oldResult = balancesMap.get(account.result.address)
+                        val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
+                        when {
+                            compareAvailable < 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(oldResult?.result?.available).subtract(BigDecimal(account.result.available)).toPlainString())}").show()
+                            compareAvailable > 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(account.result.available).subtract(BigDecimal(oldResult?.result?.available)).toPlainString())}").show()
+                        }
+                    }
 
                     balancesMap.put(account.result.address, account)
 
@@ -140,7 +149,6 @@ class DashBoardActivity : AppCompatActivity() {
         dashTotaltextView.visibility = VISIBLE
     }
 
-
     override fun onResume() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
@@ -151,6 +159,5 @@ class DashBoardActivity : AppCompatActivity() {
         super.onPause()
         unregisterReceiver(receiver)
     }
-
 
 }

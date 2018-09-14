@@ -22,34 +22,20 @@
  * SOFTWARE.
  */
 
-package de.phash.manuel.asw
+package de.phash.manuel.asw.semux
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
+import de.phash.manuel.asw.semux.json.CheckBalance
+import java.math.BigDecimal
 
-class CreditsActivity : AppCompatActivity() {
+object WalletBalance {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_credits)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-
-    }
+    var total: BigDecimal? = null
+    var locked: BigDecimal? = null
+    var balancesMap = HashMap<String, CheckBalance>()
 
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        startNewActivity(item, this)
-        return super.onOptionsItemSelected(item)
-    }
-
+    /*
+     * Idee: hier wird der Wallet state gehalten und bei changes gibts nen Alert
+     */
 
 }

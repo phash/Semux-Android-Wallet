@@ -36,16 +36,11 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
-import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.Result
-import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
 import java.util.*
@@ -68,65 +63,12 @@ class BalancesActivity : AppCompatActivity() {
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-        timer = Timer()
-        timer.scheduleAtFixedRate(UpdateBalTask(), 30000, 30000)
-        updateBalances()
 
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-            addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
-                override fun onTouchEvent(p0: RecyclerView, p1: MotionEvent) {
-                    Log.i("COPY", "onTouch")
-                }
-
-                override fun onInterceptTouchEvent(p0: RecyclerView, p1: MotionEvent): Boolean {
-                    Log.i("COPY", "intercept")
-                    return false
-                }
-
-                override fun onRequestDisallowInterceptTouchEvent(p0: Boolean) {
-                    Log.i("COPY", "disallowed")
-                }
-
-            })
         }
-
-    }
-
-
-    private var timer = Timer()
-
-    inner class UpdateBalTask : TimerTask() {
-        override fun run() {
-            Log.i("TIMER", "timer runs")
-            updateBalances()
-        }
-    }
-
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
-
-    private fun updateBalances() {
-
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-
-        val adresses = getAdresses(database)
-
-        updateBalanceList(adresses)
-    }
-
-    private fun updateBalanceList(adresses: List<SemuxAddress>) {
-
-        adresses.forEach {
-            updateAddress(it.address)
-        }
-
     }
 
     override fun onResume() {
@@ -140,19 +82,10 @@ class BalancesActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
     }
 
-    private fun updateAddress(address: String) {
-
-        val intent = Intent(this, APIService::class.java)
-        // add infos for the service which file to download and where to store
-        intent.putExtra(APIService.ADDRESS, address)
-        intent.putExtra(APIService.TYP,
-                APIService.check)
-        startService(intent)
-    }
-
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
+            Log.i("RECEIVE", "BalancesActivity received Broadcast")
             val bundle = intent.extras
             if (bundle != null) {
                 val json = bundle.getString(APIService.JSON)
