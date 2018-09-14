@@ -109,6 +109,8 @@ class TransactionsActivity : AppCompatActivity() {
                     }
                     transactionsList.clear()
                     transactionsList.addAll(transactionsResult.result)
+                    transactionsList.sortByDescending { it.timestamp }
+                    // Or: transactionsList.sortedWith(compareBy(Result::timestamp))
                     Log.i("TRX", "" + transactionsList.size)
                     viewAdapter.notifyDataSetChanged()
                 } else {

@@ -48,8 +48,8 @@ class SingleBalanceActivity : AppCompatActivity() {
         locked = intent.getStringExtra("locked")
 
         singleBalanceAddress.text = address
-        singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))
-        singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))
+        singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+        singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
         createQR()
 
     }

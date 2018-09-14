@@ -36,6 +36,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -43,10 +44,12 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.json.Result
 import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
 import java.util.*
+
 
 class BalancesActivity : AppCompatActivity() {
 
@@ -55,7 +58,7 @@ class BalancesActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var balancesMap = HashMap<String, CheckBalance>()
-    var balancesList = ArrayList<CheckBalance>()
+    var balancesList = ArrayList<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +76,25 @@ class BalancesActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+            addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                override fun onTouchEvent(p0: RecyclerView, p1: MotionEvent) {
+                    Log.i("COPY", "onTouch")
+                }
 
+                override fun onInterceptTouchEvent(p0: RecyclerView, p1: MotionEvent): Boolean {
+                    Log.i("COPY", "intercept")
+                    return false
+                }
+
+                override fun onRequestDisallowInterceptTouchEvent(p0: Boolean) {
+                    Log.i("COPY", "disallowed")
+                }
+
+            })
         }
+
     }
+
 
     private var timer = Timer()
 
@@ -149,8 +168,10 @@ class BalancesActivity : AppCompatActivity() {
                     balancesTotalLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
 
                     balancesList.clear()
-                    balancesList.addAll(balancesMap.values)
 
+                    balancesList.addAll(balancesMap.values.map { it.result })
+                    balancesList.sortByDescending { it.available }
+                    //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
                     viewAdapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(this@BalancesActivity, "check failed",
