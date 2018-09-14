@@ -58,7 +58,7 @@
             <TextView
                 android:id="@+id/listtransactionsto"
                 android:layout_width="250dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"

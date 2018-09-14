@@ -42,7 +42,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.transactions.Result
 import de.phash.manuel.asw.semux.json.transactions.TransactionsResult
-import kotlinx.android.synthetic.main.activity_dash_board.*
+import kotlinx.android.synthetic.main.activity_transactions.*
 
 
 class TransactionsActivity : AppCompatActivity() {
@@ -92,7 +92,6 @@ class TransactionsActivity : AppCompatActivity() {
 
     }
 
-
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -105,7 +104,7 @@ class TransactionsActivity : AppCompatActivity() {
                     Log.i("TRX", json)
                     Log.i("JSON", "transactions: ${transactionsResult.result.size}")
                     if (transactionsResult.result.isNotEmpty()) {
-                        noAccountsText.visibility = INVISIBLE
+                        noTransactionsTextView.visibility = INVISIBLE
 
                     }
                     transactionsList.clear()
