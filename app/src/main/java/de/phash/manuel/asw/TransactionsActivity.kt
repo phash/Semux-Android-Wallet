@@ -90,7 +90,6 @@ class TransactionsActivity : AppCompatActivity() {
                 APIService.transactions)
         startService(intent)
 
-
     }
 
 

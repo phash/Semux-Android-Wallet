@@ -69,7 +69,7 @@ class KeyUnitTest {
 
     @Test
     fun TransactionTestSend() {
-        val amount = Amount.Unit.MILLI_SEM.of(1000)
+        val amount = Amount.Unit.SEM.of(1)
         val fee = Amount.Unit.MILLI_SEM.of(5)
         val addressReceiver = "0x2e2fcd3a04771c15837a6ac6ea7e7675a82c83d8"
         val receiver = Hex.decode0x(addressReceiver)

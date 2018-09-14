@@ -40,6 +40,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.FEE
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.APIService.Companion.unvote
 import de.phash.manuel.asw.semux.APIService.Companion.vote
@@ -47,6 +48,7 @@ import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.DeCryptor
+import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_vote.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
@@ -109,10 +111,10 @@ class VoteActivity : AppCompatActivity() {
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
 
-            val amount = Amount(voteAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
-            val fee = Amount(5000000)
+            val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
+
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
-            var transaction = Transaction(APIService.NETWORK, type, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            var transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
             val signedTx = transaction.sign(senderPkey)
 

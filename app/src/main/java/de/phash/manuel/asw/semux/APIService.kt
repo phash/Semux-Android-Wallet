@@ -32,6 +32,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Amount
 import de.phash.manuel.asw.semux.key.Network
 import okhttp3.*
 import java.io.IOException
@@ -44,6 +45,7 @@ class APIService : IntentService("SemuxService") {
     companion object {
 
         val SEMUXFORMAT = DecimalFormat("0.#########")
+        val FEE = Amount.Unit.MILLI_SEM.of(5)
         val SEMUXMULTIPLICATOR = BigDecimal("1000000000")
         const val TYP = "type"
         const val ADDRESS = "address"

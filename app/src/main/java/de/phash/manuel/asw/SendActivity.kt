@@ -41,6 +41,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.FEE
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.*
@@ -103,9 +104,9 @@ class SendActivity : AppCompatActivity() {
             val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
-            val amount = Amount(sendAmountEditView.text.toString().toLong() * APIService.SEMUXMULTIPLICATOR.toLong())
-            val fee = Amount(5000000)
-            var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, fee, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
+
+            var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
 
             val signedTx = transaction.sign(senderPkey)
 
