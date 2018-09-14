@@ -36,6 +36,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -47,6 +48,7 @@ import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
 import java.util.*
+
 
 class BalancesActivity : AppCompatActivity() {
 
@@ -73,9 +75,25 @@ class BalancesActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+            addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                override fun onTouchEvent(p0: RecyclerView, p1: MotionEvent) {
+                    Log.i("COPY", "onTouch")
+                }
 
+                override fun onInterceptTouchEvent(p0: RecyclerView, p1: MotionEvent): Boolean {
+                    Log.i("COPY", "intercept")
+                    return false
+                }
+
+                override fun onRequestDisallowInterceptTouchEvent(p0: Boolean) {
+                    Log.i("COPY", "disallowed")
+                }
+
+            })
         }
+
     }
+
 
     private var timer = Timer()
 
