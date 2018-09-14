@@ -44,6 +44,7 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.json.Result
 import de.phash.manuel.asw.util.getAdresses
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
@@ -57,7 +58,7 @@ class BalancesActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var balancesMap = HashMap<String, CheckBalance>()
-    var balancesList = ArrayList<CheckBalance>()
+    var balancesList = ArrayList<Result>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,8 +167,10 @@ class BalancesActivity : AppCompatActivity() {
                     balancesTotalAvailable.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesTotalLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesList.clear()
-                    balancesList.addAll(balancesMap.values)
 
+                    balancesList.addAll(balancesMap.values.map { it.result })
+                    balancesList.sortByDescending { it.available }
+                    //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
                     viewAdapter.notifyDataSetChanged()
                 } else {
                     Toast.makeText(this@BalancesActivity, "check failed",
