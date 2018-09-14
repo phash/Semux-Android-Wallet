@@ -25,6 +25,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/dashboardMenu"
+        android:title="@string/dashboard" />
+    <item
         android:id="@+id/balancesMenu"
         android:title="@string/accounts" />
     <item
@@ -33,4 +36,7 @@
     <item
         android:id="@+id/importPrivateKey"
         android:title="@string/importKey" />
+    <item
+        android:id="@+id/creditMenu"
+        android:title="@string/credit" />
 </menu>

@@ -38,9 +38,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.google.gson.Gson
+import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.Result
+import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
 import java.util.*
@@ -63,7 +65,7 @@ class BalancesActivity : AppCompatActivity() {
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-
+        checkBalanceForWallet(database, this)
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

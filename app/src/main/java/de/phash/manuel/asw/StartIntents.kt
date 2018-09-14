@@ -44,7 +44,19 @@ fun startNewActivity(item: MenuItem, context: Context) {
         R.id.balancesMenu -> balanceActivity(context)
         R.id.createAccout -> createActivity(context)
         R.id.importPrivateKey -> importActivity(context)
+        R.id.dashboardMenu -> dashboardActivity(context)
+        R.id.creditMenu -> creditsActivity(context)
     }
+}
+
+fun dashboardActivity(context: Context) {
+    val intent = Intent(context, DashBoardActivity::class.java)
+    context.startActivity(intent)
+}
+
+fun creditsActivity(context: Context) {
+    val intent = Intent(context, CreditsActivity::class.java)
+    context.startActivity(intent)
 }
 
 fun importPrivateKey(context: Context) {

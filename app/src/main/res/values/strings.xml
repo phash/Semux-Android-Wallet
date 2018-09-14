@@ -66,5 +66,14 @@
     <string name="balances">Balances</string>
     <string name="save">save</string>
     <string name="noTransactionsText">There are no transactions for this address!</string>
+    <string name="poweredByPhash">Powered by Phash.de</string>
+    <string name="contribute">Feel free to contribute to this open source project. You find it on https://github.com/phash/ASW</string>
+    <string name="credits">CREDITS</string>
+    <string name="semuxOrg">www.semux.org</string>
+    <string name="api">API Node by mdodong on sempy.online</string>
+    <string name="security">Always back up your private keys! Never tell them anybody! We cannot recover your keys! Keep them save!</string>
+    <string name="wishes">For wishes or issues please use github</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="credit">Credits</string>
 
 </resources>

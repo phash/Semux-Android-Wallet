@@ -40,9 +40,11 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
+import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
 import java.math.BigDecimal
@@ -58,7 +60,7 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        // checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this)
         // Obtain the FirebaseAnalytics instance.
 
         val bundle = Bundle()
