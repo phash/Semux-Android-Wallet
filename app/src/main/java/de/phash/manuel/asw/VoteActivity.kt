@@ -105,17 +105,15 @@ class VoteActivity : AppCompatActivity() {
 
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
-
             val account = semuxAddressList.get(0)
-            val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
 
+            val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
             val senderPkey = Key(Hex.decode0x(decryptedKey))
 
             val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
 
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
             var transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
-
             val signedTx = transaction.sign(senderPkey)
 
             voteTransaction(signedTx)

@@ -46,10 +46,14 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import java.math.BigDecimal
+import java.util.*
 
 
 class DashBoardActivity : AppCompatActivity() {
+
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
+    private var balancesMap = HashMap<String, CheckBalance>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
@@ -94,7 +98,6 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
 
-    private val balancesList = ArrayList<CheckBalance>()
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
@@ -106,27 +109,15 @@ class DashBoardActivity : AppCompatActivity() {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
                     Log.i("RES", json)
 
-                    balancesList.add(account)
+                    showRecycler()
 
-                    dashboardCreate.visibility = INVISIBLE
-                    dashboardImport.visibility = INVISIBLE
-                    noAccountsText.visibility = INVISIBLE
+                    balancesMap.put(account.result.address, account)
 
-                    dashLocked.visibility = VISIBLE
-                    dashTotal.visibility = VISIBLE
-                    viewAccountsButton.visibility = VISIBLE
-                    dashLockedtextView.visibility = VISIBLE
-                    dashTotaltextView.visibility = VISIBLE
-
-                    val total = balancesList.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
-                    val totallocked = balancesList.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                    val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 
                     dashTotal.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     dashLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
-
-                    Log.i("BAL", "" + balancesList.size)
-                    //balancesList.sortBy { it.result.available }
-
 
                 } else {
                     Toast.makeText(this@DashBoardActivity, "check failed",
@@ -135,6 +126,18 @@ class DashBoardActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showRecycler() {
+        dashboardCreate.visibility = INVISIBLE
+        dashboardImport.visibility = INVISIBLE
+        noAccountsText.visibility = INVISIBLE
+
+        dashLocked.visibility = VISIBLE
+        dashTotal.visibility = VISIBLE
+        viewAccountsButton.visibility = VISIBLE
+        dashLockedtextView.visibility = VISIBLE
+        dashTotaltextView.visibility = VISIBLE
     }
 
 

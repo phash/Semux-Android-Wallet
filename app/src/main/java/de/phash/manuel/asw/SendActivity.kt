@@ -92,7 +92,6 @@ class SendActivity : AppCompatActivity() {
         try {
             val bundle = Bundle()
 
-            Log.i("CRYPT", "create")
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
 
@@ -107,7 +106,6 @@ class SendActivity : AppCompatActivity() {
             val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
 
             var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
-
             val signedTx = transaction.sign(senderPkey)
 
             sendTransaction(signedTx)

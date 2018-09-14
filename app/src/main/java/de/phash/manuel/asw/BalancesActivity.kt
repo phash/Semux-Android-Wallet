@@ -147,6 +147,7 @@ class BalancesActivity : AppCompatActivity() {
 
                     balancesTotalAvailable.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                     balancesTotalLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+
                     balancesList.clear()
                     balancesList.addAll(balancesMap.values)
 
