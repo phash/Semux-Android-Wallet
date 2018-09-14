@@ -31,8 +31,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.util.copyToClipboard
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
@@ -60,8 +62,14 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<CheckBalance>) :
         val df = DecimalFormat("0.#########")
         Log.i("TRX", "DatasetSize: ${myDataset.size}")
         holder.address?.text = myDataset[position].result.address
-        holder.available?.text = df.format(BigDecimal(myDataset[position].result.available).divide(APIService.SEMUXMULTIPLICATOR))
-        holder.locked?.text = df.format(BigDecimal(myDataset[position].result.locked).divide(APIService.SEMUXMULTIPLICATOR))
+        holder.available?.text = df.format(BigDecimal(myDataset[position].result.available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+        holder.locked?.text = df.format(BigDecimal(myDataset[position].result.locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+        holder.itemView.setOnLongClickListener(View.OnLongClickListener {
+            Log.i("COPY", "LONGCLICK - ${myDataset[position].result.address}")
+            copyToClipboard(it.context, myDataset[position].result.address)
+            Toast.makeText(it.context, "address copied", Toast.LENGTH_SHORT).show()
+            true
+        })
         holder.itemView.setOnClickListener(View.OnClickListener {
             val intent = Intent(holder.itemView.context, SingleBalanceActivity::class.java)
 
