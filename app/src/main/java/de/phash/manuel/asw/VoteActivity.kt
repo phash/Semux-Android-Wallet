@@ -30,8 +30,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -46,10 +48,14 @@ import de.phash.manuel.asw.semux.APIService.Companion.unvote
 import de.phash.manuel.asw.semux.APIService.Companion.vote
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.DeCryptor
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_vote.*
+import kotlinx.android.synthetic.main.password_prompt.view.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
@@ -91,7 +97,11 @@ class VoteActivity : AppCompatActivity() {
     fun onUnvoteTransactionClick(view: View) {
 
         if (voteReceivingAddressEditView.text.toString().isNotEmpty() && voteAmountEditView.text.toString().isNotEmpty()) {
-            createTransaction(vote)
+            if (isPasswordSet(this)) {
+                passwordSecured(vote)
+            } else {
+                createTransaction(vote)
+            }
         } else {
             if (voteReceivingAddressEditView.text.toString().isEmpty())
                 Toast.makeText(this, "Receiver is empty", Toast.LENGTH_LONG).show()
@@ -99,6 +109,39 @@ class VoteActivity : AppCompatActivity() {
                 Toast.makeText(this, "Amount to vote is empty", Toast.LENGTH_LONG).show()
         }
     }
+
+
+    fun passwordSecured(vote: String) {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val promptView = inflater.inflate(R.layout.password_prompt, null)
+        dialogBuilder.setView(promptView)
+
+        dialogBuilder.setCancelable(true).setOnCancelListener({ dialog ->
+            dialog.dismiss()
+        })
+                .setPositiveButton("SEND") { dialog, which ->
+                    Log.i("PASSWORD", "positive button")
+                    if (promptView.enterOldPassword.text.toString().isEmpty()) {
+                        Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                    } else {
+                        if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
+                            createTransaction(vote)
+
+                        } else {
+                            Log.i("PASSWORD", "PW false")
+                            Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                .setNegativeButton("CANCEL") { dialog, which ->
+                    Log.i("PASSWORD", "negative button")
+                    dialog.dismiss()
+                }
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
+    }
+
 
     private fun createTransaction(option: String) {
         try {
@@ -113,19 +156,19 @@ class VoteActivity : AppCompatActivity() {
             val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
 
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
-            var transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
             val signedTx = transaction.sign(senderPkey)
 
             voteTransaction(signedTx)
         } catch (e: Exception) {
             Log.e("SIGN", e.localizedMessage)
-            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
+            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
 
     private fun voteTransaction(transaction: Transaction) {
-        var raw = Hex.encode0x(transaction.toBytes())
+        val raw = Hex.encode0x(transaction.toBytes())
         Log.i("SEND", raw)
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
@@ -186,8 +229,18 @@ class VoteActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 //  val account = Gson().fromJson(json, CheckBalance::class.java)
+                val tx = Gson().fromJson(json, RawTransaction::class.java)
                 Log.i("RES", json)
+                if (tx.success)
+                    Toast.makeText(this@VoteActivity,
+                            "transfer done",
+                            Toast.LENGTH_LONG).show()
+                else {
+                    Toast.makeText(this@VoteActivity,
+                            tx.message,
+                            Toast.LENGTH_LONG).show()
 
+                }
             } else {
                 Toast.makeText(this@VoteActivity, "transfer failed",
                         Toast.LENGTH_LONG).show()

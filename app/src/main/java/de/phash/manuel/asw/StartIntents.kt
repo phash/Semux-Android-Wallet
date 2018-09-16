@@ -42,11 +42,15 @@ fun startNewActivity(item: MenuItem, context: Context) {
 
     when (item.itemId) {
         R.id.balancesMenu -> balanceActivity(context)
-        R.id.createAccout -> createActivity(context)
-        R.id.importPrivateKey -> importActivity(context)
+        R.id.settingsMenu -> settingsActivity(context)
         R.id.dashboardMenu -> dashboardActivity(context)
         R.id.creditMenu -> creditsActivity(context)
     }
+}
+
+fun settingsActivity(context: Context) {
+    val intent = Intent(context, SettingsActivity::class.java)
+    context.startActivity(intent)
 }
 
 fun dashboardActivity(context: Context) {
@@ -66,5 +70,10 @@ fun importPrivateKey(context: Context) {
 
 fun importActivity(context: Context) {
     val intent = Intent(context, ImportKeyActivity::class.java)
+    context.startActivity(intent)
+}
+
+fun setPasswordActivity(context: Context) {
+    val intent = Intent(context, PasswordActivity::class.java)
     context.startActivity(intent)
 }
