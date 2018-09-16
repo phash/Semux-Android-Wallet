@@ -25,13 +25,12 @@
 package de.phash.manuel.asw
 
 import android.app.Activity
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -44,9 +43,13 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.FEE
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.DeCryptor
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_send.*
+import kotlinx.android.synthetic.main.password_prompt.view.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
@@ -77,7 +80,11 @@ class SendActivity : AppCompatActivity() {
     fun onSendTransactionClick(view: View) {
 
         if (sendReceivingAddressEditView.text.toString().isNotEmpty() && sendAmountEditView.text.toString().isNotEmpty()) {
-            createTransaction()
+            if (isPasswordSet(this)) {
+                passwordSecured()
+            } else {
+                createTransaction()
+            }
         } else {
             if (sendReceivingAddressEditView.text.toString().isEmpty())
                 Toast.makeText(this, "Receiver is empty", Toast.LENGTH_LONG).show()
@@ -85,6 +92,37 @@ class SendActivity : AppCompatActivity() {
                 Toast.makeText(this, "Amount to send is empty", Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    fun passwordSecured() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val promptView = inflater.inflate(R.layout.password_prompt, null)
+        dialogBuilder.setView(promptView)
+
+        dialogBuilder.setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+            dialog.dismiss()
+        })
+                .setPositiveButton("SEND") { dialog, which ->
+                    Log.i("PASSWORD", "positive button")
+                    if (promptView.enterOldPassword.text.toString().isEmpty()) {
+                        Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                    } else {
+                        if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
+                            createTransaction()
+
+                        } else {
+                            Log.i("PASSWORD", "PW false")
+                            Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                .setNegativeButton("CANCEL") { dialog, which ->
+                    Log.i("PASSWORD", "negative button")
+                    dialog.dismiss()
+                }
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
     }
 
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
@@ -160,7 +198,6 @@ class SendActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-
     }
 
 
@@ -174,7 +211,6 @@ class SendActivity : AppCompatActivity() {
                     APIService.check -> check(bundle)
                     APIService.transfer -> transfer(bundle)
                 }
-
             }
         }
 
@@ -182,11 +218,18 @@ class SendActivity : AppCompatActivity() {
             val json = bundle.getString(APIService.JSON)
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
-                //  val account = Gson().fromJson(json, CheckBalance::class.java)
+                val tx = Gson().fromJson(json, RawTransaction::class.java)
                 Log.i("RES", json)
-                Toast.makeText(this@SendActivity,
-                        "transfer done",
-                        Toast.LENGTH_LONG).show()
+                if (tx.success)
+                    Toast.makeText(this@SendActivity,
+                            "transfer done",
+                            Toast.LENGTH_LONG).show()
+                else {
+                    Toast.makeText(this@SendActivity,
+                            tx.message,
+                            Toast.LENGTH_LONG).show()
+
+                }
             } else {
                 Toast.makeText(this@SendActivity, "transfer failed",
                         Toast.LENGTH_LONG).show()
@@ -210,7 +253,6 @@ class SendActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG).show()
 
             }
-
         }
     }
 

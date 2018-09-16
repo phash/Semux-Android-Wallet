@@ -60,12 +60,10 @@ class CreateAccountActivity : AppCompatActivity() {
 
     fun onSaveKey(view: View) {
 
-
         val encryptorp = EnCryptor()
         val encryptors = EnCryptor()
         val encryptedPrivK = encryptors.encryptText(key.toAddressString() + "s", de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey))
         val encryptedPublK = encryptorp.encryptText(key.toAddressString() + "p", de.phash.manuel.asw.semux.key.Hex.encode0x(key.publicKey))
-
 
         val values = ContentValues()
         values.put("address", key.toAddressString())
