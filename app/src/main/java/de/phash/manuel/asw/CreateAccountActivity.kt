@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
@@ -36,6 +37,10 @@ import de.phash.manuel.asw.semux.key.Key
 import de.phash.manuel.asw.util.EnCryptor
 import kotlinx.android.synthetic.main.activity_create_account.*
 import org.bouncycastle.util.encoders.Hex
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.okButton
+import org.jetbrains.anko.yesButton
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -52,6 +57,23 @@ class CreateAccountActivity : AppCompatActivity() {
         privateKey.text = Hex.toHexString(key.privateKey)
         publicKey.text = Hex.toHexString(key.publicKey)
         createdaddress.text = key.toAddressString()
+    }
+
+    fun onDashKey(view: View) {
+
+        alert("please write down your private key!\n${Hex.toHexString(key.privateKey)}") {
+            okButton { }
+            yesButton { dashboardActivity(this@CreateAccountActivity) }
+            noButton {}
+        }.show()
+    }
+
+    override fun onBackPressed() {
+        alert("please write down your private key!\n${Hex.toHexString(key.privateKey)}") {
+            okButton { }
+            yesButton { dashboardActivity(this@CreateAccountActivity) }
+            noButton {}
+        }.show()
     }
 
     fun save() {

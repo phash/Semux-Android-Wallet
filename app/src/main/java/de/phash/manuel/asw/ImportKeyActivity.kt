@@ -38,6 +38,7 @@ import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.semux.key.Key
 import de.phash.manuel.asw.util.EnCryptor
 import kotlinx.android.synthetic.main.activity_import_key.*
+import org.jetbrains.anko.design.snackbar
 
 class ImportKeyActivity : AppCompatActivity() {
 
@@ -68,13 +69,15 @@ class ImportKeyActivity : AppCompatActivity() {
 
                 val values = ContentValues()
                 values.put("address", key.toAddressString())
-                values.put("publickey", org.bouncycastle.util.encoders.Hex.toHexString(key.publicKey))
-                values.put("privatekey", org.bouncycastle.util.encoders.Hex.toHexString(key.privateKey))
+                values.put("publickey", org.bouncycastle.util.encoders.Hex.toHexString(encryptedPublK))
+                values.put("privatekey", org.bouncycastle.util.encoders.Hex.toHexString(encryptedPrivK))
                 values.put("ivs", org.bouncycastle.util.encoders.Hex.toHexString(encryptors.iv))
                 values.put("ivp", org.bouncycastle.util.encoders.Hex.toHexString(encryptorp.iv))
 
                 database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
             } catch (e: CryptoException) {
+                view.snackbar(e.localizedMessage)
+
                 Toast.makeText(this, "not a valid private key", Toast.LENGTH_LONG)
             }
 

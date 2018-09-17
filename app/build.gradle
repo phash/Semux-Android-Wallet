@@ -36,7 +36,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
-        versionName "0.4.0"
+        versionName "0.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -58,7 +58,7 @@ android {
 
 dependencies {
     def androidSupport = "28.0.0-rc02"
-
+def anko_version ="0.10.6"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
@@ -84,7 +84,11 @@ dependencies {
 // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8'
 // https://mvnrepository.com/artifact/org.jetbrains.anko/anko-sqlite
-    implementation group: 'org.jetbrains.anko', name: 'anko-sqlite', version: '0.10.5'
+    implementation group: 'org.jetbrains.anko', name: 'anko-sqlite', version: anko_version
+    implementation group: 'org.jetbrains.anko', name: 'anko-commons', version: anko_version
+    implementation group: 'org.jetbrains.anko', name: 'anko-design', version: anko_version
+
+
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
 // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
