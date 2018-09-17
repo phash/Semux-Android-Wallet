@@ -33,7 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        card_view:cardCornerRadius="2dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="4dp"
         card_view:contentPadding="10dp">
 
         <android.support.constraint.ConstraintLayout
@@ -49,8 +50,8 @@
                 android:layout_marginTop="8dp"
                 android:text=""
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textIsSelectable="true"
                 android:textColor="#000000"
+                android:textIsSelectable="true"
                 android:textSize="14sp"
                 card_view:layout_constraintStart_toEndOf="@+id/textView19"
                 card_view:layout_constraintTop_toTopOf="parent" />
@@ -74,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textIsSelectable="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textIsSelectable="true"
                 android:textSize="14sp"
                 card_view:layout_constraintStart_toEndOf="@+id/textView21"
                 card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsto" />
@@ -86,8 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textIsSelectable="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textIsSelectable="true"
                 android:textSize="14sp"
                 card_view:layout_constraintStart_toEndOf="@+id/textView22"
                 card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsamount" />

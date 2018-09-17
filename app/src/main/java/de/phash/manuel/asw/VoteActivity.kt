@@ -82,6 +82,10 @@ class VoteActivity : AppCompatActivity() {
         voteLockedTextView.text = lockText
     }
 
+    fun onChoseDelegateClick(view: View) {
+
+    }
+
     fun onVoteTransactionClick(view: View) {
 
         if (voteReceivingAddressEditView.text.toString().isNotEmpty() && voteAmountEditView.text.toString().isNotEmpty()) {

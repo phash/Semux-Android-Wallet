@@ -86,5 +86,8 @@
     <string name="beCareful">Be careful with changing the settings!</string>
     <string name="keepSave">Always keep your keys save! Write them down! \nNever tell them anybody! \nYour private key is the key to your funds! \nShare your address for receiving funds!</string>
     <string name="hire">Hire the Dev!\nAre you in need of a Android-Developer for your app?\nDo you need a discord-bot? \ncall me: phash@phash.de</string>
+    <string name="name">Name</string>
+    <string name="votes">Votes</string>
+    <string name="myVotes">by me</string>
 
 </resources>

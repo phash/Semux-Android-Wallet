@@ -58,7 +58,7 @@ android {
 
 dependencies {
     def androidSupport = "28.0.0-rc02"
-def anko_version ="0.10.6"
+    def anko_version = "0.10.6"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
@@ -87,7 +87,6 @@ def anko_version ="0.10.6"
     implementation group: 'org.jetbrains.anko', name: 'anko-sqlite', version: anko_version
     implementation group: 'org.jetbrains.anko', name: 'anko-commons', version: anko_version
     implementation group: 'org.jetbrains.anko', name: 'anko-design', version: anko_version
-
 
 // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
