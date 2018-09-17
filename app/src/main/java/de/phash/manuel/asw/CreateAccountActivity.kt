@@ -53,11 +53,6 @@ class CreateAccountActivity : AppCompatActivity() {
         createdaddress.text = key.toAddressString()
     }
 
-    fun onCreateKey(view: View) {
-        key = Key()
-
-    }
-
     fun onSaveKey(view: View) {
 
         val encryptorp = EnCryptor()

@@ -245,9 +245,7 @@ class SendActivity : AppCompatActivity() {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
                 nonce = account.result.nonce
-                Toast.makeText(this@SendActivity,
-                        "checked: ${account.message}",
-                        Toast.LENGTH_LONG).show()
+
             } else {
                 Toast.makeText(this@SendActivity, "check failed",
                         Toast.LENGTH_LONG).show()

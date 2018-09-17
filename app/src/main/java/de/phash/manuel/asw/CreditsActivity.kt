@@ -28,6 +28,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import org.jetbrains.anko.browse
+import org.jetbrains.anko.email
 
 class CreditsActivity : AppCompatActivity() {
 
@@ -38,7 +41,25 @@ class CreditsActivity : AppCompatActivity() {
 
     }
 
+    fun onGithubClick(view: View) {
+        browse("https://github.com/phash/Semux-Android-Wallet")
+    }
 
+    fun onPhashClick(view: View) {
+        browse("https://phash.de")
+    }
+
+    fun onPhashMailClick(view: View) {
+        email("phash@phash.de", "hire the dev", "Hi Phash\n\nI need your help!\nplease answer for getting the details of the deal")
+    }
+
+    fun onSempyClick(view: View) {
+        browse("https://sempy.info")
+    }
+
+    fun onSemuxClick(view: View) {
+        browse("https://semux.org")
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
