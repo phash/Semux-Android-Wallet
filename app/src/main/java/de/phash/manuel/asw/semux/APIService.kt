@@ -32,6 +32,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.json.delegates.Delegates
 import de.phash.manuel.asw.semux.key.Amount
 import de.phash.manuel.asw.semux.key.Network
 import okhttp3.*
@@ -55,12 +56,14 @@ class APIService : IntentService("SemuxService") {
         const val NOTIFICATION_TRANSACTION = "de.phash.manuel.asw.semux.transaction"
         const val NOTIFICATION_TRANSFER = "de.phash.manuel.asw.semux.transfer"
         const val TRANSACTION_RAW = "transactionraw"
+        const val VOTETYPE = "votetype"
 
         const val check = "check"
         const val vote = "vote"
         const val unvote = "unvote"
         const val transfer = "transfer"
         const val transactions = "transactions"
+        const val delegates = "delegates"
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
@@ -83,9 +86,37 @@ class APIService : IntentService("SemuxService") {
             check -> getBalance(intent)
             transfer -> doTransfer(intent)
             transactions -> loadTransactions(intent)
+            delegates -> loadDelegates(intent)
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    private fun loadDelegates(intent: Intent?) {
+        val voteType = intent?.getStringExtra(VOTETYPE)
+
+        Log.i("DELEGATE", "type: $voteType")
+
+        val client = OkHttpClient()
+
+        val request = Request.Builder()
+                .url("$API_ENDPOINT/delegates")
+                .addHeader("content-type", "application/json")
+                .addHeader("cache-control", "no-cache")
+
+                .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.i("TRX", call.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body()?.string()
+                val delegates = Gson().fromJson(res, Delegates::class.java)
+
+
+            }
+        })
     }
 
     //This only works for addresses given
