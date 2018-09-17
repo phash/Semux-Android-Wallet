@@ -29,7 +29,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.key.Key
@@ -45,6 +45,7 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_account)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         updateViews()
+        save()
     }
 
     fun updateViews() {
@@ -53,7 +54,7 @@ class CreateAccountActivity : AppCompatActivity() {
         createdaddress.text = key.toAddressString()
     }
 
-    fun onSaveKey(view: View) {
+    fun save() {
 
         val encryptorp = EnCryptor()
         val encryptors = EnCryptor()
@@ -68,7 +69,9 @@ class CreateAccountActivity : AppCompatActivity() {
         values.put("ivp", Hex.toHexString(encryptorp.iv))
 
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
-        balanceActivity(this)
+        Toast.makeText(this, "new account created! Save your private key!", Toast.LENGTH_LONG)
+        //balanceActivity(this)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
