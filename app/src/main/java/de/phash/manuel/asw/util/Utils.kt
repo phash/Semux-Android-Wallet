@@ -65,7 +65,7 @@ fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
 
 }
 
-private fun updateAddress(address: String, context: Context) {
+fun updateAddress(address: String, context: Context) {
 
     val intent = Intent(context, APIService::class.java)
     // add infos for the service which file to download and where to store

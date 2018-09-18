@@ -38,6 +38,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
@@ -51,9 +52,9 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.DeCryptor
+import de.phash.manuel.asw.util.firebase
 import de.phash.manuel.asw.util.isPasswordCorrect
 import de.phash.manuel.asw.util.isPasswordSet
-import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_vote.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import org.jetbrains.anko.db.classParser
@@ -63,23 +64,14 @@ import java.math.BigDecimal
 
 class VoteActivity : AppCompatActivity() {
 
-    var locked = ""
     var address = ""
-    var available = ""
-    var nonce = ""
+    var nonce: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
-        locked = intent.getStringExtra("locked")
-        available = intent.getStringExtra("available")
         checkAccount()
-        val addressText = "${SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-        voteAddressTextView.text = intent.getStringExtra("address")
-        voteAvailableTextView.text = addressText
-        val lockText = "${SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-        voteLockedTextView.text = lockText
     }
 
     fun onChoseDelegateClick(view: View) {
@@ -87,24 +79,19 @@ class VoteActivity : AppCompatActivity() {
     }
 
     fun onVoteTransactionClick(view: View) {
-
-        if (voteReceivingAddressEditView.text.toString().isNotEmpty() && voteAmountEditView.text.toString().isNotEmpty()) {
-            createTransaction(unvote)
-        } else {
-            if (voteReceivingAddressEditView.text.toString().isEmpty())
-                Toast.makeText(this, "Receiver is empty", Toast.LENGTH_LONG).show()
-            if (voteAmountEditView.text.toString().isEmpty())
-                Toast.makeText(this, "Amount to vote is empty", Toast.LENGTH_LONG).show()
-        }
+        handleTransaction(vote)
     }
 
     fun onUnvoteTransactionClick(view: View) {
+        handleTransaction(unvote)
+    }
 
+    fun handleTransaction(option: String) {
         if (voteReceivingAddressEditView.text.toString().isNotEmpty() && voteAmountEditView.text.toString().isNotEmpty()) {
             if (isPasswordSet(this)) {
-                passwordSecured(vote)
+                passwordSecured(option)
             } else {
-                createTransaction(vote)
+                createTransaction(option)
             }
         } else {
             if (voteReceivingAddressEditView.text.toString().isEmpty())
@@ -113,7 +100,6 @@ class VoteActivity : AppCompatActivity() {
                 Toast.makeText(this, "Amount to vote is empty", Toast.LENGTH_LONG).show()
         }
     }
-
 
     fun passwordSecured(vote: String) {
         val dialogBuilder = AlertDialog.Builder(this)
@@ -146,24 +132,23 @@ class VoteActivity : AppCompatActivity() {
         dialog.show()
     }
 
-
     private fun createTransaction(option: String) {
         try {
-
+            Log.i("SENDTX", "-creating transaction for $option")
+            firebase("5", type = option, mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
             val account = semuxAddressList.get(0)
-
             val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
             val senderPkey = Key(Hex.decode0x(decryptedKey))
-
-            val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
-
+            val amount = Amount.Unit.SEM.of(voteAmountEditView.text.toString().toLong())
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
-            val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
-            val signedTx = transaction.sign(senderPkey)
-
-            voteTransaction(signedTx)
+            Log.i("SENDTX", "type = ${type.name}")
+            nonce.let {
+                val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+                val signedTx = transaction.sign(senderPkey)
+                voteTransaction(signedTx)
+            }
         } catch (e: Exception) {
             Log.e("SIGN", e.localizedMessage)
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
@@ -202,48 +187,52 @@ class VoteActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
     }
 
-    fun checkAccount() {
+    override fun onRestart() {
+        super.onRestart()
+        checkAccount()
+    }
 
+    fun checkAccount() {
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
         intent.putExtra(APIService.ADDRESS, address)
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
-
     }
-
 
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-
             val bundle = intent.extras
+            Log.i("SENDTX", "vote callback received for callback${bundle?.getString(APIService.TYP)
+                    ?: " nix"}")
             if (bundle != null) {
                 when (bundle.getString(APIService.TYP)) {
                     APIService.check -> check(bundle)
-                    APIService.vote -> vote(bundle)
+                    APIService.transfer -> vote(bundle)
                 }
-
             }
         }
 
         private fun vote(bundle: Bundle) {
             val json = bundle.getString(APIService.JSON)
             val resultCode = bundle.getInt(APIService.RESULT)
+            Log.i("SENDTX", "vote callback received")
             if (resultCode == Activity.RESULT_OK) {
                 //  val account = Gson().fromJson(json, CheckBalance::class.java)
                 val tx = Gson().fromJson(json, RawTransaction::class.java)
-                Log.i("RES", json)
-                if (tx.success)
+                Log.i("SENDTX", json)
+                if (tx.success) {
+
+                    voteAmountEditView.text.clear()
                     Toast.makeText(this@VoteActivity,
-                            "transfer done",
+                            "vote done",
                             Toast.LENGTH_LONG).show()
-                else {
+                } else {
                     Toast.makeText(this@VoteActivity,
                             tx.message,
                             Toast.LENGTH_LONG).show()
-
                 }
             } else {
                 Toast.makeText(this@VoteActivity, "transfer failed",
@@ -252,13 +241,19 @@ class VoteActivity : AppCompatActivity() {
         }
 
         private fun check(bundle: Bundle) {
-
+            Log.i("SENDTX", "check")
             val json = bundle.getString(APIService.JSON)
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
                 nonce = account.result.nonce
+
+                val addressText = "${SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                voteAddressTextView.text = intent.getStringExtra("address")
+                voteAvailableTextView.text = addressText
+                val lockText = "${SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                voteLockedTextView.text = lockText
 
             } else {
                 Toast.makeText(this@VoteActivity, "check failed",

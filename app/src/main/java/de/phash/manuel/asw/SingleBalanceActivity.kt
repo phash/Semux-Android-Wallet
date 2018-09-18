@@ -24,34 +24,48 @@
 
 package de.phash.manuel.asw
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.createQRCode
+import de.phash.manuel.asw.util.updateAddress
 import kotlinx.android.synthetic.main.activity_single_balance.*
 import java.math.BigDecimal
 
 class SingleBalanceActivity : AppCompatActivity() {
-    var locked = ""
+
     var address = ""
-    var available = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_balance)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
-        available = intent.getStringExtra("available")
-        locked = intent.getStringExtra("locked")
+        setUp()
 
+    }
+
+    private fun setUp() {
+        updateAddress(address, this)
         singleBalanceAddress.text = address
-        singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
-        singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
         createQR()
+    }
 
+    override fun onRestart() {
+        super.onRestart()
+        Log.i("RESTART", "address: $address")
+        setUp()
     }
 
     fun onImageClick(view: View) {
@@ -62,19 +76,13 @@ class SingleBalanceActivity : AppCompatActivity() {
 
     fun onSendClick(view: View) {
         val intent = Intent(this, SendActivity::class.java)
-
         intent.putExtra("address", address)
-        intent.putExtra("available", available)
-        intent.putExtra("locked", locked)
-
         startActivity(intent)
     }
 
     fun onVoteClick(view: View) {
         val intent = Intent(this, VoteActivity::class.java)
         intent.putExtra("address", address)
-        intent.putExtra("available", available)
-        intent.putExtra("locked", locked)
         startActivity(intent)
     }
 
@@ -100,4 +108,39 @@ class SingleBalanceActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private val receiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("RECEIVE", "DashBoard received Broadcast")
+            val bundle = intent.extras
+            if (bundle != null) {
+                val json = bundle.getString(APIService.JSON)
+                val resultCode = bundle.getInt(APIService.RESULT)
+                if (resultCode == Activity.RESULT_OK) {
+                    val account = Gson().fromJson(json, CheckBalance::class.java)
+                    Log.i("RES", json)
+
+                    singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+                    singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+                    singleTx.text = account.result.transactionCount.toString()
+                    singlePendingTx.text = account.result.pendingTransactionCount.toString()
+
+                } else {
+                    Toast.makeText(this@SingleBalanceActivity, "check failed",
+                            Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(receiver)
+    }
 }

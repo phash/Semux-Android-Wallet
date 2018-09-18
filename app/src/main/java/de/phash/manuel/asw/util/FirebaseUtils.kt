@@ -22,44 +22,14 @@
  * SOFTWARE.
  */
 
-package de.phash.manuel.asw
+package de.phash.manuel.asw.util
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import com.google.firebase.analytics.FirebaseAnalytics
 
-class SettingsActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-        setContentView(R.layout.activity_settings)
-    }
-
-    fun onImportKeyClick(view: View) {
-        importActivity(this)
-    }
-
-    fun onSetPasswordClick(view: View) {
-        setPasswordActivity(this)
-
-    }
-
-    fun onCreateAccountClick(view: View) {
-        createActivity(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        startNewActivity(item, this)
-        return super.onOptionsItemSelected(item)
-    }
+fun firebase(id: String, type: String, mFirebaseAnalytics: FirebaseAnalytics) {
+    val bundle = Bundle()
+    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id)
+    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, type)
+    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
 }

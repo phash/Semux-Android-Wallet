@@ -45,6 +45,7 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.checkBalanceForWallet
+import de.phash.manuel.asw.util.firebase
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
 import java.math.BigDecimal
@@ -53,7 +54,7 @@ import java.util.*
 
 class DashBoardActivity : AppCompatActivity() {
 
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     private var balancesMap = HashMap<String, CheckBalance>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,13 +62,14 @@ class DashBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(database, this)
-        // Obtain the FirebaseAnalytics instance.
+        firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
 
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "1")
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "dashboard")
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        checkBalanceForWallet(database, this)
+        firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

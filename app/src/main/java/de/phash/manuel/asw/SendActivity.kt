@@ -46,6 +46,7 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.DeCryptor
+import de.phash.manuel.asw.util.firebase
 import de.phash.manuel.asw.util.isPasswordCorrect
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_send.*
@@ -57,26 +58,23 @@ import java.math.BigDecimal
 
 
 class SendActivity : AppCompatActivity() {
-    var locked = ""
+
     var address = ""
-    var available = ""
-    var nonce = ""
+    private var nonce: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        address = intent.getStringExtra("address")
-        locked = intent.getStringExtra("locked")
-        available = intent.getStringExtra("available")
-        checkAccount()
-        val addressText = "${APIService.SEMUXFORMAT.format(BigDecimal(available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-        sendAddressTextView.text = intent.getStringExtra("address")
-        sendAvailableTextView.text = addressText
-        val lockText = "${APIService.SEMUXFORMAT.format(BigDecimal(locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-        sendLockedTextView.text = lockText
 
+        address = intent.getStringExtra("address")
+        checkAccount()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        checkAccount()
+    }
     fun onSendTransactionClick(view: View) {
 
         if (sendReceivingAddressEditView.text.toString().isNotEmpty() && sendAmountEditView.text.toString().isNotEmpty()) {
@@ -91,7 +89,6 @@ class SendActivity : AppCompatActivity() {
             if (sendAmountEditView.text.toString().isEmpty())
                 Toast.makeText(this, "Amount to send is empty", Toast.LENGTH_LONG).show()
         }
-
     }
 
     fun passwordSecured() {
@@ -125,16 +122,10 @@ class SendActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     private fun createTransaction() {
         try {
-            val bundle = Bundle()
-
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
-
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-            mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+            firebase("7", type = "send", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
             val semuxAddressList = getSemuxAddress(database)
             val account = semuxAddressList.get(0)
@@ -142,11 +133,13 @@ class SendActivity : AppCompatActivity() {
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
             val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
+            nonce.let {
+                var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+                val signedTx = transaction.sign(senderPkey)
+                sendTransaction(signedTx)
+            }
 
-            var transaction = Transaction(APIService.NETWORK, TransactionType.TRANSFER, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
-            val signedTx = transaction.sign(senderPkey)
 
-            sendTransaction(signedTx)
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("SIGN", e.localizedMessage ?: "NIX")
@@ -207,6 +200,7 @@ class SendActivity : AppCompatActivity() {
 
             val bundle = intent.extras
             if (bundle != null) {
+                Log.i("SENDTX", "received callback for ${bundle.getString(APIService.TYP)}")
                 when (bundle.getString(APIService.TYP)) {
                     APIService.check -> check(bundle)
                     APIService.transfer -> transfer(bundle)
@@ -219,7 +213,7 @@ class SendActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val tx = Gson().fromJson(json, RawTransaction::class.java)
-                Log.i("RES", json)
+                Log.i("SENDTX", json)
                 if (tx.success)
                     Toast.makeText(this@SendActivity,
                             "transfer done",
@@ -245,6 +239,9 @@ class SendActivity : AppCompatActivity() {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
                 nonce = account.result.nonce
+                sendAddressTextView.text = address
+                sendAvailableTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                sendLockedTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
 
             } else {
                 Toast.makeText(this@SendActivity, "check failed",
