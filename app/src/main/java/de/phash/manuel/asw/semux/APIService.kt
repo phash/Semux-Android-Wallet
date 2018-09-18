@@ -142,12 +142,9 @@ class APIService : IntentService("SemuxService") {
                 val res = response.body()?.string()
                 val account = Gson().fromJson(res, CheckBalance::class.java)
                 var startVal = 0
-                var endVal = 20
-                if (account.result.transactionCount < 20) {
-                    endVal = account.result.transactionCount
-                } else if (account.result.transactionCount > 20) {
-                    startVal = account.result.transactionCount
-                    endVal = account.result.transactionCount - 20
+                var endVal = account.result.transactionCount
+                if (account.result.transactionCount > 20) {
+                    startVal = account.result.transactionCount - 20
                 }
 
                 val transactionRequest = Request.Builder()
