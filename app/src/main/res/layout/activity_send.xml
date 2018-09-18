@@ -91,6 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:labelFor="@+id/sendAddressTextView"
         android:text="@string/address"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -101,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:labelFor="@+id/sendAvailableTextView"
         android:text="@string/Available"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendAddressTextView" />
@@ -111,6 +113,7 @@
         android:layout_height="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:labelFor="@+id/sendLockedTextView"
         android:text="@string/locked"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendAvailableTextView" />
@@ -133,6 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:labelFor="@+id/sendAmountEditView"
         android:text="@string/AmountTOSend"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendReceivingAddressEditView" />
@@ -165,7 +169,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:labelFor="@+id/sendReceivingAddressEditView"
         android:text="@string/ReceivingAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />

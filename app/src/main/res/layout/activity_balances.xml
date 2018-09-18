@@ -48,6 +48,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        android:contentDescription="@string/balances"
         app:layout_constraintBottom_toTopOf="@+id/balancesTotalAvailable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

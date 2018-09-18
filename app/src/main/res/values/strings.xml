@@ -89,5 +89,6 @@
     <string name="name">Name</string>
     <string name="votes">Votes</string>
     <string name="myVotes">by me</string>
+    <string name="QRHint">QR Address code</string>
 
 </resources>

@@ -91,6 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:labelFor="@+id/voteAddressTextView"
         android:text="@string/address"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
@@ -101,6 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:labelFor="@+id/voteAvailableTextView"
         android:text="@string/Available"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/voteAddressTextView" />
@@ -111,6 +113,7 @@
         android:layout_height="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:labelFor="@+id/voteLockedTextView"
         android:text="@string/locked"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/voteAvailableTextView" />
@@ -133,6 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:labelFor="@+id/voteAmountEditView"
         android:text="@string/AmountTOVote"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/voteReceivingAddressEditView" />
@@ -167,7 +171,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:labelFor="@+id/voteReceivingAddressEditView"
         android:text="@string/ReceivingAddress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
