@@ -25,8 +25,7 @@
 package de.phash.manuel.asw.util
 
 import android.content.Context
-import de.phash.manuel.asw.semux.key.Bytes
-import de.phash.manuel.asw.semux.key.Hash
+import org.mindrot.jbcrypt.BCrypt
 
 private val NOKEY = "nokey"
 private val PASSWORD_KEY = "password"
@@ -41,32 +40,23 @@ fun isPasswordSet(context: Context): Boolean {
 }
 
 fun persistNewPassword(context: Context, passwordToSet: String) {
-    if (passwordToSet.length % 2 != 0) {
-        persistPassword(context, passwordToSet + "=")
-    } else {
         persistPassword(context, passwordToSet)
-    }
 }
 
 fun persistPassword(context: Context, passwordToSet: String) {
+    val salt = BCrypt.gensalt(12)
     context.getSharedPreferences("de.phash.manuel.asw", Context.MODE_PRIVATE).edit().putString(
             PASSWORD_KEY,
-            Bytes.toString(Hash.h256(Bytes.of(passwordToSet)))
+            BCrypt.hashpw(passwordToSet, salt)
     ).apply()
 }
 
 
 fun isPasswordCorrect(context: Context, passwordToTest: String): Boolean {
-    return if (passwordToTest.length % 2 != 0) {
-        checkPassword(context, passwordToTest + "=")
-    } else {
-        checkPassword(context, passwordToTest)
-    }
+    return checkPassword(context, passwordToTest)
 }
 
 fun checkPassword(context: Context, passwordToTest: String): Boolean {
-    val hashed = Hash.h256(Bytes.of(passwordToTest))
-
-    return getCurrentPassword(context)?.equals(Bytes.toString(hashed)) ?: false
+    return BCrypt.checkpw(passwordToTest, getCurrentPassword(context))
 
 }

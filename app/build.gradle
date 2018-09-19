@@ -33,10 +33,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "de.phash.manuel.asw"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
-        versionCode 4
-        versionName "0.4.3"
+        versionCode 5
+        versionName "0.4.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix 'N7'
     }
@@ -118,7 +118,10 @@ dependencies {
     // https://mvnrepository.com/artifact/com.journeyapps/zxing-android-embedded
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-    // https://mvnrepository.com/artifact/com.parse/parse-android
+
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+    implementation  group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
+
 
     //implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
     implementation 'com.google.firebase:firebase-core:16.0.3'

@@ -68,6 +68,11 @@ class CreateAccountActivity : AppCompatActivity() {
         }.show()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        dashboardActivity(this)
+    }
+
     override fun onBackPressed() {
         alert("please write down your private key!\n${Hex.toHexString(key.privateKey)}") {
             okButton { }
