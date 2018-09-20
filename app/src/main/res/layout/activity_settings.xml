@@ -49,8 +49,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView48">
+        app:layout_constraintTop_toBottomOf="@+id/textView48"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/button10"
@@ -60,6 +62,13 @@
             android:text="@string/setPassword" />
 
         <Button
+            android:id="@+id/button12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onCreateAccountClick"
+            android:text="@string/createAcc" />
+
+        <Button
             android:id="@+id/button11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,11 +76,12 @@
             android:text="@string/importKey" />
 
         <Button
-            android:id="@+id/button12"
+            android:id="@+id/button9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onCreateAccountClick"
-            android:text="@string/createAcc" />
+            android:text="@string/exportKeys"
+            android:visibility="invisible" />
+
     </LinearLayout>
 
     <TextView

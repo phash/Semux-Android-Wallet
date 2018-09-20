@@ -27,6 +27,7 @@ package de.phash.manuel.asw.util
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -54,6 +55,17 @@ fun getAdresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
     }
 }
 
+fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = db.use {
+    Log.i("PKEY", "address: ${address}")
+    var addressToSearch = address
+    if (address.startsWith("0x")) {
+        addressToSearch = address.substring(2)
+    }
+    select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME)
+            .whereArgs("${SemuxAddress.COLUMN_ADDRESS} = {address}", "address" to addressToSearch)
+            .exec { parseList(classParser<SemuxAddress>()) }.getOrNull(0)
+
+}
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
 
     val addresses = getAdresses(db)

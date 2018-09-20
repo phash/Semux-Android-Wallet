@@ -40,26 +40,18 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.FEE
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.APIService.Companion.unvote
 import de.phash.manuel.asw.semux.APIService.Companion.vote
-import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
-import de.phash.manuel.asw.util.DeCryptor
-import de.phash.manuel.asw.util.firebase
-import de.phash.manuel.asw.util.isPasswordCorrect
-import de.phash.manuel.asw.util.isPasswordSet
+import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.activity_vote.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
 import java.math.BigDecimal
 
 class VoteActivity : AppCompatActivity() {
@@ -136,20 +128,23 @@ class VoteActivity : AppCompatActivity() {
         try {
             Log.i("SENDTX", "-creating transaction for $option")
             firebase("5", type = option, mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
+
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
-            val semuxAddressList = getSemuxAddress(database)
-            val account = semuxAddressList.get(0)
-            val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
+            val account = getSemuxAddress(database, address)
+            val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.ivs))
+
             val senderPkey = Key(Hex.decode0x(decryptedKey))
             val amount = Amount.Unit.SEM.of(voteAmountEditView.text.toString().toLong())
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
             Log.i("SENDTX", "type = ${type.name}")
+
             nonce.let {
                 val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
                 val signedTx = transaction.sign(senderPkey)
                 voteTransaction(signedTx)
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             Log.e("SIGN", e.localizedMessage)
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
@@ -167,12 +162,6 @@ class VoteActivity : AppCompatActivity() {
         startService(intent)
     }
 
-    fun getSemuxAddress(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
-        Log.i("PKEY", "address: ${address}")
-        select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME)
-                .whereArgs("${SemuxAddress.COLUMN_ADDRESS} = {address}", "address" to address.substring(2))
-                .exec { parseList(classParser<SemuxAddress>()) }
-    }
 
     override fun onResume() {
         super.onResume()
