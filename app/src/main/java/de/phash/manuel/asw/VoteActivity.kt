@@ -241,13 +241,15 @@ class VoteActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
-                nonce = account.result.nonce
+                if (account.result.address.equals(address)) {
+                    nonce = account.result.nonce
 
-                val addressText = "${SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-                voteAddressTextView.text = intent.getStringExtra("address")
-                voteAvailableTextView.text = addressText
-                val lockText = "${SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-                voteLockedTextView.text = lockText
+                    val addressText = "${SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                    voteAddressTextView.text = intent.getStringExtra("address")
+                    voteAvailableTextView.text = addressText
+                    val lockText = "${SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                    voteLockedTextView.text = lockText
+                } else checkAccount()
 
             } else {
                 Toast.makeText(this@VoteActivity, "check failed",

@@ -32,12 +32,14 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
+import de.phash.manuel.asw.util.firebase
 import de.phash.manuel.asw.util.getAdresses
 import java.util.*
 
 
 class App : Application() {
 
+    private var timer = Timer()
 
     override fun onCreate() {
         super.onCreate()
@@ -53,18 +55,13 @@ class App : Application() {
     private fun updateBalances() {
 
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "5")
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "send")
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+        firebase("8", "update balances", FirebaseAnalytics.getInstance(this))
 
         val adresses = getAdresses(database)
 
         updateBalanceList(adresses)
     }
 
-    private var timer = Timer()
     private fun updateBalanceList(adresses: List<SemuxAddress>) {
 
         adresses.forEach {

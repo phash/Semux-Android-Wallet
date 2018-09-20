@@ -120,10 +120,14 @@ class SingleBalanceActivity : AppCompatActivity() {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
                     Log.i("RES", json)
 
-                    singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
-                    singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
-                    singleTx.text = account.result.transactionCount.toString()
-                    singlePendingTx.text = account.result.pendingTransactionCount.toString()
+                    if (account.result.address.equals(address)) {
+                        singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+                        singleBalanceLocked.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+                        singleTx.text = account.result.transactionCount.toString()
+                        singlePendingTx.text = account.result.pendingTransactionCount.toString()
+                    } else {
+                        updateAddress(address, this@SingleBalanceActivity)
+                    }
 
                 } else {
                     Toast.makeText(this@SingleBalanceActivity, "check failed",

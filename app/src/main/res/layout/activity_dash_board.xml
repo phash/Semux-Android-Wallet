@@ -124,13 +124,13 @@
         android:id="@+id/dashboardCreate"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:onClick="onCreateClick"
         android:text="@string/createAcc"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/versionView"
         app:layout_constraintEnd_toStartOf="@+id/dashboardImport"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noAccountsText" />
@@ -139,13 +139,13 @@
         android:id="@+id/dashboardImport"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:onClick="onImportClick"
         android:text="@string/importKey"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/versionView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dashboardCreate"
         app:layout_constraintTop_toBottomOf="@+id/noAccountsText" />
@@ -205,6 +205,14 @@
         android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/dashLockedtextView"
         app:layout_constraintTop_toBottomOf="@+id/dashTotal" />
+
+    <TextView
+        android:id="@+id/versionView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="161dp" />
 
 
 </android.support.constraint.ConstraintLayout>

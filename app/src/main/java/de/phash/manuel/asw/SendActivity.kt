@@ -34,6 +34,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -68,6 +69,7 @@ class SendActivity : AppCompatActivity() {
         super.onRestart()
         checkAccount()
     }
+
     fun onSendTransactionClick(view: View) {
 
         if (sendReceivingAddressEditView.text.toString().isNotEmpty() && sendAmountEditView.text.toString().isNotEmpty()) {
@@ -140,10 +142,12 @@ class SendActivity : AppCompatActivity() {
             }
 
 
+        } catch (e: CryptoException) {
+            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e("SIGN", e.localizedMessage ?: "NIX")
-            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT)
+            Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -159,8 +163,6 @@ class SendActivity : AppCompatActivity() {
         startService(intent)
 
     }
-
-
 
 
     override fun onResume() {
@@ -207,10 +209,13 @@ class SendActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val tx = Gson().fromJson(json, RawTransaction::class.java)
                 Log.i("SENDTX", json)
-                if (tx.success)
+                if (tx.success) {
+
+                    sendAmountEditView.setText("", TextView.BufferType.EDITABLE)
                     Toast.makeText(this@SendActivity,
                             "transfer done",
                             Toast.LENGTH_LONG).show()
+                }
                 else {
                     Toast.makeText(this@SendActivity,
                             tx.message,
@@ -231,10 +236,13 @@ class SendActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 Log.i("RES", json)
-                nonce = account.result.nonce
-                sendAddressTextView.text = address
-                sendAvailableTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
-                sendLockedTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                if (account.result.address.equals(address)) {
+
+                    nonce = account.result.nonce
+                    sendAddressTextView.text = address
+                    sendAvailableTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                    sendLockedTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                } else checkAccount()
 
             } else {
                 Toast.makeText(this@SendActivity, "check failed",

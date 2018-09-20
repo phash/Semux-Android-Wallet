@@ -26,7 +26,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'io.fabric'
 
 
 android {
@@ -35,8 +35,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 7
-        versionName "0.4.7"
+        versionCode 8
+        versionName "0.4.8 beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix 'N7'
     }
@@ -127,9 +127,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.2'
 
+    // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
+    implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
+
+
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
