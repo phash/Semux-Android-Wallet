@@ -44,7 +44,7 @@ maven {
         classpath 'com.google.gms:google-services:4.1.0'
 
         // Add dependency
-        classpath 'io.fabric.tools:gradle:1.25.4'
+   //     classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 

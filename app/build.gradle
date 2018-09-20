@@ -26,7 +26,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 
 android {
@@ -128,7 +128,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.2'
 
     // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
-    implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
+   // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
 
 
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
