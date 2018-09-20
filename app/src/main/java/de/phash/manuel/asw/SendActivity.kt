@@ -40,6 +40,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.FEE
+import de.phash.manuel.asw.semux.APIService.Companion.SEMUXMULTIPLICATOR
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
@@ -124,7 +125,11 @@ class SendActivity : AppCompatActivity() {
             val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.ivs))
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
-            val amount = Amount.Unit.SEM.of(sendAmountEditView.text.toString().toLong())
+
+            val inSem = BigDecimal(sendAmountEditView.text.toString())
+            val inNano = inSem.multiply(SEMUXMULTIPLICATOR)
+
+            val amount = Amount.Unit.NANO_SEM.of(inNano.toLong())
             val type = TransactionType.TRANSFER
             Log.i("SENDTX", "type = ${type.name}")
 

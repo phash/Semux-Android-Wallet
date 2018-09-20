@@ -50,6 +50,7 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.*
+import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_vote.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import java.math.BigDecimal
@@ -134,7 +135,11 @@ class VoteActivity : AppCompatActivity() {
             val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.ivs))
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
-            val amount = Amount.Unit.SEM.of(voteAmountEditView.text.toString().toLong())
+
+            val inSem = BigDecimal(sendAmountEditView.text.toString())
+            val inNano = inSem.multiply(APIService.SEMUXMULTIPLICATOR)
+
+            val amount = Amount.Unit.NANO_SEM.of(inNano.toLong())
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
             Log.i("SENDTX", "type = ${type.name}")
 
