@@ -50,7 +50,7 @@ class ManageAdapter(private val myDataset: ArrayList<SemuxAddress>) :
                                     viewType: Int): ManageAdapter.MyViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.custom_row_view, parent, false)
+                .inflate(R.layout.manage_balance_row, parent, false)
 
         return MyViewHolder(view)
     }
