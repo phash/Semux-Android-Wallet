@@ -91,5 +91,7 @@
     <string name="myVotes">by me</string>
     <string name="QRHint">QR Address code</string>
     <string name="exportKeys">export keys</string>
+    <string name="manageAccs">manage accounts</string>
+    <string name="removeAccount">Remove Account</string>
 
 </resources>

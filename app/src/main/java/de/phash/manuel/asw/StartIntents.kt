@@ -63,6 +63,11 @@ fun creditsActivity(context: Context) {
     context.startActivity(intent)
 }
 
+fun manageActivity(context: Context) {
+    val intent = Intent(context, ManageActivity::class.java)
+    context.startActivity(intent)
+}
+
 fun importPrivateKey(context: Context) {
     val intent = Intent(context, CreateAccountActivity::class.java)
     context.startActivity(intent)

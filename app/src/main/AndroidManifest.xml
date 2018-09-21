@@ -97,7 +97,8 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".SelectDelegate"></activity>
+        <activity android:name=".SelectDelegate" />
+        <activity android:name=".ManageActivity"></activity>
     </application>
 
 </manifest>

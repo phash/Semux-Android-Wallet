@@ -25,6 +25,7 @@
 //noinspection GradleCompatible
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+
 apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'io.fabric'
 
@@ -118,18 +119,15 @@ dependencies {
     // https://mvnrepository.com/artifact/com.journeyapps/zxing-android-embedded
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-    implementation  group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
-
+    implementation group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
 
     //implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.2'
 
     // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
-   // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
-
+    // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
 
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'

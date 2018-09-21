@@ -34,8 +34,8 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
         setContentView(R.layout.activity_settings)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
     }
 
     fun onImportKeyClick(view: View) {
@@ -44,7 +44,10 @@ class SettingsActivity : AppCompatActivity() {
 
     fun onSetPasswordClick(view: View) {
         setPasswordActivity(this)
+    }
 
+    fun onManageClick(view: View) {
+        manageActivity(this)
     }
 
     fun onCreateAccountClick(view: View) {
