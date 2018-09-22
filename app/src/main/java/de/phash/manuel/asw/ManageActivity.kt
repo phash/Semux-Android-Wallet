@@ -24,7 +24,8 @@
 
 package de.phash.manuel.asw
 
-import android.content.DialogInterface
+import android.app.Activity
+import android.content.*
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -35,9 +36,13 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
-import de.phash.manuel.asw.semux.SemuxAddress
-import de.phash.manuel.asw.util.getAdresses
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.ManageAccounts
+import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.util.checkBalanceForWallet
+import de.phash.manuel.asw.util.getSemuxAddress
 import de.phash.manuel.asw.util.isPasswordCorrect
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.password_prompt.view.*
@@ -59,12 +64,13 @@ class ManageActivity : AppCompatActivity() {
     }
 
 
-    private var accountList = ArrayList<SemuxAddress>()
+    private var accountList = ArrayList<ManageAccounts>()
+    private var accounts = HashMap<String, ManageAccounts>()
 
     private fun createContent() {
-        accountList = ArrayList(getAdresses(database))
+        checkBalanceForWallet(database, this)
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ManageAdapter(accountList)
+        viewAdapter = ManageAdapter(accountList, this, database)
 
         recyclerView = findViewById<RecyclerView>(R.id.manageRecycler).apply {
             setHasFixedSize(true)
@@ -95,6 +101,7 @@ class ManageActivity : AppCompatActivity() {
                         } else {
                             Log.i("PASSWORD", "PW false")
                             Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                            settingsActivity(this)
                         }
                     }
                 }
@@ -107,6 +114,48 @@ class ManageActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(receiver)
+    }
+
+    private val balancesMap: HashMap<String, CheckBalance> = HashMap()
+    private val receiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("RECEIVE", "BalancesActivity received Broadcast")
+            val bundle = intent.extras
+            if (bundle != null) {
+                val json = bundle.getString(APIService.JSON)
+                val resultCode = bundle.getInt(APIService.RESULT)
+                if (resultCode == Activity.RESULT_OK) {
+                    val checkBalance = Gson().fromJson(json, CheckBalance::class.java)
+                    val addressFromDB = getSemuxAddress(database, checkBalance.result.address)
+
+                    addressFromDB.let {
+                        val manage = ManageAccounts(addressFromDB!!, checkBalance)
+                        accounts.put(manage.account.address, manage)
+                        accountList.clear()
+                        accountList.addAll(accounts.values)
+
+                    }
+
+                    //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
+                    viewAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@ManageActivity, "check failed",
+                            Toast.LENGTH_LONG).show()
+
+                }
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater

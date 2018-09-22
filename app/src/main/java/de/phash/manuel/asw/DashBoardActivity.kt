@@ -63,7 +63,7 @@ class DashBoardActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(database, this)
         firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
-        versionView.text = "0.4.8 beta"
+        versionView.text = "0.4.9 beta"
 
     }
 

@@ -35,9 +35,9 @@ android {
     defaultConfig {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 8
-        versionName "0.4.8 beta"
+        versionName "0.4.9 beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix 'N7'
     }

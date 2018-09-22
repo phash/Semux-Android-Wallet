@@ -70,6 +70,7 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<Result>) :
             Toast.makeText(it.context, "address copied", Toast.LENGTH_SHORT).show()
             true
         })
+
         holder.itemView.setOnClickListener(View.OnClickListener {
             val intent = Intent(holder.itemView.context, SingleBalanceActivity::class.java)
 

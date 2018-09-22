@@ -33,8 +33,10 @@ import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.SemuxAddress
 import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.parseList
 import org.jetbrains.anko.db.select
 
@@ -46,6 +48,12 @@ fun createQRCode(text: String, width: Int): Bitmap? {
     val barcodeEncoder = BarcodeEncoder()
     return barcodeEncoder.createBitmap(bitMatrix)
 
+}
+
+fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
+    db.use {
+        delete(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, "address", "address" to account.account.address)
+    }
 }
 
 fun getAdresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {

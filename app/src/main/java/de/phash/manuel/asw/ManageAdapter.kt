@@ -24,6 +24,9 @@
 
 package de.phash.manuel.asw
 
+import android.content.Context
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,18 +34,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import de.phash.manuel.asw.semux.SemuxAddress
+import android.widget.Toast
+import de.phash.manuel.asw.database.MyDatabaseOpenHelper
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.util.DeCryptor
+import de.phash.manuel.asw.util.deleteSemuxDBAccount
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
+import kotlinx.android.synthetic.main.password_prompt.view.*
+import java.math.BigDecimal
 import java.text.DecimalFormat
 
-class ManageAdapter(private val myDataset: ArrayList<SemuxAddress>) :
+class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private val context: Context, private val database: MyDatabaseOpenHelper) :
         RecyclerView.Adapter<ManageAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val address = itemView.findViewById<TextView>(R.id.manageAddress)
         val pkey = itemView.findViewById<TextView>(R.id.managePkey)
+        val available = itemView.findViewById<TextView>(R.id.manageAvailable)
+        val locked = itemView.findViewById<TextView>(R.id.manageLocked)
+        val transactions = itemView.findViewById<TextView>(R.id.manageTx)
+        val pending = itemView.findViewById<TextView>(R.id.managePending)
         val removeButton = itemView.findViewById<Button>(R.id.removeButton)
     }
 
@@ -60,35 +75,66 @@ class ManageAdapter(private val myDataset: ArrayList<SemuxAddress>) :
         val df = DecimalFormat("0.#########")
         Log.i("MGMT", "DatasetSize: ${myDataset.size}")
         val account = myDataset[position]
-        holder.address?.text = account.address
+        holder.address?.text = account.account.address
+        holder.available.text = df.format(BigDecimal(account.check.result.available).divide(APIService.SEMUXMULTIPLICATOR))
+        holder.locked.text = df.format(BigDecimal(account.check.result.locked).divide(APIService.SEMUXMULTIPLICATOR))
+        holder.transactions.text = account.check.result.transactionCount.toString()
+        holder.pending.text = account.check.result.pendingTransactionCount.toString()
 
-        val decryptedKey = DeCryptor().decryptData(account.address + "s", Hex.decode0x(account.privateKey), Hex.decode0x(account.ivs))
+        val decryptedKey = DeCryptor().decryptData(account.account.address + "s", Hex.decode0x(account.account.privateKey), Hex.decode0x(account.account.ivs))
         holder.pkey?.text = decryptedKey
         holder.removeButton.setOnClickListener(View.OnClickListener {
-            removeClick(it)
-            Log.i("MGMT", "removeClick for: ${account.address}")
+            removeClick(account)
+
         })
-        /* holder.itemView.setOnLongClickListener(View.OnLongClickListener {
-             Log.i("COPY", "LONGCLICK - ${myDataset[position].address}")
-             copyToClipboard(it.context, myDataset[position].address)
-             Toast.makeText(it.context, "address copied", Toast.LENGTH_SHORT).show()
-             true
-         })
-         holder.itemView.setOnClickListener(View.OnClickListener {
-             val intent = Intent(holder.itemView.context, SingleBalanceActivity::class.java)
 
-             intent.putExtra("address", myDataset[position].address)
-             intent.putExtra("available", myDataset[position].available)
-             intent.putExtra("locked", myDataset[position].locked)
-
-             holder.itemView.context.startActivity(intent)
-             Log.i("CLICK", "clicked: ${myDataset[position].address}")
-         })
-         */
     }
 
-    fun removeClick(view: View) {
+    fun removeClick(account: ManageAccounts) {
         Log.i("MGMT", "remove button clicked for address ")
+        if (isPasswordSet(context = context)) {
+            passwordSecured(account)
+        } else {
+            deleteAccount(account)
+        }
+    }
+
+    private fun deleteAccount(account: ManageAccounts) {
+        deleteSemuxDBAccount(database, account)
+        settingsActivity(context)
+    }
+
+    fun passwordSecured(account: ManageAccounts) {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val inflater = LayoutInflater.from(context)
+        val promptView = inflater.inflate(R.layout.password_prompt, null)
+        dialogBuilder.setView(promptView)
+
+        dialogBuilder.setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+            dialog.dismiss()
+            settingsActivity(context)
+        })
+                .setPositiveButton("SEND") { dialog, which ->
+                    Log.i("PASSWORD", "positive button")
+                    if (promptView.enterOldPassword.text.toString().isEmpty()) {
+                        Toast.makeText(context, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                    } else {
+                        if (isPasswordCorrect(context, promptView.enterOldPassword.text.toString())) {
+                            deleteAccount(account)
+
+                        } else {
+                            Log.i("PASSWORD", "PW false")
+                            Toast.makeText(context, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+                .setNegativeButton("CANCEL") { dialog, which ->
+                    Log.i("PASSWORD", "negative button")
+                    dialog.dismiss()
+                    settingsActivity(context)
+                }
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
     }
 
     override fun getItemCount() = myDataset.size

@@ -93,5 +93,7 @@
     <string name="exportKeys">export keys</string>
     <string name="manageAccs">manage accounts</string>
     <string name="removeAccount">Remove Account</string>
+    <string name="tx">TX Count</string>
+    <string name="pendingTx">Pending</string>
 
 </resources>

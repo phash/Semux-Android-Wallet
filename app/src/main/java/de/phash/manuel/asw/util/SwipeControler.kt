@@ -79,13 +79,16 @@ class SwipeControler : Callback() {
                                  actionState: Int, isCurrentlyActive: Boolean) {
 
         recyclerView.setOnTouchListener(object : View.OnTouchListener {
+
             override fun onTouch(v: View, event: MotionEvent): Boolean {
                 Log.i("COPY", "onTouch ${v.tag as String}")
 
                 swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
                 return false
+
             }
         })
+
     }
 
     private fun setTouchUpListener(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
