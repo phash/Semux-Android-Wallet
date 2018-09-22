@@ -136,7 +136,7 @@ class VoteActivity : AppCompatActivity() {
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
 
-            val inSem = BigDecimal(sendAmountEditView.text.toString())
+            val inSem = BigDecimal(voteAmountEditView.text.toString())
             val inNano = inSem.multiply(APIService.SEMUXMULTIPLICATOR)
 
             val amount = Amount.Unit.NANO_SEM.of(inNano.toLong())
