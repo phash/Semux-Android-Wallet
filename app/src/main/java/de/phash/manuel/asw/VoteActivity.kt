@@ -50,7 +50,6 @@ import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
 import de.phash.manuel.asw.util.*
-import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.activity_vote.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import java.math.BigDecimal
