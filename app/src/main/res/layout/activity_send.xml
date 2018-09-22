@@ -53,11 +53,14 @@
 
     <TextView
         android:id="@+id/sendAvailableTextView"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:textIsSelectable="true"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView62"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
@@ -78,10 +81,14 @@
 
     <TextView
         android:id="@+id/sendLockedTextView"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
+        android:textIsSelectable="true"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView16"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -93,6 +100,7 @@
         android:layout_marginTop="32dp"
         android:labelFor="@+id/sendAddressTextView"
         android:text="@string/address"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -104,6 +112,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/sendAvailableTextView"
         android:text="@string/Available"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendAddressTextView" />
 
@@ -115,6 +124,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/sendLockedTextView"
         android:text="@string/locked"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendAvailableTextView" />
 
@@ -127,6 +137,7 @@
         android:ems="10"
         android:hint="@string/AmountTOSend"
         android:inputType="numberDecimal"
+        android:textIsSelectable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
@@ -138,11 +149,32 @@
         android:layout_marginTop="16dp"
         android:labelFor="@+id/sendAmountEditView"
         android:text="@string/AmountTOSend"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sendReceivingAddressEditView" />
 
     <TextView
         android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="SEM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sendLockedTextView" />
+
+    <TextView
+        android:id="@+id/textView62"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="SEM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sendAvailableTextView" />
+
+    <TextView
+        android:id="@+id/textView57"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -164,6 +196,7 @@
         android:lines="2"
         android:maxLines="3"
         android:minLines="1"
+        android:textIsSelectable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
@@ -175,6 +208,7 @@
         android:layout_marginTop="16dp"
         android:labelFor="@+id/sendReceivingAddressEditView"
         android:text="@string/ReceivingAddress"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
@@ -185,6 +219,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/feeExplain"
+        android:textIsSelectable="true"
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"

@@ -47,6 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textIsSelectable="true"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -71,6 +72,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/privateKey"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
@@ -81,6 +83,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/publicKey"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/privateKey" />
 
@@ -91,6 +94,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/address"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/publicKey" />
 
@@ -102,6 +106,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textIsSelectable="true"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView45" />
@@ -113,6 +118,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/storeSecure"
+        android:textIsSelectable="false"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />

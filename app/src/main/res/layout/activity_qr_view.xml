@@ -45,7 +45,7 @@
         android:layout_height="300dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/QRHint"
         android:onClick="copyClick"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
         android:text="TextView"
         android:textAlignment="center"
         android:textIsSelectable="true"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrAddressBigImageView" />

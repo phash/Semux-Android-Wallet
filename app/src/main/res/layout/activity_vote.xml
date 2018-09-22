@@ -53,13 +53,16 @@
 
     <TextView
         android:id="@+id/voteAvailableTextView"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:textIsSelectable="true"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView16"
         app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/voteAddressTextView" />
 
     <TextView
         android:id="@+id/voteAddressTextView"
@@ -72,18 +75,22 @@
         android:maxLines="2"
         android:minLines="2"
         android:textIsSelectable="true"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <TextView
         android:id="@+id/voteLockedTextView"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView16"
         app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/voteAvailableTextView" />
 
     <TextView
         android:id="@+id/textView12"
@@ -143,6 +150,26 @@
 
     <TextView
         android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="12dp"
+        android:text="SEM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/voteLockedTextView" />
+
+    <TextView
+        android:id="@+id/textView64"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="12dp"
+        android:text="SEM"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/voteAvailableTextView" />
+
+    <TextView
+        android:id="@+id/textView60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

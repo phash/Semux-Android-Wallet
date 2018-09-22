@@ -36,8 +36,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 11
-        versionName "0.4.11 beta"
+        versionCode 12
+        versionName "0.4.12 beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix 'N7'
     }

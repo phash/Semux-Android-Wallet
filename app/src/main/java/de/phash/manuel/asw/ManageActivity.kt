@@ -56,6 +56,13 @@ class ManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = ManageAdapter(accountList, this, database)
+        recyclerView = findViewById<RecyclerView>(R.id.manageRecycler).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
         if (isPasswordSet(this)) {
             passwordSecured()
         } else {
@@ -69,14 +76,7 @@ class ManageActivity : AppCompatActivity() {
 
     private fun createContent() {
         checkBalanceForWallet(database, this)
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = ManageAdapter(accountList, this, database)
 
-        recyclerView = findViewById<RecyclerView>(R.id.manageRecycler).apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
     }
 
 

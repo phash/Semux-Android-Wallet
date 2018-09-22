@@ -47,7 +47,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/singleBalanceLocked"
         android:text="@string/locked"
-        android:textIsSelectable="true"
+        android:textIsSelectable="false"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/singleBalanceAvailable"
         android:text="@string/Available"
-        android:textIsSelectable="true"
+        android:textIsSelectable="false"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,7 @@
         android:minLines="2"
         android:text="TextView"
         android:textIsSelectable="true"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qrAddressImageView" />
@@ -93,7 +93,7 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textIsSelectable="true"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -106,7 +106,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textIsSelectable="true"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -172,6 +173,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/singleTx"
         android:text="@string/viewTransactions"
+        android:textIsSelectable="false"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleBalanceLocked" />
@@ -183,6 +185,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView54" />
 
@@ -194,6 +197,7 @@
         android:layout_marginTop="8dp"
         android:labelFor="@+id/singlePendingTx"
         android:text="@string/pending"
+        android:textIsSelectable="false"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/singleTx"
         app:layout_constraintTop_toBottomOf="@+id/singleBalanceLocked" />
@@ -205,6 +209,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:textIsSelectable="false"
         app:layout_constraintStart_toEndOf="@+id/singleTx"
         app:layout_constraintTop_toBottomOf="@+id/textView56" />
 
