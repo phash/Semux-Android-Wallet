@@ -29,7 +29,7 @@ import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.google.firebase.database.FirebaseDatabase
+//import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.delegates.Delegates
@@ -72,8 +72,8 @@ class APIService : IntentService("SemuxService") {
 
         val NETWORK = Network.MAINNET
         //Network.TESTNET
-        val firebase = FirebaseDatabase.getInstance()
-        val firebaseReference = firebase.reference
+        //  val firebase = FirebaseDatabase.getInstance()
+        //   val firebaseReference = firebase.reference
 
     }
 
