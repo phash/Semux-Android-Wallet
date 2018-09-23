@@ -62,7 +62,8 @@
                 android:layout_marginTop="4dp"
                 android:text="TextView"
                 android:textIsSelectable="true"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/copyPrivkeyButton"
                 app:layout_constraintStart_toEndOf="@+id/textView55"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +86,8 @@
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textIsSelectable="true"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/copyPrivkeyButton"
                 app:layout_constraintStart_toEndOf="@+id/textView58"
                 app:layout_constraintTop_toBottomOf="@+id/manageAddress" />
 
@@ -180,6 +182,26 @@
                 android:text="TextView"
                 app:layout_constraintStart_toEndOf="@+id/textView63"
                 app:layout_constraintTop_toBottomOf="@+id/manageAvailable" />
+
+            <ImageView
+                android:id="@+id/copyPrivkeyButton"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/manageAddress"
+                app:srcCompat="@drawable/copy" />
+
+            <ImageView
+                android:id="@+id/copyAddressButton"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/copy" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 

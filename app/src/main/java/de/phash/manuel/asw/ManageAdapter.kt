@@ -33,16 +33,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.key.Hex
-import de.phash.manuel.asw.util.DeCryptor
-import de.phash.manuel.asw.util.deleteSemuxDBAccount
-import de.phash.manuel.asw.util.isPasswordCorrect
-import de.phash.manuel.asw.util.isPasswordSet
+import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -59,6 +57,8 @@ class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private va
         val transactions = itemView.findViewById<TextView>(R.id.manageTx)
         val pending = itemView.findViewById<TextView>(R.id.managePending)
         val removeButton = itemView.findViewById<Button>(R.id.removeButton)
+        val copyAddressBtn = itemView.findViewById<ImageView>(R.id.copyAddressButton)
+        val copyPrivKeyBtn = itemView.findViewById<ImageView>(R.id.copyPrivkeyButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -75,20 +75,41 @@ class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private va
         val df = DecimalFormat("0.#########")
         Log.i("MGMT", "DatasetSize: ${myDataset.size}")
         val account = myDataset[position]
-        holder.address?.text = account.account.address
+        Log.i("MGMT", "ADDRESS: ${account.account.address}")
+        holder.address?.text = "0x${account.account.address}"
         holder.available.text = df.format(BigDecimal(account.check.result.available).divide(APIService.SEMUXMULTIPLICATOR))
         holder.locked.text = df.format(BigDecimal(account.check.result.locked).divide(APIService.SEMUXMULTIPLICATOR))
         holder.transactions.text = account.check.result.transactionCount.toString()
         holder.pending.text = account.check.result.pendingTransactionCount.toString()
 
+        holder.address.setOnClickListener(View.OnClickListener {
+            copyItem(account.account.address, "ADDRESS")
+        })
+        holder.copyAddressBtn.setOnClickListener(View.OnClickListener {
+            copyItem(account.account.address, "ADDRESS")
+        })
+
+
         val decryptedKey = DeCryptor().decryptData(account.account.address + "s", Hex.decode0x(account.account.privateKey), Hex.decode0x(account.account.ivs))
         holder.pkey?.text = decryptedKey
         holder.removeButton.setOnClickListener(View.OnClickListener {
             removeClick(account)
-
+        })
+        holder.pkey.setOnClickListener(View.OnClickListener {
+            copyItem(decryptedKey, "PRIVATE KEY")
+        })
+        holder.copyPrivKeyBtn.setOnClickListener(View.OnClickListener {
+            copyItem(decryptedKey, "PRIVATE KEY")
         })
 
+
     }
+
+    fun copyItem(item: String, s: String) {
+        copyToClipboard(context, item)
+        Toast.makeText(context, "$s COPIED", Toast.LENGTH_SHORT).show()
+    }
+
 
     fun removeClick(account: ManageAccounts) {
         Log.i("MGMT", "remove button clicked for address ")

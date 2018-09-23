@@ -51,8 +51,13 @@ fun createQRCode(text: String, width: Int): Bitmap? {
 }
 
 fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
+    Log.i("DELETE", "address: ${account.account.address}")
+    var addressToSearch = account.account.address
+    if (account.account.address.startsWith("0x")) {
+        addressToSearch = account.account.address.substring(2)
+    }
     db.use {
-        delete(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, "address", "address" to account.account.address)
+        delete(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, "address = {address}", "address" to addressToSearch)
     }
 }
 
