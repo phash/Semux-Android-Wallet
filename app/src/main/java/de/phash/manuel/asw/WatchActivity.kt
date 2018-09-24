@@ -22,22 +22,16 @@
  * SOFTWARE.
  */
 
-package de.phash.manuel.asw.semux
+package de.phash.manuel.asw
 
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
-data class SemuxAddress(val id: Int?,
-                        val address: String,
-                        val publicKey: String?,
-                        val privateKey: String?,
-                        val ivs: String?,
-                        val ivp: String?
-) {
-    companion object {
-        val COLUMN_ADDRESS = "address"
-        val COLUMN_PUBLICKEY = "publickey"
-        val COLUMN_PRIVATEKEY = "privatekey"
-        val COLUMN_IVP = "ivS"
-        val COLUMN_IVS = "ivp"
+class WatchActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_watch)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
     }
 }
-
