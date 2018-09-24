@@ -42,10 +42,11 @@ import org.jetbrains.anko.db.select
 
 fun createQRCode(text: String, width: Int): Bitmap? {
 
+    Log.i("QR", "creating QR code")
     val multiFormatWriter = MultiFormatWriter()
-
     val bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, width, width)
     val barcodeEncoder = BarcodeEncoder()
+    Log.i("QR", "QR code created")
     return barcodeEncoder.createBitmap(bitMatrix)
 
 }
@@ -63,11 +64,12 @@ fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
 
 val semuxAddressRowParser = classParser<SemuxAddress>()
 fun getAddresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
+    Log.i("DATABASE", "calling selectAll")
     select(tableName = MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).parseList(semuxAddressRowParser)
 }
 
 fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = db.use {
-    Log.i("PKEY", "address: ${address}")
+    Log.i("DATABASE", "calling selecctAddress: ${address}")
     var addressToSearch = address
     if (address.startsWith("0x")) {
         addressToSearch = address.substring(2)
@@ -77,6 +79,7 @@ fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = 
             .exec { parseList(classParser<SemuxAddress>()) }.getOrNull(0)
 
 }
+
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
 
     val addresses = getAddresses(db)
