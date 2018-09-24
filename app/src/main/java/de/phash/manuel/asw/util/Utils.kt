@@ -63,9 +63,7 @@ fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
 
 val semuxAddressRowParser = classParser<SemuxAddress>()
 fun getAddresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
-    select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).exec {
-        parseList(semuxAddressRowParser)
-    }
+    select(tableName = MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).parseList(semuxAddressRowParser)
 }
 
 fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = db.use {
