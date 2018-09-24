@@ -61,10 +61,10 @@ fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
     }
 }
 
-fun getAdresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
-    val rowParser = classParser<SemuxAddress>()
+val semuxAddressRowParser = classParser<SemuxAddress>()
+fun getAddresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
     select(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).exec {
-        parseList(rowParser)
+        parseList(semuxAddressRowParser)
     }
 }
 
@@ -81,7 +81,7 @@ fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = 
 }
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
 
-    val addresses = getAdresses(db)
+    val addresses = getAddresses(db)
     addresses.forEach {
         updateAddress(it.address, context)
     }

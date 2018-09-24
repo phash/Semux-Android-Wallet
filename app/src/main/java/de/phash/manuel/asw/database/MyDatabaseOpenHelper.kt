@@ -56,7 +56,7 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDa
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Here you can upgrade tables, as usual
-        db.dropTable("SemuxAddress", true)
+        //db. dropTable("SemuxAddress", true)
 
     }
 }

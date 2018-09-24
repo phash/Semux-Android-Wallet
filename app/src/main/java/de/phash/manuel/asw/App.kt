@@ -33,7 +33,7 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.util.firebase
-import de.phash.manuel.asw.util.getAdresses
+import de.phash.manuel.asw.util.getAddresses
 import java.util.*
 
 
@@ -57,7 +57,7 @@ class App : Application() {
         val bundle = Bundle()
         firebase("8", "update balances", FirebaseAnalytics.getInstance(this))
 
-        val adresses = getAdresses(database)
+        val adresses = getAddresses(database)
 
         updateBalanceList(adresses)
     }
