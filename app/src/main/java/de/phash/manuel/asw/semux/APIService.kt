@@ -71,9 +71,7 @@ class APIService : IntentService("SemuxService") {
 
 
         val NETWORK = Network.MAINNET
-        //Network.TESTNET
-        //  val firebase = FirebaseDatabase.getInstance()
-        //   val firebaseReference = firebase.reference
+
 
     }
 
