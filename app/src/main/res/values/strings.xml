@@ -95,5 +95,6 @@
     <string name="removeAccount">Remove Account</string>
     <string name="tx">TX Count</string>
     <string name="pendingTx">Pending</string>
+    <string name="setPW">set password</string>
 
 </resources>

@@ -73,7 +73,7 @@ class EncryptionTests {
         val decryptedAddress = decryptAccount(semuxAddress, pass)
 
         Assertions.assertEquals(key.toAddressString(), decryptedAddress.address)
-        Assertions.assertEquals(Bytes.toString(key.privateKey), decryptedAddress.privateKey)
+        Assertions.assertEquals(Hex.encode0x(key.privateKey), decryptedAddress.privateKey)
 
     }
 

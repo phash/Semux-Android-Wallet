@@ -24,9 +24,12 @@
 
 package de.phash.manuel.asw
 
-import android.content.ContentValues
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -34,8 +37,11 @@ import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.key.Key
-import de.phash.manuel.asw.util.EnCryptor
+import de.phash.manuel.asw.util.createAccount
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_create_account.*
+import kotlinx.android.synthetic.main.password_prompt.view.*
 import org.bouncycastle.util.encoders.Hex
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
@@ -50,7 +56,14 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_account)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         updateViews()
-        save()
+    }
+
+    fun saveClick(view: View) {
+        if (isPasswordSet(this)) {
+            passwordSecured()
+        } else {
+            save("default")
+        }
     }
 
     fun updateViews() {
@@ -81,24 +94,49 @@ class CreateAccountActivity : AppCompatActivity() {
         }.show()
     }
 
-    fun save() {
 
-        val encryptorp = EnCryptor()
-        val encryptors = EnCryptor()
-        val encryptedPrivK = encryptors.encryptText(key.toAddressString() + "s", de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey))
-        val encryptedPublK = encryptorp.encryptText(key.toAddressString() + "p", de.phash.manuel.asw.semux.key.Hex.encode0x(key.publicKey))
-
-        val values = ContentValues()
-        values.put("address", key.toAddressString())
-        values.put("publickey", Hex.toHexString(encryptedPublK))
-        values.put("privatekey", Hex.toHexString(encryptedPrivK))
-        values.put("ivs", Hex.toHexString(encryptors.iv))
-        values.put("ivp", Hex.toHexString(encryptorp.iv))
+    fun save(password: String) {
+        val semuxAddress = createAccount(key, password)
+        val values = semuxAddress.toContentValues()
 
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
         Toast.makeText(this, "new account created! Save your private key!", Toast.LENGTH_LONG)
         //balanceActivity(this)
 
+    }
+
+    fun passwordSecured() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val promptView = inflater.inflate(R.layout.password_prompt, null)
+        dialogBuilder.setView(promptView)
+
+        dialogBuilder.setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+            dialog.dismiss()
+            settingsActivity(this)
+        })
+                .setPositiveButton("SEND") { dialog, which ->
+                    Log.i("PASSWORD", "positive button")
+                    if (promptView.enterOldPassword.text.toString().isEmpty()) {
+                        Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                    } else {
+                        if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
+                            save(promptView.enterOldPassword.text.toString())
+
+                        } else {
+                            Log.i("PASSWORD", "PW false")
+                            Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                            settingsActivity(this)
+                        }
+                    }
+                }
+                .setNegativeButton("CANCEL") { dialog, which ->
+                    Log.i("PASSWORD", "negative button")
+                    dialog.dismiss()
+                    settingsActivity(this)
+                }
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

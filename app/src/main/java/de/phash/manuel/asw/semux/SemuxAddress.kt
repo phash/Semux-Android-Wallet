@@ -30,21 +30,24 @@ import android.content.ContentValues
 data class SemuxAddress(val id: Int?,
                         val address: String,
                         val privateKey: String?,
+                        val salt: String?,
                         val iv: String?
 ) {
     companion object {
+        val COLUMN_ID = "id"
         val COLUMN_ADDRESS = "address"
         val COLUMN_PRIVATEKEY = "privatekey"
-        val COLUMN_IVP = "ivS"
-        val COLUMN_IVS = "ivp"
+        val COLUMN_IV = "iv"
+        val COLUMN_SALT = "salt"
     }
 
     fun toContentValues(): ContentValues {
-        return ContentValues(4).apply {
-            put("id", id)
-            put("address", address)
-            put("privatekey", privateKey)
-            put("iv", iv)
+        return ContentValues(5).apply {
+            put(COLUMN_ID, id)
+            put(COLUMN_ADDRESS, address)
+            put(COLUMN_PRIVATEKEY, privateKey)
+            put(COLUMN_SALT, salt)
+            put(COLUMN_IV, iv)
         }
     }
 }

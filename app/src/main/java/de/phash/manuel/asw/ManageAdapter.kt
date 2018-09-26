@@ -39,13 +39,12 @@ import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
-import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
-class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private val context: Context, private val database: MyDatabaseOpenHelper) :
+class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private val context: Context, private val password: String, private val database: MyDatabaseOpenHelper) :
         RecyclerView.Adapter<ManageAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -90,16 +89,17 @@ class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private va
         })
 
 
-        val decryptedKey = DeCryptor().decryptData(account.account.address + "s", Hex.decode0x(account.account.privateKey), Hex.decode0x(account.account.iv))
-        holder.pkey?.text = decryptedKey
+        val decryptedAcc = decryptAccount(account.account, password)
+
+        holder.pkey?.text = decryptedAcc.privateKey
         holder.removeButton.setOnClickListener(View.OnClickListener {
             removeClick(account)
         })
         holder.pkey.setOnClickListener(View.OnClickListener {
-            copyItem(decryptedKey, "PRIVATE KEY")
+            copyItem(decryptedAcc.privateKey ?: "", "PRIVATE KEY")
         })
         holder.copyPrivKeyBtn.setOnClickListener(View.OnClickListener {
-            copyItem(decryptedKey, "PRIVATE KEY")
+            copyItem(decryptedAcc.privateKey ?: "", "PRIVATE KEY")
         })
 
 

@@ -83,7 +83,7 @@ class VoteActivity : AppCompatActivity() {
             if (isPasswordSet(this)) {
                 passwordSecured(option)
             } else {
-                createTransaction(option)
+                createTransaction(option, "default")
             }
         } else {
             if (voteReceivingAddressEditView.text.toString().isEmpty())
@@ -108,7 +108,7 @@ class VoteActivity : AppCompatActivity() {
                         Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
                     } else {
                         if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
-                            createTransaction(vote)
+                            createTransaction(vote, promptView.enterOldPassword.text.toString())
 
                         } else {
                             Log.i("PASSWORD", "PW false")
@@ -124,16 +124,17 @@ class VoteActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun createTransaction(option: String) {
+    private fun createTransaction(option: String, password: String) {
         try {
-            Log.i("SENDTX", "-creating transaction for $option")
+            Log.i("VOTE", "-creating transaction for $option")
             firebase("5", type = option, mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
 
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val account = getSemuxAddress(database, address)
-            val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.iv))
+            Log.i("VOTE", "for account ${account?.address ?: "not found"}")
 
-            val senderPkey = Key(Hex.decode0x(decryptedKey))
+            val decryptedAcc = decryptAccount(account!!, password)
+            val senderPkey = Key(Hex.decode0x(decryptedAcc.privateKey))
 
             val inSem = BigDecimal(voteAmountEditView.text.toString())
             val inNano = inSem.multiply(APIService.SEMUXMULTIPLICATOR)
@@ -149,7 +150,7 @@ class VoteActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("SIGN", e.localizedMessage)
+            //Log.e("SIGN", e.localizedMessage)
             Toast.makeText(this, e.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }
@@ -164,6 +165,7 @@ class VoteActivity : AppCompatActivity() {
         intent.putExtra(APIService.TYP,
                 APIService.transfer)
         startService(intent)
+
     }
 
 
@@ -222,6 +224,7 @@ class VoteActivity : AppCompatActivity() {
                     Toast.makeText(this@VoteActivity,
                             "vote done",
                             Toast.LENGTH_LONG).show()
+                    checkAccount()
                 } else {
                     Toast.makeText(this@VoteActivity,
                             tx.message,
@@ -248,6 +251,7 @@ class VoteActivity : AppCompatActivity() {
                     voteAvailableTextView.text = addressText
                     val lockText = "${SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
                     voteLockedTextView.text = lockText
+                    votePendingTextView.text = account.result.pendingTransactionCount.toString()
                 } else checkAccount()
 
             } else {

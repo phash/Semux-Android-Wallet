@@ -36,10 +36,10 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 15
-        versionName "0.4.15 beta"
+        versionCode 16
+        versionName "0.5.16 beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionNameSuffix ' hydrogen '
+        versionNameSuffix ' helium '
     }
     buildTypes {
         release {
@@ -106,7 +106,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
     implementation 'com.github.ben-manes.caffeine:caffeine:2.6.2'
-
+    implementation 'com.github.simbiose:Encryption:2.0.1'
     // https://mvnrepository.com/artifact/com.muquit.libsodiumjna/libsodium-jna
 
     // https://mvnrepository.com/artifact/com.parse/parse-android

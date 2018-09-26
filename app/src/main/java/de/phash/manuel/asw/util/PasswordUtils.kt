@@ -25,12 +25,16 @@
 package de.phash.manuel.asw.util
 
 import android.content.Context
+import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Bytes
 import de.phash.manuel.asw.semux.key.Key
 import org.bouncycastle.util.encoders.Hex
 import org.mindrot.jbcrypt.BCrypt
+import se.simbio.encryption.Encryption
 
+
+const val DEFAULT_PW = "default"
 private val NOKEY = "nokey"
 private val PASSWORD_KEY = "password"
 
@@ -41,6 +45,13 @@ fun getCurrentPassword(context: Context): String? {
 
 fun isPasswordSet(context: Context): Boolean {
     return !getCurrentPassword(context).equals(NOKEY)
+}
+
+fun updateAllAddresses(db: MyDatabaseOpenHelper, password: String) {
+    getAddresses(db).forEach {
+        val decryptedAcc = decryptAccount(it, password)
+        updateSemuxAddress(db, encryptAccount(decryptedAcc, password))
+    }
 }
 
 fun persistNewPassword(context: Context, passwordToSet: String) {
@@ -66,25 +77,25 @@ fun checkPassword(context: Context, passwordToTest: String): Boolean {
 }
 
 fun decryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
+    val encryption = Encryption.getDefault(password, semuxAddress.salt, de.phash.manuel.asw.semux.key.Hex.decode0x(semuxAddress.iv))
 
-    val saltPriv = Bytes.random(16)
-    val pwKey = org.bouncycastle.crypto.generators.BCrypt.generate(Bytes.of(password), saltPriv, 12)
-
-    val decryptedKey = Aes.decrypt(de.phash.manuel.asw.semux.key.Hex.decode0x(semuxAddress.privateKey), saltPriv, password, Hex.decode(semuxAddress.iv))
-    val key = Key(decryptedKey)
-    return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), null)
+    val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(encryption.decryptOrNull(semuxAddress.privateKey)))
+    return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv)
 }
 
 fun createAccount(key: Key, password: String): SemuxAddress {
-    val ivpub = Bytes.random(16)
-    val ivpriv = Bytes.random(16)
-    val saltPriv = Bytes.random(16)
-    val pwKey = org.bouncycastle.crypto.generators.BCrypt.generate(Bytes.of(password), saltPriv, 12)
+    val saltPriv = Bytes.random(256)
 
-    val saltpub = Bytes.random(16)
-    val pubkey = org.bouncycastle.crypto.generators.BCrypt.generate(Bytes.of(password), saltpub, 12)
+    val iv = Bytes.random(16)
+    val encryption = Encryption.getDefault(password, de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), iv)
+    return SemuxAddress(null, key.toAddressString(), encryption.encryptOrNull(de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey)), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv))
+}
 
-    val encryptedPrivK = Aes.encrypt(key.privateKey, password, saltPriv)
 
-    return SemuxAddress(null, key.toAddressString(), Hex.toHexString(encryptedPrivK), Hex.toHexString(ivpriv))
+fun encryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
+    val saltPriv = Bytes.random(256)
+
+    val iv = Bytes.random(16)
+    val encryption = Encryption.getDefault(password, de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), iv)
+    return SemuxAddress(semuxAddress.id, semuxAddress.address, encryption.encryptOrNull(semuxAddress.privateKey), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv))
 }

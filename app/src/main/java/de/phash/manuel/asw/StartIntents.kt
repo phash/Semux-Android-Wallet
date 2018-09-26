@@ -68,11 +68,6 @@ fun manageActivity(context: Context) {
     context.startActivity(intent)
 }
 
-fun importPrivateKey(context: Context) {
-    val intent = Intent(context, CreateAccountActivity::class.java)
-    context.startActivity(intent)
-}
-
 fun importActivity(context: Context) {
     val intent = Intent(context, ImportKeyActivity::class.java)
     context.startActivity(intent)
