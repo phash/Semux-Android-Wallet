@@ -35,10 +35,7 @@ import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.SemuxAddress
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.delete
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.*
 
 fun createQRCode(text: String, width: Int): Bitmap? {
 
@@ -78,6 +75,15 @@ fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = 
             .whereArgs("${SemuxAddress.COLUMN_ADDRESS} = {address}", "address" to addressToSearch)
             .exec { parseList(classParser<SemuxAddress>()) }.getOrNull(0)
 
+}
+
+fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
+    db.use {
+
+        update(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME)
+                .whereArgs("${SemuxAddress.COLUMN_ID} = {id}", "id" to semuxAddress.id!!)
+                .exec()
+    }
 }
 
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {

@@ -46,6 +46,7 @@ import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import de.phash.manuel.asw.util.firebase
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
 import java.math.BigDecimal
@@ -65,6 +66,7 @@ class DashBoardActivity : AppCompatActivity() {
         firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
         versionView.text = this.packageManager.getPackageInfo(this.packageName, 0).versionName
 
+        setPWButton.visibility = if (isPasswordSet(this)) INVISIBLE else VISIBLE
     }
 
     override fun onRestart() {
@@ -86,18 +88,18 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
     fun onCreateClick(view: View) {
-        val intent = Intent(this, CreateAccountActivity::class.java)
-        startActivity(intent)
+        createActivity(this)
     }
 
     fun onImportClick(view: View) {
-        val intent = Intent(this, ImportKeyActivity::class.java)
-        startActivity(intent)
+        importActivity(this)
+    }
 
+    fun onSetPWClick(view: View) {
+        setPasswordActivity(this)
     }
 
     fun onBalancesClick(view: View) {
-
         val intent = Intent(this, BalancesActivity::class.java)
         startActivity(intent)
     }
@@ -152,6 +154,7 @@ class DashBoardActivity : AppCompatActivity() {
         viewAccountsButton.visibility = VISIBLE
         dashLockedtextView.visibility = VISIBLE
         dashTotaltextView.visibility = VISIBLE
+        setPWButton.visibility = INVISIBLE
     }
 
     override fun onResume() {

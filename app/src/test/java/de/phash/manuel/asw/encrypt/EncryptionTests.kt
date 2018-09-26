@@ -24,8 +24,12 @@
 
 package de.phash.manuel.asw.encrypt
 
+import de.phash.manuel.asw.semux.key.Bytes
 import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.semux.key.Key
+import de.phash.manuel.asw.util.createAccount
+import de.phash.manuel.asw.util.decryptAccount
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 
@@ -33,9 +37,45 @@ class EncryptionTests {
 
 
     @Test
-    fun testEncryption() {
-        val encrypted = "9d543d36b9b78e88ac31188ec3d3c365dad772eb4add9a2031b485ac7250457441ee2b78f58947700c239b44f45bf4b99ddc6f0c345209dcff85d1f413cddc91cda70898d34a2864b6bded50c7016b2998a281651025cd0f1a7ffe4d0dac1db4fe410046db2bdaab7b8200b83e933e22f17a"
-        val key = Key(Hex.decode0x(encrypted))
-        println("der Key: ${key.toAddressString()} - ${Hex.encode(key.privateKey)}")
+    fun keyTest() {
+        var keyString = "302e020100300506032b6570042204203d423ee2f60c8b9a6a78beea9282686e6c300e4cbae154ac4c81eae1801d087a"
+
+        var key = Key(Hex.decode0x(keyString))
+        println("key.toAddressString: " + key.toAddressString())
+        println("key.toAddress: " + key.toAddress())
+        println("key.toAddressString0x: " + key.toAddressString())
+        key.sign(ByteArray(1))
     }
+
+    @Test
+    fun encrypt() {
+        val pass = "myPassword"
+        val key = Key()
+        val semuxAddress = createAccount(key, pass)
+        var values = semuxAddress.toContentValues()
+        Assertions.assertEquals(key.toAddressString(), semuxAddress.address)
+
+    }
+
+
+    @Test
+    fun encryptAndDecrypt() {
+
+        val pass = "1234567890123456"
+        val key = Key()
+        val semuxAddress = createAccount(key, pass)
+
+        Assertions.assertEquals(key.toAddressString(), semuxAddress.address)
+        Assertions.assertNotEquals(Bytes.toString(key.privateKey), semuxAddress.privateKey)
+
+        println("ivs " + semuxAddress.iv)
+
+        val decryptedAddress = decryptAccount(semuxAddress, pass)
+
+        Assertions.assertEquals(key.toAddressString(), decryptedAddress.address)
+        Assertions.assertEquals(Hex.encode0x(key.privateKey), decryptedAddress.privateKey)
+
+    }
+
+
 }

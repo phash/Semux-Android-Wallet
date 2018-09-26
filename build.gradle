@@ -26,14 +26,11 @@
 
 buildscript {
     ext.kotlin_version = '1.2.61'
-        repositories {
+    repositories {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
 
-maven {
-           url 'https://maven.fabric.io/public'
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'
@@ -44,15 +41,15 @@ maven {
         classpath 'com.google.gms:google-services:4.1.0'
 
         // Add dependency
-   //     classpath 'io.fabric.tools:gradle:1.25.4'
+        //     classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 
 allprojects {
     repositories {
         google()
+        maven { url 'https://jitpack.io' }
         jcenter()
-
     }
 }
 

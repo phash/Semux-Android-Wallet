@@ -24,9 +24,12 @@
 
 package de.phash.manuel.asw
 
-import android.content.ContentValues
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -36,9 +39,11 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.key.CryptoException
 import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.semux.key.Key
-import de.phash.manuel.asw.util.EnCryptor
+import de.phash.manuel.asw.util.createAccount
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_import_key.*
-import org.jetbrains.anko.design.snackbar
+import kotlinx.android.synthetic.main.password_prompt.view.*
 
 class ImportKeyActivity : AppCompatActivity() {
 
@@ -49,36 +54,67 @@ class ImportKeyActivity : AppCompatActivity() {
     }
 
     fun importClick(view: View) {
+        if (isPasswordSet(this)) {
+            passwordSecured()
+        } else {
+            import("default")
+        }
+    }
+
+    fun passwordSecured() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+        val promptView = inflater.inflate(R.layout.password_prompt, null)
+        dialogBuilder.setView(promptView)
+
+        dialogBuilder.setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+            dialog.dismiss()
+            settingsActivity(this)
+        })
+                .setPositiveButton("SEND") { dialog, which ->
+                    Log.i("PASSWORD", "positive button")
+                    if (promptView.enterOldPassword.text.toString().isEmpty()) {
+                        Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                    } else {
+                        if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
+                            import(promptView.enterOldPassword.text.toString())
+
+                        } else {
+                            Log.i("PASSWORD", "PW false")
+                            Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
+                            settingsActivity(this)
+                        }
+                    }
+                }
+                .setNegativeButton("CANCEL") { dialog, which ->
+                    Log.i("PASSWORD", "negative button")
+                    dialog.dismiss()
+                    settingsActivity(this)
+                }
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
+    }
+
+    fun import(password: String) {
         val pkey = importEditText.text.toString()
         if (pkey.isEmpty())
             Toast.makeText(this, "Key may not be empty", Toast.LENGTH_LONG).show()
         else {
-
-
             try {
                 val key = Key(Hex.decode0x(pkey))
-
-                val encryptorp = EnCryptor()
-                val encryptors = EnCryptor()
-                val encryptedPrivK = encryptors.encryptText(key.toAddressString() + "s", de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey))
-                val encryptedPublK = encryptorp.encryptText(key.toAddressString() + "p", de.phash.manuel.asw.semux.key.Hex.encode0x(key.publicKey))
-
 
                 importAddress.text = key.toAddressString()
                 importPubKey.text = Hex.encode0x(key.publicKey)
 
-                val values = ContentValues()
-                values.put("address", key.toAddressString())
-                values.put("publickey", org.bouncycastle.util.encoders.Hex.toHexString(encryptedPublK))
-                values.put("privatekey", org.bouncycastle.util.encoders.Hex.toHexString(encryptedPrivK))
-                values.put("ivs", org.bouncycastle.util.encoders.Hex.toHexString(encryptors.iv))
-                values.put("ivp", org.bouncycastle.util.encoders.Hex.toHexString(encryptorp.iv))
-
+                val semuxAddress = createAccount(key, password)
+                val values = semuxAddress.toContentValues()
                 database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
-            } catch (e: CryptoException) {
-                view.snackbar(e.localizedMessage)
+                Toast.makeText(this, "key added", Toast.LENGTH_LONG).show()
+                dashboardActivity(this)
 
-                Toast.makeText(this, "not a valid private key", Toast.LENGTH_LONG)
+            } catch (e: CryptoException) {
+
+                Toast.makeText(this, "not a valid private key", Toast.LENGTH_LONG).show()
             }
 
         }

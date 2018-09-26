@@ -76,7 +76,7 @@ class SendActivity : AppCompatActivity() {
             if (isPasswordSet(this)) {
                 passwordSecured()
             } else {
-                createTransaction()
+                createTransaction("default")
             }
         } else {
             if (sendReceivingAddressEditView.text.toString().isEmpty())
@@ -101,7 +101,7 @@ class SendActivity : AppCompatActivity() {
                         Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
                     } else {
                         if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
-                            createTransaction()
+                            createTransaction(promptView.enterOldPassword.text.toString())
 
                         } else {
                             Log.i("PASSWORD", "PW false")
@@ -118,15 +118,15 @@ class SendActivity : AppCompatActivity() {
     }
 
 
-    private fun createTransaction() {
+    private fun createTransaction(password: String) {
         try {
             firebase("7", type = "send", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
 
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
             val account = getSemuxAddress(database, address)
-            val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.ivs))
 
-            val senderPkey = Key(Hex.decode0x(decryptedKey))
+            val decryptedAcc = decryptAccount(account!!, password)
+            val senderPkey = Key(Hex.decode0x(decryptedAcc.privateKey))
 
             val inSem = BigDecimal(sendAmountEditView.text.toString())
             val inNano = inSem.multiply(SEMUXMULTIPLICATOR)
@@ -139,6 +139,7 @@ class SendActivity : AppCompatActivity() {
                 val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
                 val signedTx = transaction.sign(senderPkey)
                 sendTransaction(signedTx)
+
             }
 
 
@@ -215,6 +216,7 @@ class SendActivity : AppCompatActivity() {
                     Toast.makeText(this@SendActivity,
                             "transfer done",
                             Toast.LENGTH_LONG).show()
+                    checkAccount()
                 }
                 else {
                     Toast.makeText(this@SendActivity,
@@ -242,6 +244,7 @@ class SendActivity : AppCompatActivity() {
                     sendAddressTextView.text = address
                     sendAvailableTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
                     sendLockedTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.locked).divide(APIService.SEMUXMULTIPLICATOR))} SEM"
+                    sendPendingTextView.text = account.result.pendingTransactionCount.toString()
                 } else checkAccount()
 
             } else {

@@ -41,10 +41,7 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.json.CheckBalance
-import de.phash.manuel.asw.util.checkBalanceForWallet
-import de.phash.manuel.asw.util.getSemuxAddress
-import de.phash.manuel.asw.util.isPasswordCorrect
-import de.phash.manuel.asw.util.isPasswordSet
+import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 
 class ManageActivity : AppCompatActivity() {
@@ -57,7 +54,7 @@ class ManageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manage)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ManageAdapter(accountList, this, database)
+        viewAdapter = ManageAdapter(accountList, this, DEFAULT_PW, database)
         recyclerView = findViewById<RecyclerView>(R.id.manageRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

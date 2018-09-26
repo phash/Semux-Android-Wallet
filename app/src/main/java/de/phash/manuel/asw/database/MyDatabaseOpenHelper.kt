@@ -26,9 +26,10 @@ package de.phash.manuel.asw.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import de.phash.manuel.asw.semux.SemuxAddress
 import org.jetbrains.anko.db.*
 
-class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 1) {
+class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 3) {
     companion object {
         private var instance: MyDatabaseOpenHelper? = null
 
@@ -46,18 +47,22 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDa
     override fun onCreate(db: SQLiteDatabase) {
         // Here you create tables
         db.createTable("SemuxAddress", true,
-                "id" to INTEGER + PRIMARY_KEY + UNIQUE,
-                "address" to TEXT,
-                "publickey" to TEXT,
-                "privatekey" to TEXT,
-                "ivs" to TEXT,
-                "ivp" to TEXT)
+                SemuxAddress.COLUMN_ID to INTEGER + PRIMARY_KEY + UNIQUE,
+                SemuxAddress.COLUMN_ADDRESS to TEXT,
+                SemuxAddress.COLUMN_PRIVATEKEY to TEXT,
+                SemuxAddress.COLUMN_SALT to TEXT,
+                SemuxAddress.COLUMN_IV to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Here you can upgrade tables, as usual
-        //db. dropTable("SemuxAddress", true)
-
+        db.dropTable("SemuxAddress", true)
+        db.createTable("SemuxAddress", true,
+                SemuxAddress.COLUMN_ID to INTEGER + PRIMARY_KEY + UNIQUE,
+                SemuxAddress.COLUMN_ADDRESS to TEXT,
+                SemuxAddress.COLUMN_PRIVATEKEY to TEXT,
+                SemuxAddress.COLUMN_SALT to TEXT,
+                SemuxAddress.COLUMN_IV to TEXT)
     }
 }
 
