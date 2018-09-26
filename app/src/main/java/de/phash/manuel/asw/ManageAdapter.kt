@@ -90,7 +90,7 @@ class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private va
         })
 
 
-        val decryptedKey = DeCryptor().decryptData(account.account.address + "s", Hex.decode0x(account.account.privateKey), Hex.decode0x(account.account.ivs))
+        val decryptedKey = DeCryptor().decryptData(account.account.address + "s", Hex.decode0x(account.account.privateKey), Hex.decode0x(account.account.iv))
         holder.pkey?.text = decryptedKey
         holder.removeButton.setOnClickListener(View.OnClickListener {
             removeClick(account)

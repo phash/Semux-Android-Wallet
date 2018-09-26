@@ -24,20 +24,28 @@
 
 package de.phash.manuel.asw.semux
 
+import android.content.ContentValues
+
 
 data class SemuxAddress(val id: Int?,
                         val address: String,
-                        val publicKey: String?,
                         val privateKey: String?,
-                        val ivs: String?,
-                        val ivp: String?
+                        val iv: String?
 ) {
     companion object {
         val COLUMN_ADDRESS = "address"
-        val COLUMN_PUBLICKEY = "publickey"
         val COLUMN_PRIVATEKEY = "privatekey"
         val COLUMN_IVP = "ivS"
         val COLUMN_IVS = "ivp"
+    }
+
+    fun toContentValues(): ContentValues {
+        return ContentValues(4).apply {
+            put("id", id)
+            put("address", address)
+            put("privatekey", privateKey)
+            put("iv", iv)
+        }
     }
 }
 

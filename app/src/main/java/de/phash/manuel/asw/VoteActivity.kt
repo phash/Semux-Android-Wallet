@@ -131,7 +131,7 @@ class VoteActivity : AppCompatActivity() {
 
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val account = getSemuxAddress(database, address)
-            val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.ivs))
+            val decryptedKey = DeCryptor().decryptData(account?.address + "s", Hex.decode0x(account?.privateKey), Hex.decode0x(account?.iv))
 
             val senderPkey = Key(Hex.decode0x(decryptedKey))
 
