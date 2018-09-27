@@ -34,6 +34,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -60,7 +61,8 @@ class SendActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_IMPLICIT)
         address = intent.getStringExtra("address")
         checkAccount()
     }
@@ -217,8 +219,7 @@ class SendActivity : AppCompatActivity() {
                             "transfer done",
                             Toast.LENGTH_LONG).show()
                     checkAccount()
-                }
-                else {
+                } else {
                     Toast.makeText(this@SendActivity,
                             tx.message,
                             Toast.LENGTH_LONG).show()
