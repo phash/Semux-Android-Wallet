@@ -25,6 +25,7 @@
 package de.phash.manuel.asw.util
 
 import android.content.Context
+import android.util.Log
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Bytes
@@ -76,10 +77,13 @@ fun checkPassword(context: Context, passwordToTest: String): Boolean {
 
 }
 
+//TODO logging entfernen!
 fun decryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
+    Log.i("DECRYPT", "decrypt: ${semuxAddress}")
     val encryption = Encryption.getDefault(password, semuxAddress.salt, de.phash.manuel.asw.semux.key.Hex.decode0x(semuxAddress.iv))
-
-    val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(encryption.decryptOrNull(semuxAddress.privateKey)))
+    val decryptKey = encryption.decryptOrNull(semuxAddress.privateKey)
+    Log.i("DECRYPT", "decryptKey: ${decryptKey.substring(0, 10)}")
+    val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(decryptKey))
     return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv)
 }
 
