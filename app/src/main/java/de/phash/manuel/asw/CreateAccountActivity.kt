@@ -33,6 +33,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
@@ -102,6 +103,7 @@ class CreateAccountActivity : AppCompatActivity() {
         database.use { insert(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME, null, values) }
         Toast.makeText(this, "new account created! Save your private key!", Toast.LENGTH_LONG)
         //balanceActivity(this)
+        button15.visibility = INVISIBLE
 
     }
 

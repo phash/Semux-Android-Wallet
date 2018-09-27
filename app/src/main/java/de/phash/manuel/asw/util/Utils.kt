@@ -78,9 +78,15 @@ fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = 
 }
 
 fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
+    val values = semuxAddress.toContentValues()
     db.use {
 
-        update(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME)
+        update(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME,
+                SemuxAddress.COLUMN_IV to semuxAddress.iv,
+                SemuxAddress.COLUMN_SALT to semuxAddress.salt,
+                SemuxAddress.COLUMN_PRIVATEKEY to semuxAddress.privateKey
+
+        )
                 .whereArgs("${SemuxAddress.COLUMN_ID} = {id}", "id" to semuxAddress.id!!)
                 .exec()
     }
@@ -101,6 +107,7 @@ fun updateAddress(address: String, context: Context) {
     val intent = Intent(context, APIService::class.java)
     // add infos for the service which file to download and where to store
     intent.putExtra(APIService.ADDRESS, address)
+
     intent.putExtra(APIService.TYP,
             APIService.check)
     context.startService(intent)

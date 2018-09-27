@@ -63,7 +63,7 @@ class ManageActivity : AppCompatActivity() {
         if (isPasswordSet(this)) {
             passwordSecured()
         } else {
-            createContent()
+            createContent(DEFAULT_PW)
         }
     }
 
@@ -71,9 +71,11 @@ class ManageActivity : AppCompatActivity() {
     private var accountList = ArrayList<ManageAccounts>()
     private var accounts = HashMap<String, ManageAccounts>()
 
-    private fun createContent() {
-        checkBalanceForWallet(database, this)
+    private var password: String = DEFAULT_PW
 
+    private fun createContent(password: String) {
+        checkBalanceForWallet(database, this)
+        this.password = password
     }
 
 
@@ -93,7 +95,8 @@ class ManageActivity : AppCompatActivity() {
                         Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
                     } else {
                         if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
-                            createContent()
+                            createContent(promptView.enterOldPassword.text.toString())
+
 
                         } else {
                             Log.i("PASSWORD", "PW false")
@@ -134,9 +137,9 @@ class ManageActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     val checkBalance = Gson().fromJson(json, CheckBalance::class.java)
                     val addressFromDB = getSemuxAddress(database, checkBalance.result.address)
-
                     addressFromDB.let {
-                        val manage = ManageAccounts(addressFromDB!!, checkBalance)
+                        val decryptedAcc = decryptAccount(addressFromDB!!, password)
+                        val manage = ManageAccounts(decryptedAcc, checkBalance)
                         accounts.put(manage.account.address, manage)
                         accountList.clear()
                         accountList.addAll(accounts.values)

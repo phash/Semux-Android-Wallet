@@ -29,7 +29,7 @@ import android.database.sqlite.SQLiteDatabase
 import de.phash.manuel.asw.semux.SemuxAddress
 import org.jetbrains.anko.db.*
 
-class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 3) {
+class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 4) {
     companion object {
         private var instance: MyDatabaseOpenHelper? = null
 

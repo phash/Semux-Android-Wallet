@@ -39,7 +39,10 @@ import android.widget.Toast
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
-import de.phash.manuel.asw.util.*
+import de.phash.manuel.asw.util.copyToClipboard
+import de.phash.manuel.asw.util.deleteSemuxDBAccount
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.password_prompt.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -88,19 +91,18 @@ class ManageAdapter(private val myDataset: ArrayList<ManageAccounts>, private va
             copyItem(account.account.address, "ADDRESS")
         })
 
+        //  val decryptedAcc = decryptAccount(account.account, password)
 
-        val decryptedAcc = decryptAccount(account.account, password)
-
-        holder.pkey?.text = decryptedAcc.privateKey
-        holder.removeButton.setOnClickListener(View.OnClickListener {
+        holder.pkey?.text = account.account.privateKey
+        holder.removeButton.setOnClickListener {
             removeClick(account)
-        })
-        holder.pkey.setOnClickListener(View.OnClickListener {
-            copyItem(decryptedAcc.privateKey ?: "", "PRIVATE KEY")
-        })
-        holder.copyPrivKeyBtn.setOnClickListener(View.OnClickListener {
-            copyItem(decryptedAcc.privateKey ?: "", "PRIVATE KEY")
-        })
+        }
+        holder.pkey.setOnClickListener {
+            copyItem(account.account.privateKey ?: "", "PRIVATE KEY")
+        }
+        holder.copyPrivKeyBtn.setOnClickListener {
+            copyItem(account.account.privateKey ?: "", "PRIVATE KEY")
+        }
 
 
     }

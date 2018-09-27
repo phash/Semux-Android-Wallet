@@ -25,7 +25,6 @@
 package de.phash.manuel.asw.util
 
 import android.content.Context
-import android.util.Log
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Bytes
@@ -48,10 +47,10 @@ fun isPasswordSet(context: Context): Boolean {
     return !getCurrentPassword(context).equals(NOKEY)
 }
 
-fun updateAllAddresses(db: MyDatabaseOpenHelper, password: String) {
+fun updateAllAddresses(db: MyDatabaseOpenHelper, oldPassword: String, newPassword: String) {
     getAddresses(db).forEach {
-        val decryptedAcc = decryptAccount(it, password)
-        updateSemuxAddress(db, encryptAccount(decryptedAcc, password))
+        val decryptedAcc = decryptAccount(it, oldPassword)
+        updateSemuxAddress(db, encryptAccount(decryptedAcc, newPassword))
     }
 }
 
@@ -77,12 +76,10 @@ fun checkPassword(context: Context, passwordToTest: String): Boolean {
 
 }
 
-//TODO logging entfernen!
 fun decryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
-    Log.i("DECRYPT", "decrypt: ${semuxAddress}")
     val encryption = Encryption.getDefault(password, semuxAddress.salt, de.phash.manuel.asw.semux.key.Hex.decode0x(semuxAddress.iv))
     val decryptKey = encryption.decryptOrNull(semuxAddress.privateKey)
-    Log.i("DECRYPT", "decryptKey: ${decryptKey.substring(0, 10)}")
+    if (decryptKey == null) return semuxAddress
     val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(decryptKey))
     return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv)
 }

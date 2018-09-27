@@ -33,10 +33,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import de.phash.manuel.asw.database.database
-import de.phash.manuel.asw.util.isPasswordCorrect
-import de.phash.manuel.asw.util.isPasswordSet
-import de.phash.manuel.asw.util.persistNewPassword
-import de.phash.manuel.asw.util.updateAllAddresses
+import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.activity_passwords.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 
@@ -77,7 +74,7 @@ class PasswordActivity : AppCompatActivity() {
                             Toast.makeText(this, "Input does not match your current password", Toast.LENGTH_LONG).show()
                         } else {
                             if (isPasswordCorrect(this, promptView.enterOldPassword.text.toString())) {
-                                updateAllAddresses(database, enterNewPassword.text.toString())
+                                updateAllAddresses(database, promptView.enterOldPassword.text.toString(), enterNewPassword.text.toString())
                                 persistNewPassword(this, enterNewPassword.text.toString())
                                 Toast.makeText(this, "New password set", Toast.LENGTH_LONG).show()
                                 settingsActivity(this)
@@ -94,6 +91,7 @@ class PasswordActivity : AppCompatActivity() {
             dialog.show()
         } else {
             persistNewPassword(this, enterNewPassword.text.toString())
+            updateAllAddresses(database, DEFAULT_PW, enterNewPassword.text.toString())
             Log.i("PASSWORD", "persisted")
             Toast.makeText(this, "New password set", Toast.LENGTH_LONG).show()
             settingsActivity(this)
