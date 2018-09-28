@@ -47,10 +47,10 @@ fun isPasswordSet(context: Context): Boolean {
     return !getCurrentPassword(context).equals(NOKEY)
 }
 
-fun updateAllAddresses(db: MyDatabaseOpenHelper, password: String) {
+fun updateAllAddresses(db: MyDatabaseOpenHelper, oldPassword: String, newPassword: String) {
     getAddresses(db).forEach {
-        val decryptedAcc = decryptAccount(it, password)
-        updateSemuxAddress(db, encryptAccount(decryptedAcc, password))
+        val decryptedAcc = decryptAccount(it, oldPassword)
+        updateSemuxAddress(db, encryptAccount(decryptedAcc, newPassword))
     }
 }
 
@@ -78,8 +78,9 @@ fun checkPassword(context: Context, passwordToTest: String): Boolean {
 
 fun decryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
     val encryption = Encryption.getDefault(password, semuxAddress.salt, de.phash.manuel.asw.semux.key.Hex.decode0x(semuxAddress.iv))
-
-    val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(encryption.decryptOrNull(semuxAddress.privateKey)))
+    val decryptKey = encryption.decryptOrNull(semuxAddress.privateKey)
+    if (decryptKey == null) return semuxAddress
+    val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(decryptKey))
     return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv)
 }
 
