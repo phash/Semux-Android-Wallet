@@ -37,6 +37,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -62,6 +63,8 @@ class VoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(voteReceivingAddressEditView, InputMethodManager.SHOW_IMPLICIT)
         address = intent.getStringExtra("address")
         checkAccount()
     }
@@ -141,7 +144,7 @@ class VoteActivity : AppCompatActivity() {
 
             val amount = Amount.Unit.NANO_SEM.of(inNano.toLong())
             val type = if (option.equals(vote)) TransactionType.VOTE else TransactionType.UNVOTE
-            Log.i("SENDTX", "type = ${type.name}")
+            Log.i("VOTETX", "type = ${type.name}")
 
             nonce.let {
                 val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
@@ -158,7 +161,7 @@ class VoteActivity : AppCompatActivity() {
 
     private fun voteTransaction(transaction: Transaction) {
         val raw = Hex.encode0x(transaction.toBytes())
-        Log.i("SEND", raw)
+        Log.i("VOTE", raw)
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
         intent.putExtra(APIService.TRANSACTION_RAW, raw)
