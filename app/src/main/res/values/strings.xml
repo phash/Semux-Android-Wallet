@@ -97,5 +97,10 @@
     <string name="pendingTx">Pending</string>
     <string name="setPW">set password</string>
     <string name="buy">get SEMUX</string>
+    <string name="fee">transaction fee</string>
+    <string name="votesMyBe">Votes I made</string>
+    <string name="rank">delegates rank</string>
+    <string name="copyAddress">Copy address</string>
+    <string name="copyPrivKey">copy private key</string>
 
 </resources>

@@ -57,10 +57,10 @@
                 android:id="@+id/manageAddress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:text="TextView"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/address"
                 android:textIsSelectable="true"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/copyPrivkeyButton"
@@ -81,10 +81,10 @@
                 android:id="@+id/managePkey"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/privateKey"
                 android:textIsSelectable="true"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/copyPrivkeyButton"
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:contentDescription="@string/Available"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/managePkey" />
 
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:contentDescription="@string/locked"
                 app:layout_constraintStart_toEndOf="@+id/textView59"
                 app:layout_constraintTop_toBottomOf="@+id/manageAvailable" />
 
@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:contentDescription="@string/viewTransactions"
                 app:layout_constraintStart_toEndOf="@+id/textView61"
                 app:layout_constraintTop_toBottomOf="@+id/managePkey" />
 
@@ -179,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:contentDescription="@string/pending"
                 app:layout_constraintStart_toEndOf="@+id/textView63"
                 app:layout_constraintTop_toBottomOf="@+id/manageAvailable" />
 
@@ -187,8 +187,9 @@
                 android:id="@+id/copyPrivkeyButton"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/copyPrivKey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageAddress"
                 app:srcCompat="@drawable/copy" />
@@ -197,8 +198,9 @@
                 android:id="@+id/copyAddressButton"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/copyAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/copy" />

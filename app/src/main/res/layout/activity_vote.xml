@@ -38,13 +38,15 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <Button
         android:id="@+id/readQRButton"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="@string/vote"
         android:onClick="onVoteTransactionClick"
         android:text="@string/vote"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +60,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/Available"
         android:textIsSelectable="true"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/textView16"
@@ -71,6 +74,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@string/address"
         android:lines="2"
         android:maxLines="2"
         android:minLines="2"
@@ -82,15 +86,12 @@
 
     <TextView
         android:id="@+id/voteLockedTextView"
-        android:layout_width="0dp"
+        android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/TotalLocked"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView16"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toBottomOf="@+id/voteAvailableTextView" />
+        tools:layout_editor_absoluteX="104dp"
+        tools:layout_editor_absoluteY="387dp" />
 
     <TextView
         android:id="@+id/textView12"
@@ -129,9 +130,10 @@
         android:id="@+id/voteAmountEditView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/AmountTOVote"
         android:ems="10"
         android:hint="@string/AmountTOVote"
         android:inputType="numberDecimal"
@@ -187,6 +189,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/delegatesAddress"
         android:ems="10"
         android:hint="@string/delegatesAddress"
         android:inputType="text"
@@ -221,9 +224,10 @@
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="@string/unvote"
         android:onClick="onUnvoteTransactionClick"
         android:text="@string/unvote"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -246,6 +250,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="@string/pending"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/voteLockedTextView" />
@@ -259,5 +264,5 @@
         android:onClick="onChoseDelegateClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/voteReceivingAddressEditView"
-        app:srcCompat="@drawable/select" />
+        app:srcCompat="@drawable/copy" />
 </android.support.constraint.ConstraintLayout>
