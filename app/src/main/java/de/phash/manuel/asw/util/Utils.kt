@@ -92,6 +92,7 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
     }
 }
 
+
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
 
     val addresses = getAddresses(db)

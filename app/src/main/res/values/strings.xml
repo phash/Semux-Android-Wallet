@@ -96,5 +96,6 @@
     <string name="tx">TX Count</string>
     <string name="pendingTx">Pending</string>
     <string name="setPW">set password</string>
+    <string name="buy">get SEMUX</string>
 
 </resources>

@@ -53,6 +53,12 @@ fun settingsActivity(context: Context) {
     context.startActivity(intent)
 }
 
+fun delegatesActivity(context: Context, address: String) {
+    val intent = Intent(context, SelectDelegate::class.java)
+    intent.putExtra("address", address)
+    context.startActivity(intent)
+}
+
 fun dashboardActivity(context: Context) {
     val intent = Intent(context, DashBoardActivity::class.java)
     context.startActivity(intent)

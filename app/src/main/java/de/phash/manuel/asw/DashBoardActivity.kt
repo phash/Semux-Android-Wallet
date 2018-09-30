@@ -49,6 +49,7 @@ import de.phash.manuel.asw.util.firebase
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.browse
 import java.math.BigDecimal
 import java.util.*
 
@@ -85,6 +86,10 @@ class DashBoardActivity : AppCompatActivity() {
         // Handle item selection
         startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
+    }
+
+    fun onGetSemux(view: View) {
+        browse("https://app.stex.com/?ref=77187592")
     }
 
     fun onCreateClick(view: View) {

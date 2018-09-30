@@ -24,15 +24,14 @@
 
 package de.phash.manuel.asw.semux
 
+//import com.google.firebase.database.FirebaseDatabase
 import android.app.Activity
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-//import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.json.CheckBalance
-import de.phash.manuel.asw.semux.json.delegates.Delegates
 import de.phash.manuel.asw.semux.key.Amount
 import de.phash.manuel.asw.semux.key.Network
 import okhttp3.*
@@ -55,6 +54,7 @@ class APIService : IntentService("SemuxService") {
         const val NOTIFICATION = "de.phash.manuel.asw.semux"
         const val NOTIFICATION_TRANSACTION = "de.phash.manuel.asw.semux.transaction"
         const val NOTIFICATION_TRANSFER = "de.phash.manuel.asw.semux.transfer"
+        const val NOTIFICATION_DELEGATES = "de.phash.manuel.asw.semux.delegates"
         const val TRANSACTION_RAW = "transactionraw"
         const val VOTETYPE = "votetype"
 
@@ -91,10 +91,7 @@ class APIService : IntentService("SemuxService") {
     }
 
     private fun loadDelegates(intent: Intent?) {
-        val voteType = intent?.getStringExtra(VOTETYPE)
-
-        Log.i("DELEGATE", "type: $voteType")
-
+        Log.i("DELEGATES", "delegates loading")
         val client = OkHttpClient()
 
         val request = Request.Builder()
@@ -105,17 +102,24 @@ class APIService : IntentService("SemuxService") {
                 .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.i("TRX", call.toString())
+                Log.i("DELEGATES", call.toString())
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
-                val delegates = Gson().fromJson(res, Delegates::class.java)
+                Log.i("DELEGATES", res)
 
+                val notificationIntent = Intent(NOTIFICATION_DELEGATES)
+                notificationIntent.putExtra(TYP, transactions)
+                notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                notificationIntent.putExtra(JSON, res)
+                notificationIntent.putExtra("address", intent?.getStringExtra("address"))
+                sendBroadcast(notificationIntent)
 
             }
         })
     }
+
 
     //This only works for addresses given
     private fun loadTransactions(intent: Intent?) {
