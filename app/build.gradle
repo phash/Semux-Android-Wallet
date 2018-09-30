@@ -36,10 +36,10 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 19
-        versionName "0.5.19 beta"
+        versionCode 21
+        versionName "0.5.21 beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionNameSuffix ' helium '
+        versionNameSuffix ' lithium '
     }
     buildTypes {
         release {
