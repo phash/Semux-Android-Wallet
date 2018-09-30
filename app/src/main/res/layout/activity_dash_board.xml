@@ -238,6 +238,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:onClick="onGetSemux"
         android:text="@string/buy"
         app:layout_constraintBottom_toTopOf="@+id/versionView"
         app:layout_constraintEnd_toEndOf="parent"
