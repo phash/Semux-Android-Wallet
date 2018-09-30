@@ -63,14 +63,17 @@ class VoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        //    voteAddressTextView.text = savedInstanceState?.getString("delegatesAddress") ?:""
+        voteReceivingAddressEditView.setText(intent.getStringExtra("delegatesAddress") ?: "")
+
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(voteReceivingAddressEditView, InputMethodManager.SHOW_IMPLICIT)
+        imm.showSoftInput(voteReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         address = intent.getStringExtra("address")
         checkAccount()
     }
 
     fun onChoseDelegateClick(view: View) {
-
+        delegatesActivity(this, address)
     }
 
     fun onVoteTransactionClick(view: View) {
@@ -186,6 +189,7 @@ class VoteActivity : AppCompatActivity() {
     }
 
     override fun onRestart() {
+        Log.i("RESTART", "restart")
         super.onRestart()
         checkAccount()
     }

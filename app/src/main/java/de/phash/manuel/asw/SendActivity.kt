@@ -62,7 +62,7 @@ class SendActivity : AppCompatActivity() {
         setContentView(R.layout.activity_send)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_IMPLICIT)
+        imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         address = intent.getStringExtra("address")
         checkAccount()
     }

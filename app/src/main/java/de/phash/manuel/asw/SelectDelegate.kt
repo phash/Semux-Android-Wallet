@@ -24,14 +24,102 @@
 
 package de.phash.manuel.asw
 
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import com.google.gson.Gson
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.json.delegates.Delegates
+import de.phash.manuel.asw.semux.json.delegates.Result
 
 class SelectDelegate : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
+    var address = ""
 
+    private var delegatesResult = ArrayList<Result>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_delegate)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        address = intent.getStringExtra("address")
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = DelegatesAdapter(delegatesResult, address)
+        checkDelegates(address)
+        recyclerView = findViewById<RecyclerView>(R.id.delegatesRecylcer).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+    }
+
+    fun checkDelegates(address: String) {
+
+        val intent = Intent(this, APIService::class.java)
+        intent.putExtra(APIService.TYP,
+                APIService.delegates)
+        intent.putExtra(APIService.ADDRESS,
+                address)
+        startService(intent)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION_DELEGATES))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(receiver)
+    }
+
+    private val receiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("RECEIVE", "BalancesActivity received Broadcast")
+            val bundle = intent.extras
+            if (bundle != null) {
+                val json = bundle.getString(APIService.JSON)
+                val resultCode = bundle.getInt(APIService.RESULT)
+                if (resultCode == Activity.RESULT_OK) {
+                    var delegates = Gson().fromJson(json, Delegates::class.java)
+
+                    delegatesResult.addAll(delegates.result)
+                    delegatesResult.sortByDescending { it.votes }
+                    //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
+                    viewAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@SelectDelegate, "check failed",
+                            Toast.LENGTH_LONG).show()
+
+                }
+            }
+        }
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        startNewActivity(item, this)
+        return super.onOptionsItemSelected(item)
     }
 }
