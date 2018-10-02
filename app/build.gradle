@@ -36,10 +36,11 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 23
-        versionName "0.5.23 beta"
+        versionCode 25
+        versionName "0.5.25 beta"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionNameSuffix ' lithium '
+        versionNameSuffix ' Beryllium '
     }
     buildTypes {
         release {
@@ -60,7 +61,7 @@ android {
 }
 
 dependencies {
-    def androidSupport = "28.0.0-rc02"
+    def androidSupport = "28.0.0"
     def anko_version = "0.10.6"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -90,8 +91,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
     implementation 'org.bouncycastle:bcprov-jdk15on:1.60'
-
     //implementation 'com.rfksystems:blake2b:1.0.0'
+
+    // https://mvnrepository.com/artifact/com.google.android.material/material
+    // implementation group: 'com.google.android.material', name: 'material', version: '1.0.0'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.8'
@@ -130,6 +133,10 @@ dependencies {
     // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
 
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
+    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 

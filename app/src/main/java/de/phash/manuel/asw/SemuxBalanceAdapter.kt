@@ -24,14 +24,13 @@
 
 package de.phash.manuel.asw
 
-import android.content.Intent
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.Result
 import de.phash.manuel.asw.util.copyToClipboard
@@ -71,16 +70,10 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<Result>) :
             true
         })
 
-        holder.itemView.setOnClickListener(View.OnClickListener {
-            val intent = Intent(holder.itemView.context, SingleBalanceActivity::class.java)
-
-            intent.putExtra("address", myDataset[position].address)
-            intent.putExtra("available", myDataset[position].available)
-            intent.putExtra("locked", myDataset[position].locked)
-
-            holder.itemView.context.startActivity(intent)
+        holder.itemView.setOnClickListener {
             Log.i("CLICK", "clicked: ${myDataset[position].address}")
-        })
+            singleAccountActivity(holder.itemView.context, myDataset[position].address)
+        }
     }
 
     override fun getItemCount() = myDataset.size

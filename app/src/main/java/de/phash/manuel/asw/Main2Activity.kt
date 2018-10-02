@@ -25,44 +25,12 @@
 package de.phash.manuel.asw
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
-class SettingsActivity : AppCompatActivity() {
+class Main2Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-    }
-
-    fun onImportKeyClick(view: View) {
-        importActivity(this)
-    }
-
-    fun onSetPasswordClick(view: View) {
-        setPasswordActivity(this)
-    }
-
-    fun onManageClick(view: View) {
-        manageActivity(this)
-    }
-
-    fun onCreateAccountClick(view: View) {
-        createActivity(this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        startNewActivity(item, this)
-        return super.onOptionsItemSelected(item)
+        setContentView(R.layout.activity_main2)
     }
 }

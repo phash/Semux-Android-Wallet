@@ -25,10 +25,10 @@
 package de.phash.manuel.asw
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.email
 

@@ -99,7 +99,9 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".SelectDelegate" />
         <activity android:name=".ManageActivity" />
-        <activity android:name=".WatchActivity"></activity>
+        <activity android:name=".WatchActivity" />
+
+        <activity android:name=".Main2Activity"></activity>
     </application>
 
 </manifest>

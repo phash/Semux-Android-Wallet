@@ -30,8 +30,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -39,6 +37,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
@@ -70,6 +70,15 @@ class VoteActivity : AppCompatActivity() {
         imm.showSoftInput(voteReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         address = intent.getStringExtra("address")
         checkAccount()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (address.isNotEmpty())
+            singleAccountActivity(this, address)
+        else
+            balanceActivity(this)
+
     }
 
     fun onChoseDelegateClick(view: View) {
