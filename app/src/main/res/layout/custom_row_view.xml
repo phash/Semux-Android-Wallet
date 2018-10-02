@@ -41,47 +41,57 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/address"
             android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
                 android:id="@+id/listbalanceaddress"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/address"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                 android:textIsSelectable="true"
                 android:textSize="12sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/textView31"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/listbalanceavailable"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/balance"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textIsSelectable="true"
                 android:textSize="14sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/textView32"
                 card_view:layout_constraintTop_toBottomOf="@+id/listbalanceaddress" />
 
             <TextView
                 android:id="@+id/listbalancelocked"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/TotalLocked"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="#D3D3D3"
                 android:textSize="14sp"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/textView33"
                 card_view:layout_constraintTop_toBottomOf="@+id/listbalanceavailable" />
 

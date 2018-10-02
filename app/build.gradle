@@ -38,6 +38,7 @@ android {
         targetSdkVersion 28
         versionCode 25
         versionName "0.5.25 beta"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Beryllium '
     }
