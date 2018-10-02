@@ -72,6 +72,11 @@ class VoteActivity : AppCompatActivity() {
         checkAccount()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        balanceActivity(this)
+    }
+
     fun onChoseDelegateClick(view: View) {
         delegatesActivity(this, address)
     }

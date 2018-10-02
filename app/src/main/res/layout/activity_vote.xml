@@ -259,5 +259,5 @@
         android:onClick="onChoseDelegateClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/voteReceivingAddressEditView"
-        app:srcCompat="@drawable/select" />
+        app:srcCompat="@drawable/copy" />
 </android.support.constraint.ConstraintLayout>

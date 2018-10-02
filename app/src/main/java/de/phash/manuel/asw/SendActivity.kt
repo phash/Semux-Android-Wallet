@@ -72,6 +72,12 @@ class SendActivity : AppCompatActivity() {
         checkAccount()
     }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        balanceActivity(this)
+    }
+
     fun onSendTransactionClick(view: View) {
 
         if (sendReceivingAddressEditView.text.toString().isNotEmpty() && sendAmountEditView.text.toString().isNotEmpty()) {
