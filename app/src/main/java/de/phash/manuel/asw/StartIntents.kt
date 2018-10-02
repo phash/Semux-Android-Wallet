@@ -48,6 +48,12 @@ fun startNewActivity(item: MenuItem, context: Context) {
     }
 }
 
+fun singleAccountActivity(context: Context, address: String) {
+    val intent = Intent(context, SingleBalanceActivity::class.java)
+    intent.putExtra("address", address)
+    context.startActivity(intent)
+}
+
 fun settingsActivity(context: Context) {
     val intent = Intent(context, SettingsActivity::class.java)
     context.startActivity(intent)

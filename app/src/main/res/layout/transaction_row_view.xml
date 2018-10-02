@@ -28,7 +28,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -37,7 +37,7 @@
         card_view:cardElevation="4dp"
         card_view:contentPadding="10dp">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/transactionsConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -151,6 +151,6 @@
                 android:layout_marginTop="8dp"
                 card_view:layout_constraintStart_toEndOf="@+id/textView23"
                 card_view:layout_constraintTop_toBottomOf="@+id/listtransactionsdate" />
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>
