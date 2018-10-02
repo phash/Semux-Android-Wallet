@@ -63,12 +63,12 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<Result>) :
         holder.address?.text = myDataset[position].address
         holder.available?.text = df.format(BigDecimal(myDataset[position].available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
         holder.locked?.text = df.format(BigDecimal(myDataset[position].locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
-        holder.itemView.setOnLongClickListener(View.OnLongClickListener {
+        holder.itemView.setOnLongClickListener {
             Log.i("COPY", "LONGCLICK - ${myDataset[position].address}")
             copyToClipboard(it.context, myDataset[position].address)
             Toast.makeText(it.context, "address copied", Toast.LENGTH_SHORT).show()
             true
-        })
+        }
 
         holder.itemView.setOnClickListener {
             Log.i("CLICK", "clicked: ${myDataset[position].address}")
