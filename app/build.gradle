@@ -36,8 +36,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 26
-        versionName "0.5.26 beta"
+        versionCode 27
+        versionName "0.5.27 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Beryllium '
