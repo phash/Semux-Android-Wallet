@@ -111,5 +111,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="SEM">SEM</string>
     <string name="selectDelegate">select delegate</string>
+    <string name="error">Error</string>
+    <string name="report">Report</string>
 
 </resources>

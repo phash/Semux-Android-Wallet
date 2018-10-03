@@ -89,3 +89,9 @@ fun setPasswordActivity(context: Context) {
     val intent = Intent(context, PasswordActivity::class.java)
     context.startActivity(intent)
 }
+
+fun errorActivity(context: Context, error: String) {
+    val intent = Intent(context, ErrorActivity::class.java)
+    intent.putExtra("errorMessage", error)
+    context.startActivity(intent)
+}

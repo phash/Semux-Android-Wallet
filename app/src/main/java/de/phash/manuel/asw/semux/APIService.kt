@@ -31,6 +31,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
+import de.phash.manuel.asw.errorActivity
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.Amount
 import de.phash.manuel.asw.semux.key.Network
@@ -229,11 +230,11 @@ class APIService : IntentService("SemuxService") {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i("TRX", call.toString())
+                errorActivity(this@APIService, "API not reachable")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
-
                 val notificationIntent = Intent(NOTIFICATION)
                 notificationIntent.putExtra(TYP, check)
                 notificationIntent.putExtra(RESULT, Activity.RESULT_OK)

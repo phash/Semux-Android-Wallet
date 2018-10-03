@@ -123,14 +123,18 @@ class DashBoardActivity : AppCompatActivity() {
                     Log.i("RES", json)
 
                     showRecycler()
+                    try {
 
-                    if (balancesMap.containsKey(account.result.address)) {
-                        val oldResult = balancesMap.get(account.result.address)
-                        val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
-                        when {
-                            compareAvailable < 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(oldResult?.result?.available).subtract(BigDecimal(account.result.available)).toPlainString())}").show()
-                            compareAvailable > 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(account.result.available).subtract(BigDecimal(oldResult?.result?.available)).toPlainString())}").show()
+                        if (balancesMap.containsKey(account.result.address)) {
+                            val oldResult = balancesMap.get(account.result.address)
+                            val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
+                            when {
+                                compareAvailable < 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(oldResult?.result?.available).subtract(BigDecimal(account.result.available)).toPlainString())}").show()
+                                compareAvailable > 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(account.result.available).subtract(BigDecimal(oldResult?.result?.available)).toPlainString())}").show()
+                            }
                         }
+                    } catch (e: Exception) {
+                        errorActivity(this@DashBoardActivity, "API not reachable\nPlease try again later!")
                     }
 
                     balancesMap.put(account.result.address, account)
