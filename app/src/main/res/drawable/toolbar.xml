@@ -28,8 +28,8 @@
         android:angle="270"
         android:centerColor="#FF7936"
         android:centerX="35%"
-        android:endColor="#DBDBDB"
-        android:startColor="#ff5500"
+        android:endColor="#FB3E07"
+        android:startColor="#F6AE5C"
         android:type="linear" />
     <padding
         android:bottom="0dp"

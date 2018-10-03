@@ -45,6 +45,7 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<Result>) :
         val address = itemView.findViewById<TextView>(R.id.listbalanceaddress)
         val available = itemView.findViewById<TextView>(R.id.listbalanceavailable)
         val locked = itemView.findViewById<TextView>(R.id.listbalancelocked)
+        val pending = itemView.findViewById<TextView>(R.id.listbalancepending)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -63,6 +64,7 @@ class SemuxBalanceAdapter(private val myDataset: ArrayList<Result>) :
         holder.address?.text = myDataset[position].address
         holder.available?.text = df.format(BigDecimal(myDataset[position].available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
         holder.locked?.text = df.format(BigDecimal(myDataset[position].locked).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"
+        holder.pending?.text = "${myDataset[position].pendingTransactionCount}"
         holder.itemView.setOnLongClickListener {
             Log.i("COPY", "LONGCLICK - ${myDataset[position].address}")
             copyToClipboard(it.context, myDataset[position].address)
