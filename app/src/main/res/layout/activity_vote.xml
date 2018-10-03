@@ -34,36 +34,38 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="?android:attr/colorPrimary"
+        android:background="@drawable/toolbar"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/Widget.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <Button
         android:id="@+id/readQRButton"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
+        android:background="@drawable/buttonshape"
         android:contentDescription="@string/vote"
         android:onClick="onVoteTransactionClick"
         android:text="@string/vote"
+        android:textAllCaps="true"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button6"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/voteAvailableTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:contentDescription="@string/Available"
         android:textIsSelectable="true"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView16"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/voteAddressTextView" />
 
@@ -86,12 +88,14 @@
 
     <TextView
         android:id="@+id/voteLockedTextView"
-        android:layout_width="236dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/TotalLocked"
         android:textSize="24sp"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="387dp" />
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/voteAvailableTextView" />
 
     <TextView
         android:id="@+id/textView12"
@@ -113,7 +117,7 @@
         android:labelFor="@+id/voteAvailableTextView"
         android:text="@string/Available"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/voteAddressTextView" />
+        app:layout_constraintTop_toTopOf="@+id/voteAvailableTextView" />
 
     <TextView
         android:id="@+id/textView14"
@@ -124,7 +128,7 @@
         android:labelFor="@+id/voteLockedTextView"
         android:text="@string/locked"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/voteAvailableTextView" />
+        app:layout_constraintTop_toTopOf="@+id/voteLockedTextView" />
 
     <EditText
         android:id="@+id/voteAmountEditView"
@@ -153,32 +157,12 @@
         app:layout_constraintTop_toBottomOf="@+id/voteReceivingAddressEditView" />
 
     <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="12dp"
-        android:text="SEM"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/voteLockedTextView" />
-
-    <TextView
-        android:id="@+id/textView64"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="12dp"
-        android:text="SEM"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/voteAvailableTextView" />
-
-    <TextView
         android:id="@+id/textView60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
-        android:text="SEM"
+        android:layout_marginEnd="8dp"
+        android:text="@string/SEM"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
@@ -222,14 +206,15 @@
 
     <Button
         android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/unvote"
         android:onClick="onUnvoteTransactionClick"
         android:text="@string/unvote"
+        android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/readQRButton" />
@@ -251,7 +236,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/pending"
-        android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/voteLockedTextView" />
 
@@ -261,6 +245,7 @@
         android:layout_height="34dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/selectDelegate"
         android:onClick="onChoseDelegateClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/voteReceivingAddressEditView"

@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2018 Manuel Roedig / Phash
@@ -21,35 +21,21 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-<resources>
-
-    <!-- Base application theme.
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:buttonStyle">@style/button</item>
-
-    </style>
-    -->
-
-    <style name="remove">remove</style>
-
-    <style name="button" parent="@android:style/Widget.Button">
-        <item name="android:gravity">center_vertical|center_horizontal</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:shadowColor">#FF0000</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">-1</item>
-        <item name="android:shadowRadius">0.2</item>
-        <item name="android:textSize">18dip</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:background">@drawable/button</item>
-        <item name="android:focusable">true</item>
-        <item name="android:clickable">true</item>
-    </style>
+    <gradient
+        android:angle="270"
+        android:centerColor="#FF7936"
+        android:centerX="35%"
+        android:endColor="#FFFFFF"
+        android:startColor="#ff5500"
+        android:type="linear" />
+    <padding
+        android:bottom="0dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="0dp" />
 
 
-</resources>
+</shape>

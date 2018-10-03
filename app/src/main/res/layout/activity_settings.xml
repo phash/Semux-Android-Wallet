@@ -35,9 +35,9 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="?android:attr/colorPrimary"
+        android:background="@drawable/toolbar"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:theme="@style/Widget.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <LinearLayout
@@ -60,6 +60,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onSetPasswordClick"
+            android:background="@drawable/buttonshape"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
             android:text="@string/setPassword" />
 
         <Button
@@ -67,6 +70,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onCreateAccountClick"
+            android:background="@drawable/buttonshape"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
             android:text="@string/createAcc" />
 
         <Button
@@ -74,6 +80,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onImportKeyClick"
+            android:background="@drawable/buttonshape"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
             android:text="@string/importKey" />
 
         <Button
@@ -81,6 +90,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onManageClick"
+            android:background="@drawable/buttonshape"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
             android:text="@string/manageAccs" />
 
     </LinearLayout>

@@ -41,6 +41,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTintMode="add"
             android:contentDescription="@string/address"
             android:orientation="vertical"
             android:padding="10dp">
