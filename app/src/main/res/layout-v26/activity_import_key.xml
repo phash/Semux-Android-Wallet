@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2018 Manuel Roedig / Phash
@@ -48,6 +47,7 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/privateKey"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:lines="4"
         android:maxLines="6"
@@ -56,7 +56,6 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
 
     <Button
