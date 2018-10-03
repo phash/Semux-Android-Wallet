@@ -160,14 +160,15 @@
 
     <Button
         android:id="@+id/viewAccountsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/buttonshape"
         android:onClick="onBalancesClick"
         android:text="@string/balances"
+        android:textAllCaps="true"
         android:textColor="#ffffff"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -230,7 +231,7 @@
     <Button
         android:id="@+id/setPWButton"
 
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
