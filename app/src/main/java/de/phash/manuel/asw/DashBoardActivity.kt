@@ -123,6 +123,7 @@ class DashBoardActivity : AppCompatActivity() {
                     Log.i("RES", json)
 
                     showRecycler()
+
                     if (balancesMap.containsKey(account.result.address)) {
                         val oldResult = balancesMap.get(account.result.address)
                         val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
