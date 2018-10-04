@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.json.accountvotes.AccountVotes
 import de.phash.manuel.asw.semux.json.delegates.Delegates
 import de.phash.manuel.asw.semux.json.delegates.Result
 
@@ -49,13 +50,14 @@ class SelectDelegate : AppCompatActivity() {
     var address = ""
 
     private var delegatesResult = ArrayList<Result>()
+    private var ownVotes = ArrayList<de.phash.manuel.asw.semux.json.accountvotes.Result>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_delegate)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         viewManager = LinearLayoutManager(this)
-        viewAdapter = DelegatesAdapter(delegatesResult, address)
+        viewAdapter = DelegatesAdapter(delegatesResult, ownVotes, address)
         checkDelegates(address)
         recyclerView = findViewById<RecyclerView>(R.id.delegatesRecylcer).apply {
             setHasFixedSize(true)
@@ -79,6 +81,8 @@ class SelectDelegate : AppCompatActivity() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
                 APIService.NOTIFICATION_DELEGATES))
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION_ACCOUNTVOTES))
     }
 
     override fun onPause() {
@@ -89,23 +93,54 @@ class SelectDelegate : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            Log.i("RECEIVE", "BalancesActivity received Broadcast")
-            val bundle = intent.extras
-            if (bundle != null) {
-                val json = bundle.getString(APIService.JSON)
-                val resultCode = bundle.getInt(APIService.RESULT)
-                if (resultCode == Activity.RESULT_OK) {
-                    var delegates = Gson().fromJson(json, Delegates::class.java)
+            Log.i("RECEIVE", "SelectDelegate received Broadcast: ${intent.getStringExtra(APIService.TYP)}")
+            when (intent.getStringExtra(APIService.TYP)) {
+                APIService.delegates -> updateDelegates(context, intent)
+                APIService.accountvotes -> updateVotes(context, intent)
+                else -> Log.i("RECEIVE", "SelectDelegate received Broadcast: ${intent.getStringExtra(APIService.TYP)} - but did not match any case!")
+            }
 
-                    delegatesResult.addAll(delegates.result)
-                    delegatesResult.sortByDescending { it.votes }
-                    //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
-                    viewAdapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(this@SelectDelegate, "check failed",
-                            Toast.LENGTH_LONG).show()
 
-                }
+        }
+    }
+
+    private fun updateVotes(context: Context, intent: Intent) {
+        Log.i("RECEIVE", "SelectDelegate received NOTIFICATION_DELEGATES Broadcast")
+        val bundle = intent.extras
+        if (bundle != null) {
+            val json = bundle.getString(APIService.JSON)
+            val resultCode = bundle.getInt(APIService.RESULT)
+            if (resultCode == Activity.RESULT_OK) {
+                var votes = Gson().fromJson(json, AccountVotes::class.java)
+
+                ownVotes.addAll(votes.result)
+
+                viewAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(this@SelectDelegate, "check votes failed",
+                        Toast.LENGTH_LONG).show()
+
+            }
+        }
+    }
+
+    private fun updateDelegates(context: Context, intent: Intent) {
+        Log.i("RECEIVE", "SelectDelegate received NOTIFICATION_ACCOUNTVOTES Broadcast")
+        val bundle = intent.extras
+        if (bundle != null) {
+            val json = bundle.getString(APIService.JSON)
+            val resultCode = bundle.getInt(APIService.RESULT)
+            if (resultCode == Activity.RESULT_OK) {
+                var delegates = Gson().fromJson(json, Delegates::class.java)
+
+                delegatesResult.addAll(delegates.result)
+                delegatesResult.sortByDescending { it.votes }
+                //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
+                viewAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(this@SelectDelegate, "check failed",
+                        Toast.LENGTH_LONG).show()
+
             }
         }
     }

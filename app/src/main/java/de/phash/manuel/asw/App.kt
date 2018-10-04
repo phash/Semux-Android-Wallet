@@ -46,8 +46,6 @@ class App : Application() {
         timer = Timer()
         timer.scheduleAtFixedRate(UpdateBalTask(), 50, 30000)
 
-        //startService(Intent(this.applicationContext, AlertReceiver::class.java))
-
     }
 
     private var mFirebaseAnalytics: FirebaseAnalytics? = null

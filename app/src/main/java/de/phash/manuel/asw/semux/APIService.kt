@@ -56,6 +56,7 @@ class APIService : IntentService("SemuxService") {
         const val NOTIFICATION_TRANSACTION = "de.phash.manuel.asw.semux.transaction"
         const val NOTIFICATION_TRANSFER = "de.phash.manuel.asw.semux.transfer"
         const val NOTIFICATION_DELEGATES = "de.phash.manuel.asw.semux.delegates"
+        const val NOTIFICATION_ACCOUNTVOTES = "de.phash.manuel.asw.semux.accountvotes"
         const val TRANSACTION_RAW = "transactionraw"
         const val VOTETYPE = "votetype"
 
@@ -65,6 +66,7 @@ class APIService : IntentService("SemuxService") {
         const val transfer = "transfer"
         const val transactions = "transactions"
         const val delegates = "delegates"
+        const val accountvotes = "accountvotes"
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
@@ -86,13 +88,17 @@ class APIService : IntentService("SemuxService") {
             transfer -> doTransfer(intent)
             transactions -> loadTransactions(intent)
             delegates -> loadDelegates(intent)
+            accountvotes -> getVotesForAccount(intent)
+
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
         }
 
     }
 
     private fun loadDelegates(intent: Intent?) {
+
         Log.i("DELEGATES", "delegates loading")
+        getVotesForAccount(intent)
         val client = OkHttpClient()
 
         val request = Request.Builder()
@@ -111,7 +117,7 @@ class APIService : IntentService("SemuxService") {
                 Log.i("DELEGATES", res)
 
                 val notificationIntent = Intent(NOTIFICATION_DELEGATES)
-                notificationIntent.putExtra(TYP, transactions)
+                notificationIntent.putExtra(TYP, delegates)
                 notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
                 notificationIntent.putExtra(JSON, res)
                 notificationIntent.putExtra("address", intent?.getStringExtra("address"))
@@ -216,32 +222,71 @@ class APIService : IntentService("SemuxService") {
         }
     }
 
+    fun getVotesForAccount(intent: Intent?) {
+        try {
+            val address = intent?.getStringExtra(ADDRESS)
+            Log.i("OWNVOTES", "getVotes for $address")
+
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                    .url("$API_ENDPOINT/account/votes?address=$address")
+                    .addHeader("content-type", "application/json")
+                    .addHeader("cache-control", "no-cache")
+
+                    .build()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.i("OWNVOTES", call.toString())
+                    errorActivity(this@APIService, "API not reachable")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val res = response.body()?.string()
+                    Log.i("OWNVOTES", res)
+                    val notificationIntent = Intent(NOTIFICATION_ACCOUNTVOTES)
+                    notificationIntent.putExtra(TYP, accountvotes)
+                    notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                    notificationIntent.putExtra(JSON, res)
+                    sendBroadcast(notificationIntent)
+                }
+            })
+        } catch (e: Exception) {
+            errorActivity(this@APIService, "API not reachable")
+        }
+
+    }
+
 
     fun getBalance(intent: Intent?) {
-        val address = intent?.getStringExtra(ADDRESS)
+        try {
 
-        val client = OkHttpClient()
-        val request = Request.Builder()
-                .url("$API_ENDPOINT/account?address=$address")
-                .addHeader("content-type", "application/json")
-                .addHeader("cache-control", "no-cache")
+            val address = intent?.getStringExtra(ADDRESS)
 
-                .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.i("TRX", call.toString())
-                errorActivity(this@APIService, "API not reachable")
-            }
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                    .url("$API_ENDPOINT/account?address=$address")
+                    .addHeader("content-type", "application/json")
+                    .addHeader("cache-control", "no-cache")
 
-            override fun onResponse(call: Call, response: Response) {
-                val res = response.body()?.string()
-                val notificationIntent = Intent(NOTIFICATION)
-                notificationIntent.putExtra(TYP, check)
-                notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
-                notificationIntent.putExtra(JSON, res)
-                sendBroadcast(notificationIntent)
-            }
-        })
+                    .build()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.i("TRX", call.toString())
+                    errorActivity(this@APIService, "API not reachable")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val res = response.body()?.string()
+                    val notificationIntent = Intent(NOTIFICATION)
+                    notificationIntent.putExtra(TYP, check)
+                    notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                    notificationIntent.putExtra(JSON, res)
+                    sendBroadcast(notificationIntent)
+                }
+            })
+        } catch (e: Exception) {
+            errorActivity(this@APIService, "API not reachable")
+        }
 
     }
 

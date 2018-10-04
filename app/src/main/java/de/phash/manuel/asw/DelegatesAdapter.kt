@@ -28,6 +28,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +37,11 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.delegates.Result
 import java.math.BigDecimal
 
-class DelegatesAdapter(private val delegates: ArrayList<Result>, private val lookupAddress: String) : RecyclerView.Adapter<DelegatesAdapter.MyViewHolder>() {
+class DelegatesAdapter(
+        private val delegates: ArrayList<Result>,
+        private val ownVotes: ArrayList<de.phash.manuel.asw.semux.json.accountvotes.Result>,
+        private val lookupAddress: String)
+    : RecyclerView.Adapter<DelegatesAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -44,6 +50,7 @@ class DelegatesAdapter(private val delegates: ArrayList<Result>, private val loo
         val name = itemView.findViewById<TextView>(R.id.delegatesListName)
         val votes = itemView.findViewById<TextView>(R.id.delegatesListVotes)
         val rank = itemView.findViewById<TextView>(R.id.delegatesListRank)
+        val byMe = itemView.findViewById<TextView>(R.id.byMeTextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -56,8 +63,19 @@ class DelegatesAdapter(private val delegates: ArrayList<Result>, private val loo
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        if (ownVotes.isNotEmpty()) {
+            val myVotes = ownVotes.filter { it.delegate.address.equals(delegates.get(position).address) }.firstOrNull()?.votes
+            if (myVotes != null) {
+                holder.votesByMe.text = "${APIService.SEMUXFORMAT.format(BigDecimal(myVotes).divide(APIService.SEMUXMULTIPLICATOR))}"
+                holder.votesByMe.visibility = VISIBLE
+                holder.byMe.visibility = VISIBLE
+            } else {
+                holder.votesByMe.visibility = GONE
+                holder.byMe.visibility = GONE
+            }
 
 
+        }
         Log.i("", "DatasetSize: ${delegates.size}")
         holder.address.text = delegates.get(position).address
         holder.name.text = delegates.get(position).name

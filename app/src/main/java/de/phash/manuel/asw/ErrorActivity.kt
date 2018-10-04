@@ -25,14 +25,16 @@
 package de.phash.manuel.asw
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_error.*
+import java.util.*
 
 
 class ErrorActivity : AppCompatActivity() {
-
+    private var timer = Timer()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_error)
@@ -41,6 +43,9 @@ class ErrorActivity : AppCompatActivity() {
         var error = intent.getStringExtra("errorMessage")
                 ?: "something is not working as intendend..."
         myErorView.text = error
+        timer.schedule(
+                GoToDashBoard(), 10000)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,5 +58,12 @@ class ErrorActivity : AppCompatActivity() {
         // Handle item selection
         startNewActivity(item, this)
         return super.onOptionsItemSelected(item)
+    }
+
+    inner class GoToDashBoard : TimerTask() {
+        override fun run() {
+            Log.i("TIMER", "timer runs")
+            dashboardActivity(this@ErrorActivity)
+        }
     }
 }
