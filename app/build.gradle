@@ -36,8 +36,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 30
-        versionName "0.5.30 beta"
+        versionCode 32
+        versionName "0.5.32 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Beryllium '
@@ -126,8 +126,8 @@ dependencies {
     implementation group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
 
     //implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
-    implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-database:16.0.2'
+    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-database:16.0.4'
 
     // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
     // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'

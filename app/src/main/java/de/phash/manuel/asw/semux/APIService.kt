@@ -141,56 +141,60 @@ class APIService : IntentService("SemuxService") {
 
     //This only works for addresses given
     private fun loadTransactions(intent: Intent?) {
-        val address = intent?.getStringExtra(ADDRESS)
+        try {
 
-        Log.i("TRX", "address: $address")
+            val address = intent?.getStringExtra(ADDRESS)
 
-        val client = OkHttpClient()
+            Log.i("TRX", "address: $address")
 
-        val request = Request.Builder()
-                .url("$API_ENDPOINT/account?address=${address}")
-                .addHeader("content-type", "application/json")
-                .addHeader("cache-control", "no-cache")
+            val client = OkHttpClient()
 
-                .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.i("TRX", call.toString())
-            }
+            val request = Request.Builder()
+                    .url("$API_ENDPOINT/account?address=${address}")
+                    .addHeader("content-type", "application/json")
+                    .addHeader("cache-control", "no-cache")
 
-            override fun onResponse(call: Call, response: Response) {
-                val res = response.body()?.string()
-                val account = Gson().fromJson(res, CheckBalance::class.java)
-                var startVal = 0
-                var endVal = account.result.transactionCount
-                if (account.result.transactionCount > 20) {
-                    startVal = account.result.transactionCount - 20
+                    .build()
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.i("TRX", call.toString())
                 }
 
-                val transactionRequest = Request.Builder()
-                        .url("$API_ENDPOINT/account/transactions?address=$address&start=$startVal&end=$endVal")
-                        .addHeader("content-type", "application/json")
-                        .addHeader("cache-control", "no-cache")
-                        .build()
-
-                client.newCall(transactionRequest).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        Log.i("TRX", call.toString())
+                override fun onResponse(call: Call, response: Response) {
+                    val res = response.body()?.string()
+                    val account = Gson().fromJson(res, CheckBalance::class.java)
+                    var startVal = 0
+                    var endVal = account.result.transactionCount
+                    if (account.result.transactionCount > 20) {
+                        startVal = account.result.transactionCount - 20
                     }
 
-                    override fun onResponse(call: Call, response: Response) {
-                        val innerResult = response.body()?.string()
-                        Log.i("TRX", "result-> $innerResult")
-                        val notificationIntent = Intent(NOTIFICATION_TRANSACTION)
-                        notificationIntent.putExtra(TYP, transactions)
-                        notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
-                        notificationIntent.putExtra(JSON, innerResult)
-                        sendBroadcast(notificationIntent)
-                    }
-                })
-            }
-        })
+                    val transactionRequest = Request.Builder()
+                            .url("$API_ENDPOINT/account/transactions?address=$address&start=$startVal&end=$endVal")
+                            .addHeader("content-type", "application/json")
+                            .addHeader("cache-control", "no-cache")
+                            .build()
 
+                    client.newCall(transactionRequest).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            Log.i("TRX", call.toString())
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            val innerResult = response.body()?.string()
+                            Log.i("TRX", "result-> $innerResult")
+                            val notificationIntent = Intent(NOTIFICATION_TRANSACTION)
+                            notificationIntent.putExtra(TYP, transactions)
+                            notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                            notificationIntent.putExtra(JSON, innerResult)
+                            sendBroadcast(notificationIntent)
+                        }
+                    })
+                }
+            })
+        } catch (e: java.lang.Exception) {
+            Log.e("API", e.message)
+        }
 
     }
 
@@ -248,7 +252,7 @@ class APIService : IntentService("SemuxService") {
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     Log.i("OWNVOTES", call.toString())
-                    errorActivity(this@APIService, "API not reachable")
+
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -262,7 +266,7 @@ class APIService : IntentService("SemuxService") {
                 }
             })
         } catch (e: Exception) {
-            errorActivity(this@APIService, "API not reachable")
+            Log.e("API", e.message)
         }
 
     }

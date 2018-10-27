@@ -114,7 +114,7 @@ class SelectDelegate : AppCompatActivity() {
                 var votes = Gson().fromJson(json, AccountVotes::class.java)
 
                 ownVotes.addAll(votes.result)
-
+                delegatesResult.sortedByDescending { it.votes.toDouble() }
                 viewAdapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(this@SelectDelegate, "check votes failed",
@@ -134,7 +134,7 @@ class SelectDelegate : AppCompatActivity() {
                 var delegates = Gson().fromJson(json, Delegates::class.java)
 
                 delegatesResult.addAll(delegates.result)
-                delegatesResult.sortByDescending { it.votes }
+                delegatesResult.sortByDescending { it.votes.toDouble() }
                 //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
                 viewAdapter.notifyDataSetChanged()
             } else {
