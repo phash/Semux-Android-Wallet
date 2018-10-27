@@ -56,7 +56,6 @@ import java.util.*
 
 class DashBoardActivity : AppCompatActivity() {
 
-
     private var balancesMap = HashMap<String, CheckBalance>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

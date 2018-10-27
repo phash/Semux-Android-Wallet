@@ -93,13 +93,20 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
 }
 
 
-fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context): Boolean {
+fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context) {
+    val intent = Intent(context, APIService::class.java)
+    // add infos for the service which file to download and where to store
 
+    intent.putExtra(APIService.TYP,
+            APIService.checkall)
+    context.startService(intent)
+/*
     val addresses = getAddresses(db)
     addresses.forEach {
         updateAddress(it.address, context)
     }
     return addresses.isNotEmpty()
+*/
 
 }
 

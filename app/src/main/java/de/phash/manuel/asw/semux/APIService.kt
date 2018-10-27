@@ -31,10 +31,12 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
+import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.errorActivity
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.Amount
 import de.phash.manuel.asw.semux.key.Network
+import de.phash.manuel.asw.util.getAddresses
 import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
@@ -67,6 +69,7 @@ class APIService : IntentService("SemuxService") {
         const val transactions = "transactions"
         const val delegates = "delegates"
         const val accountvotes = "accountvotes"
+        const val checkall = "checkall"
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
@@ -89,8 +92,16 @@ class APIService : IntentService("SemuxService") {
             transactions -> loadTransactions(intent)
             delegates -> loadDelegates(intent)
             accountvotes -> getVotesForAccount(intent)
-
+            checkall -> checkAll(intent)
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun checkAll(intent: Intent?) {
+        val addresses = getAddresses(database)
+        addresses.forEach {
+            getBalance(intent)
         }
 
     }
@@ -256,6 +267,9 @@ class APIService : IntentService("SemuxService") {
 
     }
 
+    fun updateBalances() {
+        database
+    }
 
     fun getBalance(intent: Intent?) {
         try {

@@ -25,15 +25,12 @@
 package de.phash.manuel.asw
 
 import android.app.Application
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
 import de.phash.manuel.asw.database.database
-import de.phash.manuel.asw.semux.APIService
-import de.phash.manuel.asw.semux.SemuxAddress
+import de.phash.manuel.asw.util.checkBalanceForWallet
 import de.phash.manuel.asw.util.firebase
-import de.phash.manuel.asw.util.getAddresses
 import java.util.*
 
 
@@ -55,27 +52,29 @@ class App : Application() {
         val bundle = Bundle()
         firebase("8", "update balances", FirebaseAnalytics.getInstance(this))
 
-        val adresses = getAddresses(database)
-
-        updateBalanceList(adresses)
+        checkBalanceForWallet(database, this)
+        // updateBalanceList(adresses)
     }
 
-    private fun updateBalanceList(adresses: List<SemuxAddress>) {
+    /*   private fun updateBalanceList(adresses: List<SemuxAddress>) {
 
-        adresses.forEach {
-            updateAddress(it.address)
-        }
-    }
+           adresses.forEach {
+               updateAddress(it.address)
+           }
+       }*/
 
-    private fun updateAddress(address: String) {
 
-        val intent = Intent(this, APIService::class.java)
-        // add infos for the service which file to download and where to store
-        intent.putExtra(APIService.ADDRESS, address)
-        intent.putExtra(APIService.TYP,
-                APIService.check)
-        startService(intent)
-    }
+//    private fun updateAddress(address: String) {
+    //checkBalanceForWallet(database)
+    /*
+    val intent = Intent(this, APIService::class.java)
+    // add infos for the service which file to download and where to store
+    intent.putExtra(APIService.ADDRESS, address)
+    intent.putExtra(APIService.TYP,
+            APIService.check)
+    startService(intent)
+    */
+    //  }
 
     inner class UpdateBalTask : TimerTask() {
         override fun run() {
