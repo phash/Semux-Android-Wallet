@@ -65,6 +65,9 @@ class SendActivity : AppCompatActivity() {
         imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         val inputMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMgr.toggleSoftInput(0, 0)
+        sendAmountEditView.showSoftInputOnFocus = true
+        sendReceivingAddressEditView.showSoftInputOnFocus = true
+
         address = intent.getStringExtra("address")
         checkAccount()
     }
