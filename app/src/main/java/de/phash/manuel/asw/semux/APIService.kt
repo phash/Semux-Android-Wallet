@@ -101,7 +101,7 @@ class APIService : IntentService("SemuxService") {
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
         addresses.forEach {
-            getBalance(intent)
+            checkAddress(it.address);
         }
 
     }
@@ -271,41 +271,43 @@ class APIService : IntentService("SemuxService") {
 
     }
 
-    fun updateBalances() {
-        database
-    }
 
     fun getBalance(intent: Intent?) {
         try {
 
             val address = intent?.getStringExtra(ADDRESS)
-
-            val client = OkHttpClient()
-            val request = Request.Builder()
-                    .url("$API_ENDPOINT/account?address=$address")
-                    .addHeader("content-type", "application/json")
-                    .addHeader("cache-control", "no-cache")
-
-                    .build()
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.i("TRX", call.toString())
-                    errorActivity(this@APIService, "API not reachable")
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    val res = response.body()?.string()
-                    val notificationIntent = Intent(NOTIFICATION)
-                    notificationIntent.putExtra(TYP, check)
-                    notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
-                    notificationIntent.putExtra(JSON, res)
-                    sendBroadcast(notificationIntent)
-                }
-            })
+            address?.let{
+                checkAddress(it)
+            }
         } catch (e: Exception) {
             errorActivity(this@APIService, "API not reachable")
         }
 
+    }
+
+    private fun checkAddress(address: String) {
+        val client = OkHttpClient()
+        val request = Request.Builder()
+                .url("$API_ENDPOINT/account?address=$address")
+                .addHeader("content-type", "application/json")
+                .addHeader("cache-control", "no-cache")
+
+                .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.i("TRX", call.toString())
+                errorActivity(this@APIService, "API not reachable")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val res = response.body()?.string()
+                val notificationIntent = Intent(NOTIFICATION)
+                notificationIntent.putExtra(TYP, check)
+                notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+                notificationIntent.putExtra(JSON, res)
+                sendBroadcast(notificationIntent)
+            }
+        })
     }
 
 
