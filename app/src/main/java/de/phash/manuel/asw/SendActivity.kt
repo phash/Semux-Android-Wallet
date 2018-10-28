@@ -63,8 +63,9 @@ class SendActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
+        imm.showSoftInput(sendAmountEditView, InputMethodManager.SHOW_FORCED)
         val inputMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMgr.toggleSoftInput(0, 0)
+        inputMgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         sendAmountEditView.showSoftInputOnFocus = true
         sendReceivingAddressEditView.showSoftInputOnFocus = true
 
