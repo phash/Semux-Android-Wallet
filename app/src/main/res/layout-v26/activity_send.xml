@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2018 Manuel Roedig / Phash
@@ -32,13 +31,13 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        app:titleTextColor="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@drawable/toolbar"
         android:elevation="4dp"
         android:theme="@style/Widget.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="#FFFFFF" />
 
     <Button
         android:id="@+id/readQRButton"
@@ -206,6 +205,7 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/ReceivingAddress"
+        android:importantForAutofill="no"
         android:inputType="text"
         android:lines="2"
         android:maxLines="3"
@@ -214,7 +214,6 @@
         android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <TextView

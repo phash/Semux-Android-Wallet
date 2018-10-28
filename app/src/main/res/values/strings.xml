@@ -114,5 +114,6 @@
     <string name="error">Error</string>
     <string name="report">Report</string>
     <string name="title_activity_new_main">NewMainActivity</string>
+    <string name="sem">SEM</string>
 
 </resources>
