@@ -40,7 +40,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         timer = Timer()
-        timer.scheduleAtFixedRate(UpdateBalTask(), 50, 30000)
+        timer.scheduleAtFixedRate(UpdateBalTask(), 250, 45000)
 
     }
 
