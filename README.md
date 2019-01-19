@@ -9,3 +9,6 @@ It handles the wallet-interaction with semux Blockchain!
 - Vote / Unvote Delegates 
 - look up your transaction history
 - Import / export keys
+
+
+find it on playstore: https://play.google.com/store/apps/details?id=de.phash.manuel.asw
