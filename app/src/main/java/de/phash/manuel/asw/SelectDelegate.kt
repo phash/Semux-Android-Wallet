@@ -33,6 +33,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +43,7 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.accountvotes.AccountVotes
 import de.phash.manuel.asw.semux.json.delegates.Delegates
 import de.phash.manuel.asw.semux.json.delegates.Result
+import kotlinx.android.synthetic.main.activity_select_delegate.*
 
 class SelectDelegate : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -57,7 +59,10 @@ class SelectDelegate : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         viewManager = LinearLayoutManager(this)
-        viewAdapter = DelegatesAdapter(delegatesResult, ownVotes, address)
+        checkOwnSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked -> checkDelegates(address) })
+
+
+        viewAdapter = DelegatesAdapter(delegatesResult, ownVotes, address, checkOwnSwitch.isChecked)
         checkDelegates(address)
         recyclerView = findViewById<RecyclerView>(R.id.delegatesRecylcer).apply {
             setHasFixedSize(true)
@@ -132,8 +137,14 @@ class SelectDelegate : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 var delegates = Gson().fromJson(json, Delegates::class.java)
-
-                delegatesResult.addAll(delegates.result)
+                delegatesResult.clear()
+                if (checkOwnSwitch.isChecked) {
+                    Log.i("FILTER", "show only voted by me")
+                    delegatesResult.addAll(delegates.result.filter { it.address.equals(address) })
+                } else {
+                    Log.i("FILTER", "show all delegates")
+                    delegatesResult.addAll(delegates.result)
+                }
                 delegatesResult.sortByDescending { it.votes.toDouble() }
                 //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
                 viewAdapter.notifyDataSetChanged()

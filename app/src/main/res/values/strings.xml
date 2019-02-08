@@ -115,5 +115,8 @@
     <string name="report">Report</string>
     <string name="title_activity_new_main">NewMainActivity</string>
     <string name="sem">SEM</string>
+    <string name="select_own">Select own votes</string>
+    <string name="selected_own">only my votes</string>
+    <string name="select_all">select all votes</string>
 
 </resources>

@@ -40,7 +40,8 @@ import java.math.BigDecimal
 class DelegatesAdapter(
         private val delegates: ArrayList<Result>,
         private val ownVotes: ArrayList<de.phash.manuel.asw.semux.json.accountvotes.Result>,
-        private val lookupAddress: String)
+        private val lookupAddress: String,
+        private val onlyOwn: Boolean)
     : RecyclerView.Adapter<DelegatesAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -51,6 +52,7 @@ class DelegatesAdapter(
         val votes = itemView.findViewById<TextView>(R.id.delegatesListVotes)
         val rank = itemView.findViewById<TextView>(R.id.delegatesListRank)
         val byMe = itemView.findViewById<TextView>(R.id.byMeTextView)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -63,6 +65,7 @@ class DelegatesAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         if (ownVotes.isNotEmpty()) {
             val myVotes = ownVotes.filter { it.delegate.address.equals(delegates.get(position).address) }.firstOrNull()?.votes
             if (myVotes != null) {
