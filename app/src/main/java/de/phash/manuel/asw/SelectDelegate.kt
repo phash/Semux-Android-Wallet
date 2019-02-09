@@ -61,7 +61,6 @@ class SelectDelegate : AppCompatActivity() {
         viewManager = LinearLayoutManager(this)
         checkOwnSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked -> checkDelegates(address) })
 
-
         viewAdapter = DelegatesAdapter(delegatesResult, ownVotes, address, checkOwnSwitch.isChecked)
         checkDelegates(address)
         recyclerView = findViewById<RecyclerView>(R.id.delegatesRecylcer).apply {
@@ -140,7 +139,11 @@ class SelectDelegate : AppCompatActivity() {
                 delegatesResult.clear()
                 if (checkOwnSwitch.isChecked) {
                     Log.i("FILTER", "show only voted by me")
-                    delegatesResult.addAll(delegates.result.filter { it.address.equals(address) })
+                    //delegates.result -> all delegates
+                    //ownvotes -> my votes
+
+                    delegatesResult.addAll(getAllDelegatesWithVotesFromMe(delegates))
+
                 } else {
                     Log.i("FILTER", "show all delegates")
                     delegatesResult.addAll(delegates.result)
@@ -156,6 +159,24 @@ class SelectDelegate : AppCompatActivity() {
         }
     }
 
+    private fun getAllDelegatesWithVotesFromMe(delegates: Delegates): Collection<Result> {
+        var res =
+                delegates.result.filter { delegate ->
+                    ownVotes.filter {
+                        delegate.address.equals(it.delegate.address)
+                    }.firstOrNull() != null
+                }
+        return res
+        /*
+          outer ->
+                      //    var found = ownVotes.filter { it.delegate.address.equals(outer.address) }.firstOrNull()?.votes
+                      ownVotes.filter { it.delegate.address.equals(outer.address) }.firstOrNull()?.votes?.let {it2->
+                          2.compareTo(   BigDecimal(it2).compareTo(BigDecimal.ONE) ) ?:false
+                      }
+
+                  }*/
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
@@ -169,3 +190,5 @@ class SelectDelegate : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
+
+
