@@ -75,9 +75,7 @@ class SingleBalanceActivity : AppCompatActivity() {
     }
 
     fun onSendClick(view: View) {
-        val intent = Intent(this, SendActivity::class.java)
-        intent.putExtra("address", address)
-        startActivity(intent)
+        sendActivity(this, address)
     }
 
     fun onVoteClick(view: View) {

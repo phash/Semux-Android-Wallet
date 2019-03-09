@@ -57,6 +57,7 @@ class SendActivity : AppCompatActivity() {
     var address = ""
     private var nonce: String? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
@@ -70,6 +71,9 @@ class SendActivity : AppCompatActivity() {
         sendReceivingAddressEditView.showSoftInputOnFocus = true
 
         address = intent.getStringExtra("address")
+
+        sendReceivingAddressEditView.setText( intent.getStringExtra("targetAddress")?:"")
+
         checkAccount()
     }
 
@@ -182,7 +186,9 @@ class SendActivity : AppCompatActivity() {
         startService(intent)
 
     }
-
+    fun onScanClicked(view: View){
+        scanActivity(this, address)
+    }
 
     override fun onResume() {
         super.onResume()
