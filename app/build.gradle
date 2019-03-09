@@ -36,11 +36,11 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 37
-        versionName "0.5.37 beta"
+        versionCode 38
+        versionName "0.5.38 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionNameSuffix ' Beryllium '
+        versionNameSuffix ' Boron '
     }
     buildTypes {
         release {
@@ -127,7 +127,7 @@ dependencies {
 
     //implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
     implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.google.firebase:firebase-database:16.1.0'
 
     // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
     // implementation group: 'com.crashlytics.sdk.android', name: 'crashlytics', version: '2.9.5'
