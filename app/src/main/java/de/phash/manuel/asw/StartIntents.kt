@@ -53,6 +53,18 @@ fun singleAccountActivity(context: Context, address: String) {
     intent.putExtra("address", address)
     context.startActivity(intent)
 }
+fun sendActivity(context: Context, address: String) {
+    val intent = Intent(context, SendActivity::class.java)
+    intent.putExtra("address", address)
+    context.startActivity(intent)
+}
+
+fun sendActivity(context: Context, address: String, targetAddress: String) {
+    val intent = Intent(context, SendActivity::class.java)
+    intent.putExtra("address", address)
+    intent.putExtra("targetAddress", targetAddress)
+    context.startActivity(intent)
+}
 
 fun settingsActivity(context: Context) {
     val intent = Intent(context, SettingsActivity::class.java)
@@ -93,5 +105,11 @@ fun setPasswordActivity(context: Context) {
 fun errorActivity(context: Context, error: String) {
     val intent = Intent(context, ErrorActivity::class.java)
     intent.putExtra("errorMessage", error)
+    context.startActivity(intent)
+}
+
+fun scanActivity(context: Context, address: String){
+    val intent = Intent(context, ScanActivity::class.java)
+    intent.putExtra("address", address)
     context.startActivity(intent)
 }
