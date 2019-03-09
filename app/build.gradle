@@ -37,7 +37,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 38
-        versionName "0.5.38 beta"
+        versionName "0.6.38 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Boron '
