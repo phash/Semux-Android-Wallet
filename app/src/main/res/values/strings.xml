@@ -115,6 +115,9 @@
     <string name="report">Report</string>
     <string name="title_activity_new_main">NewMainActivity</string>
     <string name="sem">SEM</string>
+    <string name="select_own">Select own votes</string>
+    <string name="selected_own">only my votes</string>
+    <string name="select_all">select all votes</string>
 
     <string name="showing_code_in_fragment">Showing code in fragment</string>
     <string name="scan_qr_code">SCAN QR CODE</string>
