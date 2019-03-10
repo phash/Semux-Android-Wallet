@@ -139,8 +139,6 @@ class SelectDelegate : AppCompatActivity() {
                 delegatesResult.clear()
                 if (checkOwnSwitch.isChecked) {
                     Log.i("FILTER", "show only voted by me")
-                    //delegates.result -> all delegates
-                    //ownvotes -> my votes
 
                     delegatesResult.addAll(getAllDelegatesWithVotesFromMe(delegates))
 
@@ -149,7 +147,6 @@ class SelectDelegate : AppCompatActivity() {
                     delegatesResult.addAll(delegates.result)
                 }
                 delegatesResult.sortByDescending { it.votes.toDouble() }
-                //   balancesList.sortWith<Result>(compareBy(Result::available, Result::locked, Result::transactionCount))
                 viewAdapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(this@SelectDelegate, "check failed",
@@ -167,14 +164,7 @@ class SelectDelegate : AppCompatActivity() {
                     }.firstOrNull() != null
                 }
         return res
-        /*
-          outer ->
-                      //    var found = ownVotes.filter { it.delegate.address.equals(outer.address) }.firstOrNull()?.votes
-                      ownVotes.filter { it.delegate.address.equals(outer.address) }.firstOrNull()?.votes?.let {it2->
-                          2.compareTo(   BigDecimal(it2).compareTo(BigDecimal.ONE) ) ?:false
-                      }
 
-                  }*/
     }
 
 
