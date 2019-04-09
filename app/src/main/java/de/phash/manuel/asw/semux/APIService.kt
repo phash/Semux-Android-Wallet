@@ -79,7 +79,7 @@ class APIService : IntentService("SemuxService") {
 
         val NETWORK = Network.MAINNET
 
-        var lastChecked = Date();
+        var lastChecked = System.currentTimeMillis()
         var cachedAccounts = HashMap<String, String>()
 
     }
@@ -289,7 +289,7 @@ class APIService : IntentService("SemuxService") {
     }
 
     private fun checkAddressCached(address: String) {
-        if (lastChecked.time + 28000L < Date().time) {
+        if (lastChecked + 30000L < System.currentTimeMillis()) {
             Log.i("CHECKADDRESSCACHED", "update accounts")
             checkAddress(address)
 
@@ -316,6 +316,7 @@ class APIService : IntentService("SemuxService") {
                 .addHeader("cache-control", "no-cache")
 
                 .build()
+        lastChecked = System.currentTimeMillis()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i("CHECKADDRESS", call.toString())
@@ -332,7 +333,7 @@ class APIService : IntentService("SemuxService") {
                 }
             }
         })
-        lastChecked = Date()
+
 
 
     }
