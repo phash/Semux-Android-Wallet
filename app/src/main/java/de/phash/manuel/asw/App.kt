@@ -44,11 +44,8 @@ class App : Application() {
 
     }
 
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
-
     private fun updateBalances() {
 
-        firebase("8", "update balances", FirebaseAnalytics.getInstance(this))
         Log.i("UPDATEBALANCE", "updateBalances")
         checkBalanceForWallet(database, this)
     }

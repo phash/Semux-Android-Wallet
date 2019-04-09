@@ -36,8 +36,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 42
-        versionName "0.6.42 beta"
+        versionCode 43
+        versionName "0.6.43 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Boron '

@@ -62,7 +62,7 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        //checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this)
         firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
         versionView.text = this.packageManager.getPackageInfo(this.packageName, 0).versionName
 
@@ -71,7 +71,7 @@ class DashBoardActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        //checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this)
         firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
     }
 

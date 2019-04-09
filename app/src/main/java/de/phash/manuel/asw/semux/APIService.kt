@@ -41,6 +41,8 @@ import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class APIService : IntentService("SemuxService") {
@@ -75,9 +77,10 @@ class APIService : IntentService("SemuxService") {
 
         var API_ENDPOINT = "https://sempy.online/api"
 
-
         val NETWORK = Network.MAINNET
 
+        var lastChecked = Date();
+        var cachedAccounts = HashMap<String, String>()
 
     }
 
@@ -101,7 +104,7 @@ class APIService : IntentService("SemuxService") {
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
         addresses.forEach {
-            checkAddress(it.address);
+            checkAddressCached(it.address);
         }
 
     }
@@ -276,8 +279,8 @@ class APIService : IntentService("SemuxService") {
         try {
 
             val address = intent?.getStringExtra(ADDRESS)
-            address?.let{
-                checkAddress(it)
+            address?.let {
+                checkAddressCached(it)
             }
         } catch (e: Exception) {
             errorActivity(this@APIService, "API not reachable")
@@ -285,7 +288,27 @@ class APIService : IntentService("SemuxService") {
 
     }
 
+    private fun checkAddressCached(address: String) {
+        if (lastChecked.time + 28000L < Date().time) {
+            Log.i("CHECKADDRESSCACHED", "update accounts")
+            checkAddress(address)
+
+        } else {
+            Log.i("CHECKADDRESSCACHED", "checking cached values")
+            var cached = cachedAccounts.get(address)
+
+            if (cached != null) {
+                Log.i("CHECKADDRESSCACHED", "using cached values")
+                sendNotificationIntent(cached)
+            } else {
+                Log.i("CHECKADDRESSCACHED", "update cached values")
+                checkAddress(address)
+            }
+        }
+    }
+
     private fun checkAddress(address: String) {
+
         val client = OkHttpClient()
         val request = Request.Builder()
                 .url("$API_ENDPOINT/account?address=$address")
@@ -295,20 +318,31 @@ class APIService : IntentService("SemuxService") {
                 .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.i("TRX", call.toString())
+                Log.i("CHECKADDRESS", call.toString())
                 errorActivity(this@APIService, "API not reachable")
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
-                val notificationIntent = Intent(NOTIFICATION)
-                notificationIntent.putExtra(TYP, check)
-                notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
-                notificationIntent.putExtra(JSON, res)
-                sendBroadcast(notificationIntent)
+                if (res != null) {
+
+                    cachedAccounts.put(address, res);
+                    Log.i("CHECKADDRESS", "updated cached accounts")
+                    sendNotificationIntent(res)
+                }
             }
         })
+        lastChecked = Date()
+
+
     }
 
+    private fun sendNotificationIntent(res: String?) {
+        val notificationIntent = Intent(NOTIFICATION)
+        notificationIntent.putExtra(TYP, check)
+        notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
+        notificationIntent.putExtra(JSON, res)
+        sendBroadcast(notificationIntent)
+    }
 
 }

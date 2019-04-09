@@ -66,7 +66,7 @@ class BalancesActivity : AppCompatActivity() {
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-        //checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this)
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
