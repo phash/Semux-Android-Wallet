@@ -40,7 +40,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         timer = Timer()
-        timer.scheduleAtFixedRate(UpdateBalTask(), 250, 45000)
+        timer.scheduleAtFixedRate(UpdateBalTask(), 250, 28000)
 
     }
 
@@ -49,6 +49,7 @@ class App : Application() {
     private fun updateBalances() {
 
         firebase("8", "update balances", FirebaseAnalytics.getInstance(this))
+        Log.i("UPDATEBALANCE", "updateBalances")
         checkBalanceForWallet(database, this)
     }
 

@@ -99,6 +99,7 @@ fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context) {
 
     intent.putExtra(APIService.TYP,
             APIService.checkall)
+    Log.i("UPDATEBALANCE", "call checkBalanceForWallet")
     context.startService(intent)
 /*
     val addresses = getAddresses(db)
