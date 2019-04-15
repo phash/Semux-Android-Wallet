@@ -66,7 +66,7 @@ class BalancesActivity : AppCompatActivity() {
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-        checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this, true)
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -95,8 +95,9 @@ class BalancesActivity : AppCompatActivity() {
                 val resultCode = bundle.getInt(APIService.RESULT)
                 if (resultCode == Activity.RESULT_OK) {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
-
+                    account?.result?.address.let {
                     balancesMap.put(account.result.address, account)
+                    }
                     val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                     val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
 

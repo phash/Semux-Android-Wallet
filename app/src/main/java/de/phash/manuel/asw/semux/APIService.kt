@@ -81,7 +81,7 @@ class APIService : IntentService("SemuxService") {
 
         val NETWORK = Network.MAINNET
 
-        var lastChecked = System.currentTimeMillis()
+        var lastChecked = HashMap<String, Long>()
         var cachedAccounts = HashMap<String, String>()
 
     }
@@ -105,6 +105,10 @@ class APIService : IntentService("SemuxService") {
 
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
+        if (intent?.getBooleanExtra(FORCE, false) ?: false) {
+
+            resetCache()
+        }
         addresses.forEach {
             checkAddressCached(it.address);
         }
@@ -207,7 +211,7 @@ class APIService : IntentService("SemuxService") {
     private fun doTransfer(intent: Intent?) {
         val transactionRaw = intent?.getStringExtra(TRANSACTION_RAW)
         transactionRaw?.let {
-            lastChecked = System.currentTimeMillis() - 100000L
+            resetCache()
             val client = OkHttpClient()
 
             Log.i("RAW", transactionRaw)
@@ -240,6 +244,11 @@ class APIService : IntentService("SemuxService") {
                 }
             })
         }
+    }
+
+    private fun resetCache() {
+        Log.i("CACHE", "resetCache")
+        lastChecked.clear()
     }
 
     fun getVotesForAccount(intent: Intent?) {
@@ -291,26 +300,39 @@ class APIService : IntentService("SemuxService") {
     }
 
     private fun checkAddressCached(address: String) {
-        if (lastChecked + 30000L < System.currentTimeMillis()) {
-            Log.i("CHECKADDRESSCACHED", "update accounts")
+        Log.i("CHECKADDRESSCACHED", "checking if cache is to be used for " + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                ?: 0L)) + ")")
+
+        if (cacheNeedsUpdate(address)) {
+            Log.i("CHECKADDRESSCACHED", "update account  " + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                    ?: 0L)) + ")")
             checkAddress(address)
 
         } else {
-            Log.i("CHECKADDRESSCACHED", "checking cached values")
+            Log.i("CHECKADDRESSCACHED", "checking cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                    ?: 0L)) + ")")
             var cached = cachedAccounts.get(address)
 
             if (cached != null) {
-                Log.i("CHECKADDRESSCACHED", "using cached values")
+                Log.i("CHECKADDRESSCACHED", "using cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                        ?: 0L)) + ")")
                 sendNotificationIntent(cached)
             } else {
-                Log.i("CHECKADDRESSCACHED", "update cached values")
+                Log.i("CHECKADDRESSCACHED", "update cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                        ?: 0L)) + ")")
                 checkAddress(address)
             }
         }
     }
 
-    private fun checkAddress(address: String) {
+    private fun cacheNeedsUpdate(address: String): Boolean {
+        Log.i("CACHEUPDATE", "cache needs update for " + address)
+        return lastChecked.get(address) ?: 0L + 30000L < Calendar.getInstance().timeInMillis
+    }
 
+    private fun checkAddress(address: String) {
+        Log.i("CHECKADDRESS", address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                ?: 0L)) + ")")
         val client = OkHttpClient()
         val request = Request.Builder()
                 .url("$API_ENDPOINT/account?address=$address")
@@ -318,7 +340,7 @@ class APIService : IntentService("SemuxService") {
                 .addHeader("cache-control", "no-cache")
 
                 .build()
-        lastChecked = System.currentTimeMillis()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i("CHECKADDRESS", call.toString())
@@ -330,12 +352,13 @@ class APIService : IntentService("SemuxService") {
                 if (res != null) {
 
                     cachedAccounts.put(address, res);
-                    Log.i("CHECKADDRESS", "updated cached accounts")
+                    Log.i("CHECKADDRESS", "updated cached accounts" + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
+                            ?: 0L)) + ")")
+                    lastChecked.put(address, Calendar.getInstance().timeInMillis)
                     sendNotificationIntent(res)
                 }
             }
         })
-
 
 
     }

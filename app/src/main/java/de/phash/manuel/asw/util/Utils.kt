@@ -93,12 +93,13 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
 }
 
 
-fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context) {
+fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context, force: Boolean = false) {
     val intent = Intent(context, APIService::class.java)
     // add infos for the service which file to download and where to store
 
     intent.putExtra(APIService.TYP,
             APIService.checkall)
+    intent.putExtra(APIService.FORCE, force)
     Log.i("UPDATEBALANCE", "call checkBalanceForWallet")
     context.startService(intent)
 /*

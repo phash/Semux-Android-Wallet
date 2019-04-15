@@ -26,10 +26,8 @@ package de.phash.manuel.asw
 
 import android.app.Application
 import android.util.Log
-import com.google.firebase.analytics.FirebaseAnalytics
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.util.checkBalanceForWallet
-import de.phash.manuel.asw.util.firebase
 import java.util.*
 
 
@@ -47,7 +45,7 @@ class App : Application() {
     private fun updateBalances() {
 
         Log.i("UPDATEBALANCE", "updateBalances")
-        checkBalanceForWallet(database, this)
+        checkBalanceForWallet(database, this, true)
     }
 
 
