@@ -36,8 +36,8 @@ android {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 43
-        versionName "0.6.43 beta"
+        versionCode 44
+        versionName "0.6.44 beta"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix ' Boron '
@@ -128,7 +128,7 @@ dependencies {
     implementation group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
 
     //implementation group: 'com.parse', name: 'parse-android', version: '1.17.3'
-    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-database:16.1.0'
 
     // https://mvnrepository.com/artifact/com.crashlytics.sdk.android/crashlytics
