@@ -49,6 +49,8 @@ class APIService : IntentService("SemuxService") {
 
     companion object {
 
+        const val FORCE = "force"
+
         val SEMUXFORMAT = DecimalFormat("0.#########")
         val FEE = Amount.Unit.MILLI_SEM.of(5)
         val SEMUXMULTIPLICATOR = BigDecimal("1000000000")
@@ -205,7 +207,7 @@ class APIService : IntentService("SemuxService") {
     private fun doTransfer(intent: Intent?) {
         val transactionRaw = intent?.getStringExtra(TRANSACTION_RAW)
         transactionRaw?.let {
-
+            lastChecked = System.currentTimeMillis() - 100000L
             val client = OkHttpClient()
 
             Log.i("RAW", transactionRaw)
