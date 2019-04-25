@@ -94,21 +94,19 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
 
 
 fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context, force: Boolean = false) {
-    val intent = Intent(context, APIService::class.java)
-    // add infos for the service which file to download and where to store
+    try {
 
-    intent.putExtra(APIService.TYP,
-            APIService.checkall)
-    intent.putExtra(APIService.FORCE, force)
-    Log.i("UPDATEBALANCE", "call checkBalanceForWallet")
-    context.startService(intent)
-/*
-    val addresses = getAddresses(db)
-    addresses.forEach {
-        updateAddress(it.address, context)
+        val intent = Intent(context, APIService::class.java)
+        // add infos for the service which file to download and where to store
+
+        intent.putExtra(APIService.TYP,
+                APIService.checkall)
+        intent.putExtra(APIService.FORCE, force)
+        Log.i("UPDATEBALANCE", "call checkBalanceForWallet")
+        context.startService(intent)
+    } catch (e: Exception) {
+        Log.e("UPDATEBALANCE", "call checkBalanceForWallet warf einen Fehler: ", e)
     }
-    return addresses.isNotEmpty()
-*/
 
 }
 
