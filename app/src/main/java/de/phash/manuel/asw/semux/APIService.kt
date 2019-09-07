@@ -77,7 +77,7 @@ class APIService : IntentService("SemuxService") {
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
-        var API_ENDPOINT = "https://api.semux.online/"
+        var API_ENDPOINT = "https://api.semux.online/v2.3.0"
 
         val NETWORK = Network.MAINNET
 
