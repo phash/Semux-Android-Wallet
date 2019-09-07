@@ -48,6 +48,10 @@ import kotlin.collections.HashMap
 class APIService : IntentService("SemuxService") {
 
     companion object {
+        fun changeNetwork(network: Network){
+            Log.i("SETTINGS", "change network to ${network.label()}")
+            NETWORK = network
+        }
 
         const val FORCE = "force"
 
@@ -79,7 +83,7 @@ class APIService : IntentService("SemuxService") {
 
         var API_ENDPOINT = "https://api.semux.online/v2.3.0"
 
-        val NETWORK = Network.MAINNET
+        var NETWORK = Network.MAINNET
 
         var lastChecked = HashMap<String, Long>()
         var cachedAccounts = HashMap<String, String>()
@@ -90,6 +94,7 @@ class APIService : IntentService("SemuxService") {
     override fun onHandleIntent(intent: Intent?) {
 
         val typ = intent?.getStringExtra(TYP) ?: "fehler"
+        Log.i("HANDLEINTENT", "handling $typ")
 
         when (typ) {
             check -> getBalance(intent)
@@ -98,10 +103,13 @@ class APIService : IntentService("SemuxService") {
             delegates -> loadDelegates(intent)
             accountvotes -> getVotesForAccount(intent)
             checkall -> checkAll(intent)
+
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
         }
 
     }
+
+
 
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
@@ -246,7 +254,7 @@ class APIService : IntentService("SemuxService") {
         }
     }
 
-    private fun resetCache() {
+    public fun resetCache() {
         Log.i("CACHE", "resetCache")
         lastChecked.clear()
     }

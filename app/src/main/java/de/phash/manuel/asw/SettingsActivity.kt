@@ -24,11 +24,30 @@
 
 package de.phash.manuel.asw
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.FORCE
+import de.phash.manuel.asw.semux.APIService.Companion.TYP
+import de.phash.manuel.asw.semux.APIService.Companion.checkall
+import de.phash.manuel.asw.semux.key.Network
+import de.phash.manuel.asw.util.isPasswordCorrect
+import de.phash.manuel.asw.util.persistNewPassword
+import de.phash.manuel.asw.util.updateAllAddresses
+import kotlinx.android.synthetic.main.activity_passwords.*
+import kotlinx.android.synthetic.main.password_prompt.view.*
+import java.util.*
+import java.util.Arrays.asList
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -52,6 +71,49 @@ class SettingsActivity : AppCompatActivity() {
 
     fun onCreateAccountClick(view: View) {
         createActivity(this)
+    }
+
+    fun onNetworkClick(view: View) {
+
+    }
+
+    val networks = arrayOf( "MAINNET", "TESTNET", "DEVNET");
+
+    fun onApiClick(view: View) {
+
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+
+        with(dialogBuilder) {
+            setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+                dialog.dismiss()
+            })
+
+            setItems(networks,  DialogInterface.OnClickListener { dialog, which ->
+                change(which)
+                dialog.dismiss()
+            })
+
+            show()
+        }
+    }
+
+    private fun change(which: Int) {
+        Log.i("SETTINGS", "chosen Networktyp -> $which")
+        when (which){
+            0 -> APIService.changeNetwork(Network.MAINNET)
+
+            1 -> APIService.changeNetwork(Network.TESTNET)
+
+            2 -> APIService.changeNetwork(Network.DEVNET)
+
+        }
+
+        val intent = Intent(this, APIService::class.java)
+
+        intent.putExtra(TYP, checkall)
+        intent.putExtra(FORCE, true)
+        startService(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
