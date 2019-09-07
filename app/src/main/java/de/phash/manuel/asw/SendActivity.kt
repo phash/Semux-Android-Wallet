@@ -37,7 +37,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
@@ -142,7 +141,6 @@ class SendActivity : AppCompatActivity() {
 
     private fun createTransaction(password: String) {
         try {
-            firebase("7", type = "send", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
 
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
             val account = getSemuxAddress(database, address)

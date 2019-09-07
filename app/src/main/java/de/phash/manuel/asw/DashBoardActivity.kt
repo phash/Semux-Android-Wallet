@@ -38,14 +38,12 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.util.checkBalanceForWallet
-import de.phash.manuel.asw.util.firebase
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
@@ -63,7 +61,6 @@ class DashBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(database, this, true)
-        firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
         versionView.text = this.packageManager.getPackageInfo(this.packageName, 0).versionName
 
         setPWButton.visibility = if (isPasswordSet(this)) INVISIBLE else VISIBLE
@@ -72,7 +69,6 @@ class DashBoardActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         checkBalanceForWallet(database, this, true)
-        firebase("1", type = "dashboard", mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
