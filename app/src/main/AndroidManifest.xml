@@ -14,7 +14,6 @@
         android:roundIcon="@drawable/semux_trans"
         android:supportsRtl="true"
         android:theme="@style/YourApplicationTheme">
-        <activity android:name=".ScanActivity"></activity>
         <activity
             android:name=".DashBoardActivity"
             android:configChanges="orientation"
@@ -31,6 +30,10 @@
             android:enabled="true"
             android:exported="true" />
 
+        <activity
+            android:name=".ScanActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CreateAccountActivity"
             android:configChanges="orientation"
