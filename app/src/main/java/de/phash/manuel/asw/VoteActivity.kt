@@ -39,7 +39,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
@@ -142,7 +141,6 @@ class VoteActivity : AppCompatActivity() {
     private fun createTransaction(option: String, password: String) {
         try {
             Log.i("VOTE", "-creating transaction for $option")
-            firebase("5", type = option, mFirebaseAnalytics = FirebaseAnalytics.getInstance(this))
 
             val receiver = Hex.decode0x(voteReceivingAddressEditView.text.toString())
             val account = getSemuxAddress(database, address)
