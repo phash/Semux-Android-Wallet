@@ -42,6 +42,7 @@ import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
 
@@ -54,6 +55,8 @@ class ManageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
+
         viewManager = LinearLayoutManager(this)
         viewAdapter = ManageAdapter(accountList, this, DEFAULT_PW, database)
         recyclerView = findViewById<RecyclerView>(R.id.manageRecycler).apply {

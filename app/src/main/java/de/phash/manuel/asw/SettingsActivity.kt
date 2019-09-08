@@ -80,6 +80,7 @@ class SettingsActivity : AppCompatActivity() {
 
             setItems(networks,  DialogInterface.OnClickListener { dialog, which ->
                 changeNetwork(which)
+
                 dialog.dismiss()
             })
 
@@ -93,6 +94,7 @@ class SettingsActivity : AppCompatActivity() {
             0 -> APIService.changeNetwork(Network.MAINNET)
             1 -> APIService.changeNetwork(Network.TESTNET)
         }
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         val intent = Intent(this, APIService::class.java)
         intent.putExtra(TYP, checkall)
         intent.putExtra(FORCE, true)
