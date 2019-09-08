@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.createQRCode
 import de.phash.manuel.asw.util.updateAddress
 import kotlinx.android.synthetic.main.activity_single_balance.*
@@ -51,6 +52,7 @@ class SingleBalanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_balance)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         address = intent.getStringExtra("address")
         setUp()
 

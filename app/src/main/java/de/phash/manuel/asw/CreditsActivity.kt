@@ -29,6 +29,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 import org.jetbrains.anko.browse
 import org.jetbrains.anko.email
 
@@ -38,6 +40,7 @@ class CreditsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credits)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
 
     }
 

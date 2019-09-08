@@ -72,7 +72,7 @@
     <string name="semuxOrg">www.semux.org</string>
     <string name="api">API Node by mdodong on sempy.online</string>
     <string name="security">Always back up your private keys!\nNever tell them anybody!\nWe cannot recover your keys!\nKeep them save!</string>
-    <string name="wishes">For wishes or issues please use github</string>
+    <string name="wishes">For wishes, feature request or issues please use github</string>
     <string name="dashboard">Dashboard</string>
     <string name="credit">Credits</string>
     <string name="newPassword">Set a new password for sending, voting and exporting keys</string>
@@ -128,6 +128,6 @@
     <string name="show_scanner_from_fragment">Show Scanner From Fragment</string>
     <string name="pickNetwork">SELECT NETWORK</string>
     <string name="pickAPI">SELECT ENDPOINT</string>
-
-
+    <string name="semuxMain">SEMUX - MAINNET</string>
+    <string name="semuxTest">SEMUX - TESTNET</string>
 </resources>

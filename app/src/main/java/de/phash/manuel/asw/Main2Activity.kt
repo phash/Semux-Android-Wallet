@@ -26,11 +26,14 @@ package de.phash.manuel.asw
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 
 class Main2Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
     }
 }

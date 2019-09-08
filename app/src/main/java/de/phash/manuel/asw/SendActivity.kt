@@ -61,6 +61,7 @@ class SendActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         imm.showSoftInput(sendAmountEditView, InputMethodManager.SHOW_FORCED)

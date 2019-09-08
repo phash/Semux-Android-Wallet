@@ -26,6 +26,7 @@ package de.phash.manuel.asw.util
 
 import android.content.Context
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
+import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
 import de.phash.manuel.asw.semux.key.Bytes
 import de.phash.manuel.asw.semux.key.Key
@@ -81,7 +82,7 @@ fun decryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
     val decryptKey = encryption.decryptOrNull(semuxAddress.privateKey)
     if (decryptKey == null) return semuxAddress
     val key = Key(de.phash.manuel.asw.semux.key.Hex.decode0x(decryptKey))
-    return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv)
+    return SemuxAddress(semuxAddress.id, key.toAddressString(), de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey), semuxAddress.salt, semuxAddress.iv, APIService.NETWORK.label())
 }
 
 fun createAccount(key: Key, password: String): SemuxAddress {
@@ -89,7 +90,7 @@ fun createAccount(key: Key, password: String): SemuxAddress {
 
     val iv = Bytes.random(16)
     val encryption = Encryption.getDefault(password, de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), iv)
-    return SemuxAddress(null, key.toAddressString(), encryption.encryptOrNull(de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey)), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv))
+    return SemuxAddress(null, key.toAddressString(), encryption.encryptOrNull(de.phash.manuel.asw.semux.key.Hex.encode0x(key.privateKey)), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv), APIService.NETWORK.label())
 }
 
 
@@ -98,5 +99,5 @@ fun encryptAccount(semuxAddress: SemuxAddress, password: String): SemuxAddress {
 
     val iv = Bytes.random(16)
     val encryption = Encryption.getDefault(password, de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), iv)
-    return SemuxAddress(semuxAddress.id, semuxAddress.address, encryption.encryptOrNull(semuxAddress.privateKey), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv))
+    return SemuxAddress(semuxAddress.id, semuxAddress.address, encryption.encryptOrNull(semuxAddress.privateKey), de.phash.manuel.asw.semux.key.Hex.encode(saltPriv), Hex.toHexString(iv), APIService.NETWORK.label())
 }

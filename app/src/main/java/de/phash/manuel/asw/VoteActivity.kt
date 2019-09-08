@@ -62,7 +62,7 @@ class VoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        //    voteAddressTextView.text = savedInstanceState?.getString("delegatesAddress") ?:""
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         voteReceivingAddressEditView.setText(intent.getStringExtra("delegatesAddress") ?: "")
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

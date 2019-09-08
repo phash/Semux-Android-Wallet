@@ -42,6 +42,7 @@ import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.transactions.Result
 import de.phash.manuel.asw.semux.json.transactions.TransactionsResult
+import de.phash.manuel.asw.semux.key.Network
 import kotlinx.android.synthetic.main.activity_transactions.*
 
 
@@ -57,6 +58,7 @@ class TransactionsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         viewManager = LinearLayoutManager(this)
         viewAdapter = TransactionAdapter(transactionsList)
         loadTransactions(intent.getStringExtra("address"))

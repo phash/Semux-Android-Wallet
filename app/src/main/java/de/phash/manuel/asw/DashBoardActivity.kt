@@ -39,10 +39,10 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_dash_board.*
@@ -60,15 +60,15 @@ class DashBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        checkBalanceForWallet(database, this, true)
+        checkBalanceForWallet(this, true)
         versionView.text = this.packageManager.getPackageInfo(this.packageName, 0).versionName
-
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         setPWButton.visibility = if (isPasswordSet(this)) INVISIBLE else VISIBLE
     }
 
     override fun onRestart() {
         super.onRestart()
-        checkBalanceForWallet(database, this, true)
+        checkBalanceForWallet(this, true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

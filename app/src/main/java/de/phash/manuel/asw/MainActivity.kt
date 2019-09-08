@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
+import de.phash.manuel.asw.semux.key.Network
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

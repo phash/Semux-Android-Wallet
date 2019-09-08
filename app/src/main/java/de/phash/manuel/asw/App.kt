@@ -26,7 +26,6 @@ package de.phash.manuel.asw
 
 import android.app.Application
 import android.util.Log
-import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import java.util.*
 
@@ -45,7 +44,7 @@ class App : Application() {
     private fun updateBalances() {
 
         Log.i("UPDATEBALANCE", "updateBalances")
-        checkBalanceForWallet(database, this, true)
+        checkBalanceForWallet(this, true)
     }
 
 

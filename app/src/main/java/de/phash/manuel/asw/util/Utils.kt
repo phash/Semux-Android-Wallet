@@ -62,11 +62,13 @@ fun deleteSemuxDBAccount(db: MyDatabaseOpenHelper, account: ManageAccounts) {
 val semuxAddressRowParser = classParser<SemuxAddress>()
 fun getAddresses(db: MyDatabaseOpenHelper): List<SemuxAddress> = db.use {
     Log.i("DATABASE", "calling selectAll")
-    select(tableName = MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME).parseList(semuxAddressRowParser)
+    select(tableName = MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME)
+            .whereArgs("${SemuxAddress.COLUMN_NETWORK} = \"${APIService.NETWORK.label()}\"")
+            .parseList(semuxAddressRowParser)
 }
 
 fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = db.use {
-    Log.i("DATABASE", "calling selecctAddress: ${address}")
+    Log.i("DATABASE", "calling selectAddress: ${address}")
     var addressToSearch = address
     if (address.startsWith("0x")) {
         addressToSearch = address.substring(2)
@@ -78,14 +80,13 @@ fun getSemuxAddress(db: MyDatabaseOpenHelper, address: String): SemuxAddress? = 
 }
 
 fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
-    val values = semuxAddress.toContentValues()
+
     db.use {
 
         update(MyDatabaseOpenHelper.SEMUXADDRESS_TABLENAME,
                 SemuxAddress.COLUMN_IV to semuxAddress.iv,
                 SemuxAddress.COLUMN_SALT to semuxAddress.salt,
                 SemuxAddress.COLUMN_PRIVATEKEY to semuxAddress.privateKey
-
         )
                 .whereArgs("${SemuxAddress.COLUMN_ID} = {id}", "id" to semuxAddress.id!!)
                 .exec()
@@ -93,7 +94,7 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
 }
 
 
-fun checkBalanceForWallet(db: MyDatabaseOpenHelper, context: Context, force: Boolean = false) {
+fun checkBalanceForWallet(context: Context, force: Boolean = false) {
     try {
 
         val intent = Intent(context, APIService::class.java)

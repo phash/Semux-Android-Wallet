@@ -31,7 +31,8 @@ data class SemuxAddress(val id: Int?,
                         val address: String,
                         val privateKey: String?,
                         val salt: String?,
-                        val iv: String?
+                        val iv: String?,
+                        val network: String?
 ) {
     companion object {
         val COLUMN_ID = "id"
@@ -39,15 +40,17 @@ data class SemuxAddress(val id: Int?,
         val COLUMN_PRIVATEKEY = "privatekey"
         val COLUMN_IV = "iv"
         val COLUMN_SALT = "salt"
+        val COLUMN_NETWORK = "network"
     }
 
     fun toContentValues(): ContentValues {
-        return ContentValues(5).apply {
+        return ContentValues(6).apply {
             put(COLUMN_ID, id)
             put(COLUMN_ADDRESS, address)
             put(COLUMN_PRIVATEKEY, privateKey)
             put(COLUMN_SALT, salt)
             put(COLUMN_IV, iv)
+            put(COLUMN_NETWORK, network)
         }
     }
 }

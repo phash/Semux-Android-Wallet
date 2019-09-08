@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -19,6 +21,7 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
         address = intent.getStringExtra("address")
         targetAddress = findViewById(R.id.targetAddress)
    //     txtSiteName = findViewById(R.id.site_name)
@@ -27,6 +30,7 @@ class ScanActivity : AppCompatActivity() {
         btnScan!!.setOnClickListener { performAction() }
 
         qrScanIntegrator = IntentIntegrator(this)
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
 
     }
 

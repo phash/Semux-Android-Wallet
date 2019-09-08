@@ -51,6 +51,10 @@ class APIService : IntentService("SemuxService") {
         fun changeNetwork(network: Network){
             Log.i("SETTINGS", "change network to ${network.label()}")
             NETWORK = network
+            when (network){
+                Network.MAINNET -> API_ENDPOINT = API_ENDPOINT_MAINNET
+                Network.TESTNET -> API_ENDPOINT = API_ENDPOINT_TESTNET
+            }
         }
 
         const val FORCE = "force"
@@ -81,7 +85,9 @@ class APIService : IntentService("SemuxService") {
         //   private var API_ENDPOINT = "http://localhost:5171/"//"http://45.32.185.200/api"
         //   val NETWORK = Network.TESTNET
 
-        var API_ENDPOINT = "https://api.semux.online/v2.3.0"
+        val API_ENDPOINT_MAINNET = "https://api.semux.online/v2.3.0"
+        val API_ENDPOINT_TESTNET = "https://api.testnet.semux.online/v2.3.0"
+        var API_ENDPOINT = API_ENDPOINT_MAINNET
 
         var NETWORK = Network.MAINNET
 

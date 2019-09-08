@@ -107,24 +107,12 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/button7"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/buttonshape"
-            android:onClick="onNetworkClick"
-            android:text="@string/pickNetwork"
-            android:textAllCaps="true"
-            android:textColor="#ffffff"
-            android:textStyle="bold" />
-
-        <Button
             android:id="@+id/button16"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/buttonshape"
-            android:onClick="onApiClick"
+            android:onClick="onNetworkClick"
             android:text="@string/pickNetwork"
             android:textAllCaps="true"
             android:textColor="#ffffff"

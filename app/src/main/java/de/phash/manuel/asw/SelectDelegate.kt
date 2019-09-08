@@ -43,6 +43,7 @@ import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.accountvotes.AccountVotes
 import de.phash.manuel.asw.semux.json.delegates.Delegates
 import de.phash.manuel.asw.semux.json.delegates.Result
+import de.phash.manuel.asw.semux.key.Network
 import kotlinx.android.synthetic.main.activity_select_delegate.*
 
 class SelectDelegate : AppCompatActivity() {
@@ -57,6 +58,7 @@ class SelectDelegate : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_delegate)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         address = intent.getStringExtra("address")
         viewManager = LinearLayoutManager(this)
         checkOwnSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked -> checkDelegates(address) })

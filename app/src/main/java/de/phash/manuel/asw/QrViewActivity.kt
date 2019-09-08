@@ -30,6 +30,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.copyToClipboard
 import de.phash.manuel.asw.util.createQRCode
 import kotlinx.android.synthetic.main.activity_qr_view.*
@@ -40,6 +42,7 @@ class QrViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr_view)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         address = intent.getStringExtra("address")
         qrAddressAddress.text = address
         createQR(intent.getStringExtra("address"))
