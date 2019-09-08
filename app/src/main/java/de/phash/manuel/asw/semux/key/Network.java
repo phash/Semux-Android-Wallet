@@ -11,11 +11,11 @@ import java.util.Map;
 
 public enum Network {
 
-    MAINNET((byte) 0, "mainnet"),
+    MAINNET((byte) 0, "MAINNET"),
 
-    TESTNET((byte) 1, "testnet"),
+    TESTNET((byte) 1, "TESTNET"),
 
-    DEVNET((byte) 2, "devnet");
+    DEVNET((byte) 2, "DEVNET");
 
     Network(byte id, String label) {
         this.id = id;

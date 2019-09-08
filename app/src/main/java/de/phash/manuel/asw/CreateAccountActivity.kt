@@ -37,7 +37,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.key.Key
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.createAccount
 import de.phash.manuel.asw.util.isPasswordCorrect
 import de.phash.manuel.asw.util.isPasswordSet
@@ -56,6 +58,7 @@ class CreateAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         updateViews()
     }
 

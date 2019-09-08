@@ -26,6 +26,8 @@ package de.phash.manuel.asw
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 
 class WatchActivity : AppCompatActivity() {
 
@@ -33,5 +35,7 @@ class WatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_watch)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
+
     }
 }

@@ -36,9 +36,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
 import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.key.CryptoException
 import de.phash.manuel.asw.semux.key.Hex
 import de.phash.manuel.asw.semux.key.Key
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.createAccount
 import de.phash.manuel.asw.util.isPasswordCorrect
 import de.phash.manuel.asw.util.isPasswordSet
@@ -51,6 +53,7 @@ class ImportKeyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_import_key)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
     }
 
     fun importClick(view: View) {

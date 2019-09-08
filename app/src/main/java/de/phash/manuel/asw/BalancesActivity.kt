@@ -39,10 +39,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import de.phash.manuel.asw.database.database
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.Result
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.checkBalanceForWallet
 import kotlinx.android.synthetic.main.activity_balances.*
 import java.math.BigDecimal
@@ -61,12 +61,13 @@ class BalancesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_balances)
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         viewManager = LinearLayoutManager(this)
         viewAdapter = SemuxBalanceAdapter(balancesList)
         balancesTotalAvailable.text = "0 SEM"
         balancesTotalLocked.text = "0 SEM"
-        checkBalanceForWallet(database, this, true)
+        checkBalanceForWallet(this, true)
         recyclerView = findViewById<RecyclerView>(R.id.balancesRecycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

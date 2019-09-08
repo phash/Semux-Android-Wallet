@@ -24,11 +24,21 @@
 
 package de.phash.manuel.asw
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.APIService.Companion.FORCE
+import de.phash.manuel.asw.semux.APIService.Companion.TYP
+import de.phash.manuel.asw.semux.APIService.Companion.checkall
+import de.phash.manuel.asw.semux.key.Network
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -36,6 +46,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
     }
 
     fun onImportKeyClick(view: View) {
@@ -52,6 +63,40 @@ class SettingsActivity : AppCompatActivity() {
 
     fun onCreateAccountClick(view: View) {
         createActivity(this)
+    }
+
+
+    val networks = arrayOf( "MAINNET", "TESTNET");
+
+    fun onNetworkClick(view: View) {
+
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = LayoutInflater.from(this)
+
+        with(dialogBuilder) {
+            setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+                dialog.dismiss()
+            })
+
+            setItems(networks,  DialogInterface.OnClickListener { dialog, which ->
+                changeNetwork(which)
+                dialog.dismiss()
+            })
+
+            show()
+        }
+    }
+
+    private fun changeNetwork(which: Int) {
+        Log.i("SETTINGS", "chosen Networktyp -> $which")
+        when (which){
+            0 -> APIService.changeNetwork(Network.MAINNET)
+            1 -> APIService.changeNetwork(Network.TESTNET)
+        }
+        val intent = Intent(this, APIService::class.java)
+        intent.putExtra(TYP, checkall)
+        intent.putExtra(FORCE, true)
+        startService(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -75,7 +75,7 @@ class ManageActivity : AppCompatActivity() {
     private var password: String = DEFAULT_PW
 
     private fun createContent(password: String) {
-        checkBalanceForWallet(database, this, true)
+        checkBalanceForWallet(this, true)
         this.password = password
     }
 

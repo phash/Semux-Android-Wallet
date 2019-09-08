@@ -33,13 +33,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        app:titleTextColor="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@drawable/toolbar"
         android:elevation="4dp"
         android:theme="@style/Widget.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -101,6 +102,18 @@
             android:background="@drawable/buttonshape"
             android:onClick="onManageClick"
             android:text="@string/manageAccs"
+            android:textAllCaps="true"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button16"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/buttonshape"
+            android:onClick="onNetworkClick"
+            android:text="@string/pickNetwork"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textStyle="bold" />

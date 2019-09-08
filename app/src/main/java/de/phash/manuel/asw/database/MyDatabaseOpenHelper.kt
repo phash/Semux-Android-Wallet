@@ -26,10 +26,12 @@ package de.phash.manuel.asw.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.SemuxAddress
+import de.phash.manuel.asw.semux.key.Network
 import org.jetbrains.anko.db.*
 
-class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 4) {
+class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDatabase.db", null, 5) {
     companion object {
         private var instance: MyDatabaseOpenHelper? = null
 
@@ -46,23 +48,27 @@ class MyDatabaseOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, "SemuxDa
 
     override fun onCreate(db: SQLiteDatabase) {
         // Here you create tables
-        db.createTable("SemuxAddress", true,
+        db.createTable(SEMUXADDRESS_TABLENAME, true,
                 SemuxAddress.COLUMN_ID to INTEGER + PRIMARY_KEY + UNIQUE,
                 SemuxAddress.COLUMN_ADDRESS to TEXT,
                 SemuxAddress.COLUMN_PRIVATEKEY to TEXT,
                 SemuxAddress.COLUMN_SALT to TEXT,
-                SemuxAddress.COLUMN_IV to TEXT)
+                SemuxAddress.COLUMN_IV to TEXT,
+                SemuxAddress.COLUMN_NETWORK to TEXT)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // Here you can upgrade tables, as usual
-        db.dropTable("SemuxAddress", true)
-        db.createTable("SemuxAddress", true,
+        //db.dropTable("SemuxAddress", true)
+
+        db.execSQL("ALTER TABLE SemuxAddress ADD network VARCHAR(32)")
+        db.execSQL("UPDATE SemuxAddress SET network = \"${Network.MAINNET.label()}\" ")
+        /*query("SemuxAddress", true,
                 SemuxAddress.COLUMN_ID to INTEGER + PRIMARY_KEY + UNIQUE,
                 SemuxAddress.COLUMN_ADDRESS to TEXT,
                 SemuxAddress.COLUMN_PRIVATEKEY to TEXT,
                 SemuxAddress.COLUMN_SALT to TEXT,
-                SemuxAddress.COLUMN_IV to TEXT)
+                SemuxAddress.COLUMN_IV to TEXT)*/
     }
 }
 

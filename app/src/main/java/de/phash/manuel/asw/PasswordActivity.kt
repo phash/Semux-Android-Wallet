@@ -33,6 +33,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import de.phash.manuel.asw.database.database
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.activity_passwords.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
@@ -42,6 +44,7 @@ class PasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_passwords)
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
     }
 
     fun onSavePasswordsClick(view: View) {

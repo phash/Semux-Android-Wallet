@@ -29,6 +29,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import de.phash.manuel.asw.semux.APIService
+import de.phash.manuel.asw.semux.key.Network
 import kotlinx.android.synthetic.main.activity_error.*
 import java.util.*
 
@@ -39,7 +41,7 @@ class ErrorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_error)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-
+        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         var error = intent.getStringExtra("errorMessage")
                 ?: "something is not working as intendend..."
         myErorView.text = error

@@ -32,13 +32,16 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        app:titleTextColor="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@drawable/toolbar"
         android:elevation="4dp"
         android:theme="@style/Widget.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="#FFFFFF" />
 
     <ImageView
         android:id="@+id/qrAddressBigImageView"
