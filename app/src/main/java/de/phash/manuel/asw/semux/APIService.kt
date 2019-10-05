@@ -187,13 +187,13 @@ class APIService : IntentService("SemuxService") {
                     val res = response.body()?.string()
                     val account = Gson().fromJson(res, CheckBalance::class.java)
                     var startVal = 0
-                    var endVal = account.result.transactionCount
+                    var endVal = 20/* account.result.transactionCount
                     if (account.result.transactionCount > 20) {
                         startVal = account.result.transactionCount - 20
-                    }
+                    }*/
 
                     val transactionRequest = Request.Builder()
-                            .url("$API_ENDPOINT/account/transactions?address=$address&start=$startVal&end=$endVal")
+                            .url("$API_ENDPOINT/account/transactions?address=$address&from=$startVal&to=$endVal")
                             .addHeader("content-type", "application/json")
                             .addHeader("cache-control", "no-cache")
                             .build()
