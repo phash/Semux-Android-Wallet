@@ -41,6 +41,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
+import de.phash.manuel.asw.semux.APIService.Companion.SEMUXMULTIPLICATOR
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.checkBalanceForWallet
@@ -56,6 +57,7 @@ import java.util.*
 class DashBoardActivity : AppCompatActivity() {
 
     private var balancesMap = HashMap<String, CheckBalance>()
+    private var currPrice = 0.07
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,8 +123,10 @@ class DashBoardActivity : AppCompatActivity() {
 
     private fun updatePrice(intent: Intent) {
         var bundle = intent.extras
-        Log.i("DASHBOARD", "price check -> {$bundle?.getString(APIService.currentPrice)}")
-        currentprice.text = bundle?.getString(APIService.currentPrice)
+        currPrice = bundle?.getDouble(APIService.currentPrice, 0.0) ?: 0.0
+        val ergebnis = "%.4f USD".format(currPrice)
+        Log.i("DASHBOARD", "price check -> $ergebnis")
+        currentprice.text = ergebnis
     }
 
     private fun checkAll(intent: Intent) {
@@ -154,9 +158,12 @@ class DashBoardActivity : AppCompatActivity() {
 
                 val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
                 val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
-
+                val totalInUSD = "%.2f USD".format(total.multiply(BigDecimal.valueOf(currPrice)).divide(SEMUXMULTIPLICATOR))
+                val totalLockedInUSD = "%.2f USD".format(totallocked.multiply(BigDecimal.valueOf(currPrice)).divide(SEMUXMULTIPLICATOR))
                 dashTotal.text = "${SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
                 dashLocked.text = "${SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                dashTotalLockedUsd.text= "(${totalLockedInUSD})"
+                dashTotalUsd.text= "(${totalInUSD})"
 
             } else {
                 Toast.makeText(this@DashBoardActivity, "check failed",

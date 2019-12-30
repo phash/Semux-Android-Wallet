@@ -30,6 +30,14 @@
     android:layout_height="match_parent"
     tools:context=".DashBoardActivity">
 
+    <TextView
+        android:id="@+id/dashTotalLockedUsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/dashLocked"
+        app:layout_constraintTop_toTopOf="@+id/dashLocked" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -190,7 +198,7 @@
 
     <TextView
         android:id="@+id/dashTotal"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -211,7 +219,7 @@
 
     <TextView
         android:id="@+id/dashLocked"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -277,7 +285,7 @@
 
     <TextView
         android:id="@+id/currentprice"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="32dp"
@@ -285,5 +293,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView73"
         app:layout_constraintTop_toTopOf="@+id/textView73" />
+
+    <TextView
+        android:id="@+id/dashTotalUsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/dashTotal"
+        app:layout_constraintTop_toTopOf="@+id/dashTotal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
