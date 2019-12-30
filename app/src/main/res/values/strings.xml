@@ -130,4 +130,5 @@
     <string name="pickAPI">SELECT ENDPOINT</string>
     <string name="semuxMain">SEMUX - MAINNET</string>
     <string name="semuxTest">SEMUX - TESTNET</string>
+    <string name="currPrice">current Price:</string>
 </resources>

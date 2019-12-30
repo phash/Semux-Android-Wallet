@@ -48,15 +48,18 @@ import kotlin.collections.HashMap
 class APIService : IntentService("SemuxService") {
 
     companion object {
-        fun changeNetwork(network: Network){
+        fun changeNetwork(network: Network) {
             Log.i("SETTINGS", "change network to ${network.label()}")
             NETWORK = network
-            when (network){
+            when (network) {
                 Network.MAINNET -> API_ENDPOINT = API_ENDPOINT_MAINNET
                 Network.TESTNET -> API_ENDPOINT = API_ENDPOINT_TESTNET
             }
         }
 
+        const val currentPrice = "currentPrice"
+        const val getprice = "getprice"
+        const val PRICE = "price"
         const val FORCE = "force"
 
         val SEMUXFORMAT = DecimalFormat("0.#########")
@@ -71,6 +74,7 @@ class APIService : IntentService("SemuxService") {
         const val NOTIFICATION_TRANSFER = "de.phash.manuel.asw.semux.transfer"
         const val NOTIFICATION_DELEGATES = "de.phash.manuel.asw.semux.delegates"
         const val NOTIFICATION_ACCOUNTVOTES = "de.phash.manuel.asw.semux.accountvotes"
+        const val NOTIFICATION_CURRENTPRICE = "de.phash.manuel.asw.integration.cmc.calculate"
         const val TRANSACTION_RAW = "transactionraw"
         const val VOTETYPE = "votetype"
 
@@ -116,15 +120,14 @@ class APIService : IntentService("SemuxService") {
     }
 
 
-
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
-        if (intent?.getBooleanExtra(FORCE, false) ?: false) {
+        if (intent?.getBooleanExtra(FORCE, false) == true) {
 
             resetCache()
         }
         addresses.forEach {
-            checkAddressCached(it.address);
+            checkAddressCached(it.address)
         }
 
     }
@@ -260,7 +263,7 @@ class APIService : IntentService("SemuxService") {
         }
     }
 
-    public fun resetCache() {
+    fun resetCache() {
         Log.i("CACHE", "resetCache")
         lastChecked.clear()
     }
@@ -304,8 +307,12 @@ class APIService : IntentService("SemuxService") {
         try {
 
             val address = intent?.getStringExtra(ADDRESS)
+            val force = intent?.getBooleanExtra(FORCE, false) ?: false
             address?.let {
-                checkAddressCached(it)
+                if (force)
+                    checkAddress(it)
+                else
+                    checkAddressCached(it)
             }
         } catch (e: Exception) {
             errorActivity(this@APIService, "API not reachable")
@@ -365,7 +372,7 @@ class APIService : IntentService("SemuxService") {
                 val res = response.body()?.string()
                 if (res != null) {
 
-                    cachedAccounts.put(address, res);
+                    cachedAccounts.put(address, res)
                     Log.i("CHECKADDRESS", "updated cached accounts" + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
                             ?: 0L)) + ")")
                     lastChecked.put(address, Calendar.getInstance().timeInMillis)

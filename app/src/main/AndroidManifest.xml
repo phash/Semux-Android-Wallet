@@ -30,6 +30,8 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service android:name=".integration.cmc.impl.CmCApiServiceImpl" />
+
         <activity
             android:name=".ScanActivity"
             android:configChanges="orientation"
