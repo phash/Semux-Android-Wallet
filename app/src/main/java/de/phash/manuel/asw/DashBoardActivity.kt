@@ -44,6 +44,7 @@ import de.phash.manuel.asw.semux.APIService.Companion.SEMUXFORMAT
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.key.Network
 import de.phash.manuel.asw.util.checkBalanceForWallet
+import de.phash.manuel.asw.util.checkPrice
 import de.phash.manuel.asw.util.isPasswordSet
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import org.jetbrains.anko.alert
@@ -61,8 +62,9 @@ class DashBoardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dash_board)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         checkBalanceForWallet(this, true)
+        checkPrice(this)
         versionView.text = this.packageManager.getPackageInfo(this.packageName, 0).versionName
-        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
+        setTitle(if (APIService.NETWORK == Network.MAINNET) R.string.semuxMain else R.string.semuxTest)
         setPWButton.visibility = if (isPasswordSet(this)) INVISIBLE else VISIBLE
     }
 
@@ -108,43 +110,58 @@ class DashBoardActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            Log.i("RECEIVE", "DashBoard received Broadcast")
-            val bundle = intent.extras
-            if (bundle != null) {
-                val json = bundle.getString(APIService.JSON)
-                val resultCode = bundle.getInt(APIService.RESULT)
-                if (resultCode == Activity.RESULT_OK) {
-                    val account = Gson().fromJson(json, CheckBalance::class.java)
-                    Log.i("RES", json)
+            var type = intent.getStringExtra(APIService.TYP)
+            Log.i("DASHBOARD", "type -> $type")
+            when (type) {
+                APIService.checkall, APIService.check -> checkAll(intent)
+                APIService.currentPrice -> updatePrice(intent)
+            }
+        }
+    }
 
-                    showRecycler()
-                    try {
+    private fun updatePrice(intent: Intent) {
+        var bundle = intent.extras
+        Log.i("DASHBOARD", "price check -> {$bundle?.getString(APIService.currentPrice)}")
+        currentprice.text = bundle?.getString(APIService.currentPrice)
+    }
 
-                        if (balancesMap.containsKey(account.result.address)) {
-                            val oldResult = balancesMap.get(account.result.address)
-                            val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
-                            when {
-                                compareAvailable < 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(oldResult?.result?.available).subtract(BigDecimal(account.result.available)).toPlainString())}").show()
-                                compareAvailable > 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(account.result.available).subtract(BigDecimal(oldResult?.result?.available)).toPlainString())}").show()
-                            }
+    private fun checkAll(intent: Intent) {
+        Log.i("RECEIVE", "DashBoard received Broadcast")
+        val bundle = intent.extras
+        if (bundle != null) {
+            val json = bundle.getString(APIService.JSON)
+            val resultCode = bundle.getInt(APIService.RESULT)
+            if (resultCode == Activity.RESULT_OK) {
+                val account = Gson().fromJson(json, CheckBalance::class.java)
+                Log.i("RES", json)
+
+                showRecycler()
+                try {
+
+                    if (balancesMap.containsKey(account.result.address)) {
+                        val oldResult = balancesMap.get(account.result.address)
+                        val compareAvailable = BigDecimal(oldResult?.result?.available).compareTo(BigDecimal(account.result.available))
+                        when {
+                            compareAvailable < 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(oldResult?.result?.available).subtract(BigDecimal(account.result.available)).toPlainString())}").show()
+                            compareAvailable > 0 -> alert("Incoming Transaction of ${SEMUXFORMAT.format(BigDecimal(account.result.available).subtract(BigDecimal(oldResult?.result?.available)).toPlainString())}").show()
                         }
-                    } catch (e: Exception) {
-                        errorActivity(this@DashBoardActivity, "API not reachable\nPlease try again later!")
                     }
-
-                    balancesMap.put(account.result.address, account)
-
-                    val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
-                    val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
-
-                    dashTotal.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
-                    dashLocked.text = "${APIService.SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
-
-                } else {
-                    Toast.makeText(this@DashBoardActivity, "check failed",
-                            Toast.LENGTH_LONG).show()
-
+                } catch (e: Exception) {
+                    errorActivity(this@DashBoardActivity, "API not reachable\nPlease try again later!")
                 }
+
+                balancesMap.put(account.result.address, account)
+
+                val total = balancesMap.values.map { BigDecimal(it.result.available) }.fold(BigDecimal.ZERO, BigDecimal::add)
+                val totallocked = balancesMap.values.map { BigDecimal(it.result.locked) }.fold(BigDecimal.ZERO, BigDecimal::add)
+
+                dashTotal.text = "${SEMUXFORMAT.format(BigDecimal.ZERO.add(total.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+                dashLocked.text = "${SEMUXFORMAT.format(BigDecimal.ZERO.add(totallocked.divide(APIService.SEMUXMULTIPLICATOR)))} SEM"
+
+            } else {
+                Toast.makeText(this@DashBoardActivity, "check failed",
+                        Toast.LENGTH_LONG).show()
+
             }
         }
     }
@@ -166,6 +183,8 @@ class DashBoardActivity : AppCompatActivity() {
         super.onResume()
         registerReceiver(receiver, IntentFilter(
                 APIService.NOTIFICATION))
+        registerReceiver(receiver, IntentFilter(
+                APIService.NOTIFICATION_CURRENTPRICE))
     }
 
     override fun onPause() {

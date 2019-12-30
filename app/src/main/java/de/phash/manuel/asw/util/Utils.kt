@@ -32,6 +32,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import de.phash.manuel.asw.database.MyDatabaseOpenHelper
+import de.phash.manuel.asw.integration.cmc.impl.CmCApiServiceImpl
 import de.phash.manuel.asw.semux.APIService
 import de.phash.manuel.asw.semux.ManageAccounts
 import de.phash.manuel.asw.semux.SemuxAddress
@@ -93,7 +94,12 @@ fun updateSemuxAddress(db: MyDatabaseOpenHelper, semuxAddress: SemuxAddress) {
     }
 }
 
-
+fun checkPrice(context: Context){
+    Log.i("CMCSERVICE", "call check")
+    val intent = Intent(context, CmCApiServiceImpl::class.java)
+    intent.putExtra(APIService.TYP, APIService.getprice)
+    context.startService(intent)
+}
 fun checkBalanceForWallet(context: Context, force: Boolean = false) {
     try {
 

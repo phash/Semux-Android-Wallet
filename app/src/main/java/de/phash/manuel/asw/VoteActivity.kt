@@ -206,6 +206,7 @@ class VoteActivity : AppCompatActivity() {
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
         intent.putExtra(APIService.ADDRESS, address)
+        intent.putExtra(APIService.FORCE,true)
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)

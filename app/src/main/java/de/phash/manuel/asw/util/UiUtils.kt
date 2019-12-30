@@ -30,7 +30,8 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 
 fun copyToClipboard(context: Context, srcText: String) {
-    val clipboardManager = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+    var clipboardManager = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText("Source Text", srcText)
-    clipboardManager.primaryClip = clipData
+
+    clipboardManager.setPrimaryClip(clipData)
 }
