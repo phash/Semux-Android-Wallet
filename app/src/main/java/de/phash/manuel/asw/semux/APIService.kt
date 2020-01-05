@@ -299,7 +299,6 @@ class APIService : IntentService("SemuxService") {
         } catch (e: Exception) {
             Log.e("API", e.message)
         }
-
     }
 
 
@@ -325,35 +324,36 @@ class APIService : IntentService("SemuxService") {
                 ?: 0L)) + ")")
 
         if (cacheNeedsUpdate(address)) {
-            Log.i("CHECKADDRESSCACHED", "update account  " + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                    ?: 0L)) + ")")
+            Log.i("CHECKADDRESSCACHED", "update account $address lastChecked: $lastChecked (${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                    ?: 0L))} )")
             checkAddress(address)
 
         } else {
-            Log.i("CHECKADDRESSCACHED", "checking cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                    ?: 0L)) + ")")
+            Log.i("CHECKADDRESSCACHED", "update account $address lastChecked: $lastChecked (${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                    ?: 0L))} )")
+
             var cached = cachedAccounts.get(address)
 
             if (cached != null) {
-                Log.i("CHECKADDRESSCACHED", "using cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                        ?: 0L)) + ")")
+                Log.i("CHECKADDRESSCACHED", "update account $address lastChecked: $lastChecked (${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                        ?: 0L))} )")
                 sendNotificationIntent(cached)
             } else {
-                Log.i("CHECKADDRESSCACHED", "update cached values for" + address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                        ?: 0L)) + ")")
+                Log.i("CHECKADDRESSCACHED", "update account $address lastChecked: $lastChecked (${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                        ?: 0L))} )")
                 checkAddress(address)
             }
         }
     }
 
     private fun cacheNeedsUpdate(address: String): Boolean {
-        Log.i("CACHEUPDATE", "cache needs update for " + address)
+        Log.i("CACHEUPDATE", "cache needs update for  $address")
         return lastChecked.get(address) ?: 0L + 30000L < Calendar.getInstance().timeInMillis
     }
 
     private fun checkAddress(address: String) {
-        Log.i("CHECKADDRESS", address + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                ?: 0L)) + ")")
+        Log.i("CHECKADDRESS", "$address  lastChecked: $lastChecked  ${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                ?: 0L))} ")
         val client = OkHttpClient()
         val request = Request.Builder()
                 .url("$API_ENDPOINT/account?address=$address")
@@ -373,8 +373,8 @@ class APIService : IntentService("SemuxService") {
                 if (res != null) {
 
                     cachedAccounts.put(address, res)
-                    Log.i("CHECKADDRESS", "updated cached accounts" + " lastChecked: " + lastChecked + " (" + (Calendar.getInstance().timeInMillis - (lastChecked.get(address)
-                            ?: 0L)) + ")")
+                    Log.i("CHECKADDRESS", "updated cached accounts - lastChecked: $lastChecked (${(Calendar.getInstance().timeInMillis - (lastChecked[address]
+                            ?: 0L))})")
                     lastChecked.put(address, Calendar.getInstance().timeInMillis)
                     sendNotificationIntent(res)
                 }

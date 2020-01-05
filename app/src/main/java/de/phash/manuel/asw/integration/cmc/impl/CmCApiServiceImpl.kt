@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import de.phash.manuel.asw.semux.APIService
 import okhttp3.*
+import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
 import java.io.IOException
 
@@ -30,19 +31,21 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
                 println(res)
                 var contents = arrayOf<String>("", "SEM", "USD")
                 val json = JSONObject(res)
-                val data = json?.getJSONObject("data")
-                println("-------------")
-                println(data.toString())
-                val currency = data.getJSONObject(contents[1].toUpperCase())
-                val quote = currency.getJSONObject("quote")
-                val myErg = quote.getJSONObject(contents[2].toUpperCase()).getDouble("price")
+                if (json.isNull("data")) return ;
+                json.getJSONObject("data").let {
+                    if (StringUtils.isBlank(it.toString())) return
+                    println(it.toString())
+                    val currency = it.getJSONObject(contents[1].toUpperCase())
+                    val quote = currency.getJSONObject("quote")
+                    val myErg = quote.getJSONObject(contents[2].toUpperCase()).getDouble("price")
 
-                Log.i("CMCSERVICE", "current Price {$myErg}")
-                val notificationIntent = Intent(APIService.NOTIFICATION_CURRENTPRICE)
-                notificationIntent.putExtra(APIService.TYP, APIService.currentPrice)
-                notificationIntent.putExtra(APIService.currentPrice, myErg)
+                    Log.i("CMCSERVICE", "current Price {$myErg}")
+                    val notificationIntent = Intent(APIService.NOTIFICATION_CURRENTPRICE)
+                    notificationIntent.putExtra(APIService.TYP, APIService.currentPrice)
+                    notificationIntent.putExtra(APIService.currentPrice, myErg)
 
-                sendBroadcast(notificationIntent)
+                    sendBroadcast(notificationIntent)
+                }
             }
         })
     }
