@@ -41,6 +41,7 @@ import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -57,6 +58,8 @@ class APIService : IntentService("SemuxService") {
             }
         }
 
+        lateinit var instance: APIService
+            private set
         const val currentPrice = "currentPrice"
         const val getprice = "getprice"
         const val PRICE = "price"
@@ -97,9 +100,12 @@ class APIService : IntentService("SemuxService") {
 
         var lastChecked = HashMap<String, Long>()
         var cachedAccounts = HashMap<String, String>()
-
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
 
     override fun onHandleIntent(intent: Intent?) {
 
@@ -116,20 +122,16 @@ class APIService : IntentService("SemuxService") {
 
             "fehler" -> Toast.makeText(this, "Irgendwas lief schief", Toast.LENGTH_SHORT).show()
         }
-
     }
-
 
     private fun checkAll(intent: Intent?) {
         val addresses = getAddresses(database)
         if (intent?.getBooleanExtra(FORCE, false) == true) {
-
             resetCache()
         }
         addresses.forEach {
             checkAddressCached(it.address)
         }
-
     }
 
     private fun loadDelegates(intent: Intent?) {
@@ -159,7 +161,6 @@ class APIService : IntentService("SemuxService") {
                 notificationIntent.putExtra(JSON, res)
                 notificationIntent.putExtra("address", intent?.getStringExtra("address"))
                 sendBroadcast(notificationIntent)
-
             }
         })
     }
