@@ -37,7 +37,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         timer = Timer()
-        timer.scheduleAtFixedRate(UpdateBalTask(), 250, 28000)
+        timer.scheduleAtFixedRate(UpdateBalTask(), 250, 30000)
 
     }
 
@@ -46,7 +46,6 @@ class App : Application() {
         Log.i("UPDATEBALANCE", "updateBalances")
         checkBalanceForWallet(this, true)
     }
-
 
     inner class UpdateBalTask : TimerTask() {
         override fun run() {

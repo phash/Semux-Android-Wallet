@@ -58,7 +58,7 @@ class TransactionsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
+        setTitle(if (APIService.NETWORK == Network.MAINNET) R.string.semuxMain else R.string.semuxTest)
         viewManager = LinearLayoutManager(this)
         viewAdapter = TransactionAdapter(transactionsList)
         loadTransactions(intent.getStringExtra("address"))
@@ -104,10 +104,12 @@ class TransactionsActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     val transactionsResult = Gson().fromJson(json, TransactionsResult::class.java)
                     Log.i("TRX", json)
-                    Log.i("JSON", "transactions: ${transactionsResult.result.size}")
-                    if (transactionsResult.result.isNotEmpty()) {
-                        noTransactionsTextView.visibility = INVISIBLE
-
+                    Log.i("JSON", "transactions: ${transactionsResult?.result?.size
+                            ?: "no Transactions"}")
+                    transactionsResult?.result?.let {
+                        if (it.isNotEmpty()) {
+                            noTransactionsTextView.visibility = INVISIBLE
+                        }
                     }
                     transactionsList.clear()
                     transactionsList.addAll(transactionsResult.result)
@@ -118,7 +120,6 @@ class TransactionsActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@TransactionsActivity, "check failed",
                             Toast.LENGTH_LONG).show()
-
                 }
             }
         }
