@@ -61,15 +61,18 @@ class SelectDelegate : AppCompatActivity() {
         setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
         address = intent.getStringExtra("address")
         viewManager = LinearLayoutManager(this)
+
         checkOwnSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked -> checkDelegates(address) })
 
         viewAdapter = DelegatesAdapter(delegatesResult, ownVotes, address, checkOwnSwitch.isChecked)
+
         checkDelegates(address)
         recyclerView = findViewById<RecyclerView>(R.id.delegatesRecylcer).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
+        viewAdapter.notifyDataSetChanged()
     }
 
     fun checkDelegates(address: String) {
@@ -105,8 +108,6 @@ class SelectDelegate : AppCompatActivity() {
                 APIService.accountvotes -> updateVotes(context, intent)
                 else -> Log.i("RECEIVE", "SelectDelegate received Broadcast: ${intent.getStringExtra(APIService.TYP)} - but did not match any case!")
             }
-
-
         }
     }
 
@@ -125,7 +126,6 @@ class SelectDelegate : AppCompatActivity() {
             } else {
                 Toast.makeText(this@SelectDelegate, "check votes failed",
                         Toast.LENGTH_LONG).show()
-
             }
         }
     }
@@ -153,7 +153,6 @@ class SelectDelegate : AppCompatActivity() {
             } else {
                 Toast.makeText(this@SelectDelegate, "check failed",
                         Toast.LENGTH_LONG).show()
-
             }
         }
     }
@@ -166,7 +165,6 @@ class SelectDelegate : AppCompatActivity() {
                     }.firstOrNull() != null
                 }
         return res
-
     }
 
 
