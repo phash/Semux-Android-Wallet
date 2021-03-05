@@ -55,7 +55,7 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
         Log.i("CMCSERVICE", "calculate")
         val client = OkHttpClient()
         val request = Request.Builder()
-                .addHeader("X-CMC_PRO_API_KEY", "")
+                .addHeader("X-CMC_PRO_API_KEY", "5d7e7efc-49a6-4381-8d50-240c10977a06")
                 // .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=500&convert=USD")
                 .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SEM&convert=$conversionUnit")
                 .build()
