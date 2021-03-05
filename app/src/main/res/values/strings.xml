@@ -70,7 +70,7 @@
     <string name="contribute">Feel free to contribute to this open source project. You find it on https://github.com/phash/ASW</string>
     <string name="credits">CREDITS</string>
     <string name="semuxOrg">www.semux.org</string>
-    <string name="api">API Node by mdodong on sempy.online</string>
+    <string name="api">API Node by honeycrpto semux.info</string>
     <string name="security">Always back up your private keys!\nNever tell them anybody!\nWe cannot recover your keys!\nKeep them save!</string>
     <string name="wishes">For wishes, feature request or issues please use github</string>
     <string name="dashboard">Dashboard</string>
@@ -131,4 +131,5 @@
     <string name="semuxMain">SEMUX - MAINNET</string>
     <string name="semuxTest">SEMUX - TESTNET</string>
     <string name="currPrice">current Price:</string>
+    <string name="join_discord">join discord</string>
 </resources>

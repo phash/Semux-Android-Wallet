@@ -31,6 +31,18 @@
     tools:context=".DashBoardActivity">
 
     <TextView
+        android:id="@+id/textView75"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="onDiscordClick"
+        android:text="@string/join_discord"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/dashboardCreate"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardCreate" />
+
+    <TextView
         android:id="@+id/dashTotalLockedUsd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -261,15 +273,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
         android:onClick="onGetSemux"
         android:text="@string/buy"
-        app:layout_constraintBottom_toTopOf="@+id/versionView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dashboardCreate" />
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/dashboardImport"
+        app:layout_constraintTop_toBottomOf="@+id/dashboardImport" />
 
     <TextView
         android:id="@+id/textView73"

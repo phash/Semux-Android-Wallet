@@ -75,6 +75,9 @@ class DashBoardActivity : AppCompatActivity() {
         checkBalanceForWallet(this, true)
     }
 
+    fun onDiscordClick(view: View) {
+        browse("https://discord.gg/qQVckKZ")
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
