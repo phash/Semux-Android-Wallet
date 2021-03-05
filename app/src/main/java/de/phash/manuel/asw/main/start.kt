@@ -33,7 +33,7 @@ import java.io.IOException
 import java.math.BigDecimal
 
 
-fun main(args: Array<String>) {
+fun main() {
     var key = Key()
     val address = key.toAddressString()
     println("Call $address")

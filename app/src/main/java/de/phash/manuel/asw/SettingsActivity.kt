@@ -74,12 +74,12 @@ class SettingsActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
 
         with(dialogBuilder) {
-            setCancelable(true).setOnCancelListener(DialogInterface.OnCancelListener { dialog ->
+            setCancelable(true).setOnCancelListener({ dialog ->
                 dialog.dismiss()
             })
 
-            setItems(networks,  DialogInterface.OnClickListener { dialog, which ->
-                changeNetwork(which)
+            setItems(networks, { dialog, which ->
+              //  changeNetwork(which)
 
                 dialog.dismiss()
             })
@@ -87,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
             show()
         }
     }
-
+/* no longer available
     private fun changeNetwork(which: Int) {
         Log.i("SETTINGS", "chosen Networktyp -> $which")
         when (which){
@@ -100,7 +100,7 @@ class SettingsActivity : AppCompatActivity() {
         intent.putExtra(FORCE, true)
         startService(intent)
     }
-
+*/
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
