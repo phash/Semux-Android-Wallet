@@ -53,7 +53,7 @@ class SingleBalanceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_single_balance)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
         setUp()
 
     }
@@ -118,7 +118,7 @@ class SingleBalanceActivity : AppCompatActivity() {
                 val resultCode = bundle.getInt(APIService.RESULT)
                 if (resultCode == Activity.RESULT_OK) {
                     val account = Gson().fromJson(json, CheckBalance::class.java)
-                    Log.i("RES", json)
+                    json?.let { Log.i("RES", it) }
 
                     if (account.result.address.equals(address)) {
                         singleBalanceAvailable.text = APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR)) + " SEM"

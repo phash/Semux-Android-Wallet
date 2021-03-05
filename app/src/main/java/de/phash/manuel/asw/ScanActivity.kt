@@ -22,7 +22,7 @@ class ScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
         targetAddress = findViewById(R.id.targetAddress)
    //     txtSiteName = findViewById(R.id.site_name)
 

@@ -31,7 +31,7 @@ apply plugin: 'kotlin-android-extensions'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "de.phash.manuel.asw"
         minSdkVersion 26

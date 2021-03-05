@@ -67,7 +67,7 @@ class VoteActivity : AppCompatActivity() {
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(voteReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
         checkAccount()
     }
 
@@ -233,7 +233,7 @@ class VoteActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 //  val account = Gson().fromJson(json, CheckBalance::class.java)
                 val tx = Gson().fromJson(json, RawTransaction::class.java)
-                Log.i("SENDTX", json)
+                json?.let { Log.i("SENDTX", it) }
                 if (tx.success) {
 
                     voteAmountEditView.text.clear()
@@ -258,7 +258,7 @@ class VoteActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
-                Log.i("RES", json)
+                json?.let { Log.i("RES", it) }
                 if (account.result.address.equals(address)) {
                     nonce = account.result.nonce
 

@@ -43,9 +43,9 @@ class QrViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_qr_view)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
         qrAddressAddress.text = address
-        createQR(intent.getStringExtra("address"))
+        intent.getStringExtra("address")?.let { createQR(it) }
     }
 
     private fun createQR(address: String) {

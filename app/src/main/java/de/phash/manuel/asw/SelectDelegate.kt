@@ -59,7 +59,7 @@ class SelectDelegate : AppCompatActivity() {
         setContentView(R.layout.activity_select_delegate)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
         viewManager = LinearLayoutManager(this)
 
         checkOwnSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked -> checkDelegates(address) })

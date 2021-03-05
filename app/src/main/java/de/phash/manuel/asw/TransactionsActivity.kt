@@ -103,7 +103,7 @@ class TransactionsActivity : AppCompatActivity() {
                 val resultCode = bundle.getInt(APIService.RESULT)
                 if (resultCode == Activity.RESULT_OK) {
                     val transactionsResult = Gson().fromJson(json, TransactionsResult::class.java)
-                    Log.i("TRX", json)
+                    json?.let { Log.i("TRX", it) }
                     Log.i("JSON", "transactions: ${transactionsResult?.result?.size
                             ?: "no Transactions"}")
                     transactionsResult?.result?.let {

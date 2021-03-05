@@ -137,7 +137,7 @@ class DashBoardActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
-                Log.i("RES", json)
+                json?.let { Log.i("RES", it) }
 
                 showRecycler()
                 try {

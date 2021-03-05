@@ -153,7 +153,7 @@ class APIService : IntentService("SemuxService") {
 
             override fun onResponse(call: Call, response: Response) {
                 val res = response.body()?.string()
-                Log.i("DELEGATES", res)
+                res?.let { Log.i("DELEGATES", it) }
 
                 val notificationIntent = Intent(NOTIFICATION_DELEGATES)
                 notificationIntent.putExtra(TYP, delegates)
@@ -220,7 +220,7 @@ class APIService : IntentService("SemuxService") {
                 }
             })
         } catch (e: java.lang.Exception) {
-            Log.e("API", e.message)
+            e.message?.let { Log.e("API", it) }
         }
 
     }
@@ -289,7 +289,7 @@ class APIService : IntentService("SemuxService") {
 
                 override fun onResponse(call: Call, response: Response) {
                     val res = response.body()?.string()
-                    Log.i("OWNVOTES", res)
+                    res?.let { Log.i("OWNVOTES", it) }
                     val notificationIntent = Intent(NOTIFICATION_ACCOUNTVOTES)
                     notificationIntent.putExtra(TYP, accountvotes)
                     notificationIntent.putExtra(RESULT, Activity.RESULT_OK)
@@ -298,7 +298,7 @@ class APIService : IntentService("SemuxService") {
                 }
             })
         } catch (e: Exception) {
-            Log.e("API", e.message)
+            e.message?.let { Log.e("API", it) }
         }
     }
 

@@ -70,7 +70,7 @@ class SendActivity : AppCompatActivity() {
         sendAmountEditView.showSoftInputOnFocus = true
         sendReceivingAddressEditView.showSoftInputOnFocus = true
 
-        address = intent.getStringExtra("address")
+        address = intent.getStringExtra("address").toString()
 
         sendReceivingAddressEditView.setText( intent.getStringExtra("targetAddress")?:"")
 
@@ -234,7 +234,7 @@ class SendActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val tx = Gson().fromJson(json, RawTransaction::class.java)
-                Log.i("SENDTX", json)
+                json?.let { Log.i("SENDTX", it) }
                 if (tx.success) {
 
                     sendAmountEditView.setText("", TextView.BufferType.EDITABLE)
@@ -261,7 +261,7 @@ class SendActivity : AppCompatActivity() {
             val resultCode = bundle.getInt(APIService.RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
-                Log.i("RES", json)
+                json?.let { Log.i("RES", it) }
                 if (account.result.address.equals(address)) {
 
                     nonce = account.result.nonce
