@@ -67,7 +67,7 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
 
             override fun onResponse(call: Call, response: Response) {
 
-                val res = response.body()?.string()
+                val res = response.body?.string()
                 println(res)
                 var contents = arrayOf<String>("", "SEM", conversionUnit)
                 val json = JSONObject(res)

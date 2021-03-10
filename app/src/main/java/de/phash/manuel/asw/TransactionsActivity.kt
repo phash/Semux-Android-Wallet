@@ -34,6 +34,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,9 +67,7 @@ class TransactionsActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,12 +107,14 @@ class TransactionsActivity : AppCompatActivity() {
                             ?: "no Transactions"}")
                     transactionsResult?.result?.let {
                         if (it.isNotEmpty()) {
+                            transactionsList.clear()
+                            transactionsList.addAll(transactionsResult.result)
+                            transactionsList.sortByDescending { it.nonce }
                             noTransactionsTextView.visibility = INVISIBLE
-                        }
+                        } else
+                            noTransactionsTextView.visibility = VISIBLE
+                        loadingTx.visibility = INVISIBLE
                     }
-                    transactionsList.clear()
-                    transactionsList.addAll(transactionsResult.result)
-                    transactionsList.sortByDescending { it.timestamp }
                     // Or: transactionsList.sortedWith(compareBy(Result::timestamp))
                     Log.i("TRX", "" + transactionsList.size)
                     viewAdapter.notifyDataSetChanged()

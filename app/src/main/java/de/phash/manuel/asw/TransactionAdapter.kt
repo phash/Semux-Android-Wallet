@@ -69,7 +69,7 @@ class TransactionAdapter(private val myDataset: ArrayList<Result>) :
     }
 
     override fun getItemCount() = myDataset.size
-    private fun getDateTime(date: String): String? {
+    private fun getDateTime(date: Long): String? {
         try {
             val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm:ss z", Locale.getDefault())
             val netDate = Date(date.toLong())

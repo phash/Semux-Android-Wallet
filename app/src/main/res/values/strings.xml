@@ -132,4 +132,5 @@
     <string name="semuxTest">SEMUX - TESTNET</string>
     <string name="currPrice">current Price:</string>
     <string name="join_discord">join discord</string>
+    <string name="loading">loading</string>
 </resources>

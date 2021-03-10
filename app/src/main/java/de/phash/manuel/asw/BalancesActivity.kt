@@ -34,6 +34,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,6 +85,10 @@ class BalancesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         unregisterReceiver(receiver)
+    }
+
+    fun onCreateAccountClick(view: View) {
+        createActivity(this)
     }
 
     private val receiver = object : BroadcastReceiver() {

@@ -51,7 +51,7 @@ fun main() {
         }
 
         override fun onResponse(call: Call, response: Response) {
-            val res = response.body()?.string()
+            val res = response.body?.string()
 
             var balance = Gson().fromJson(res, CheckBalance::class.java)
             var avail = BigDecimal(balance.result.available)

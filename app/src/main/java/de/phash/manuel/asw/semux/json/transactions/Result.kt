@@ -7,8 +7,8 @@ data class Result(
         val gas: String,
         val gasPrice: String,
         val hash: String,
-        val nonce: String,
-        val timestamp: String,
+        val nonce: Int,
+        val timestamp: Long,
         val to: String,
         val type: String,
         val value: String

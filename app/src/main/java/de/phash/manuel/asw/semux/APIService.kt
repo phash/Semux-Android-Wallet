@@ -41,7 +41,6 @@ import okhttp3.*
 import java.io.IOException
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -152,7 +151,7 @@ class APIService : IntentService("SemuxService") {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val res = response.body()?.string()
+                val res = response.body?.string()
                 res?.let { Log.i("DELEGATES", it) }
 
                 val notificationIntent = Intent(NOTIFICATION_DELEGATES)
@@ -169,18 +168,13 @@ class APIService : IntentService("SemuxService") {
     //This only works for addresses given
     private fun loadTransactions(intent: Intent?) {
         try {
-
             val address = intent?.getStringExtra(ADDRESS)
-
             Log.i("TRX", "address: $address")
-
             val client = OkHttpClient()
-
             val request = Request.Builder()
                     .url("$API_ENDPOINT/account?address=${address}")
                     .addHeader("content-type", "application/json")
                     .addHeader("cache-control", "no-cache")
-
                     .build()
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -188,27 +182,24 @@ class APIService : IntentService("SemuxService") {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val res = response.body()?.string()
+                    val res = response.body?.string()
                     val account = Gson().fromJson(res, CheckBalance::class.java)
-                    var startVal = 0
-                    var endVal = 20/* account.result.transactionCount
-                    if (account.result.transactionCount > 20) {
-                        startVal = account.result.transactionCount - 20
-                    }*/
+                    var from = 0
+                    var to =  20  // -> can be too big! account.result.transactionCount
 
                     val transactionRequest = Request.Builder()
-                            .url("$API_ENDPOINT/account/transactions?address=$address&from=$startVal&to=$endVal")
+                            .url("$API_ENDPOINT/account/transactions?address=$address&from=$from&to=$to")
                             .addHeader("content-type", "application/json")
                             .addHeader("cache-control", "no-cache")
                             .build()
-
+                    Log.i("TRX", transactionRequest.url.toString())
                     client.newCall(transactionRequest).enqueue(object : Callback {
                         override fun onFailure(call: Call, e: IOException) {
                             Log.i("TRX", call.toString())
                         }
 
                         override fun onResponse(call: Call, response: Response) {
-                            val innerResult = response.body()?.string()
+                            val innerResult = response.body?.string()
                             Log.i("TRX", "result-> $innerResult")
                             val notificationIntent = Intent(NOTIFICATION_TRANSACTION)
                             notificationIntent.putExtra(TYP, transactions)
@@ -252,7 +243,7 @@ class APIService : IntentService("SemuxService") {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val res = response.body()?.string()
+                    val res = response.body?.string()
 
                     val responseIntent = Intent(NOTIFICATION_TRANSFER)
                     responseIntent.putExtra(TYP, transfer)
@@ -288,7 +279,7 @@ class APIService : IntentService("SemuxService") {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val res = response.body()?.string()
+                    val res = response.body?.string()
                     res?.let { Log.i("OWNVOTES", it) }
                     val notificationIntent = Intent(NOTIFICATION_ACCOUNTVOTES)
                     notificationIntent.putExtra(TYP, accountvotes)
@@ -370,7 +361,7 @@ class APIService : IntentService("SemuxService") {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val res = response.body()?.string()
+                val res = response.body?.string()
                 if (res != null) {
 
                     cachedAccounts.put(address, res)
