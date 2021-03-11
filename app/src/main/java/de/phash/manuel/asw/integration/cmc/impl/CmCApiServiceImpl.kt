@@ -3,18 +3,14 @@ package de.phash.manuel.asw.integration.cmc.impl
 
 import android.app.IntentService
 import android.content.Intent
-import android.content.res.AssetManager
 import android.util.Log
-import android.view.inspector.PropertyReader
 import de.phash.manuel.asw.R
 import de.phash.manuel.asw.semux.APIService
 import okhttp3.*
 import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
 import java.io.IOException
-import java.io.InputStream
 import java.time.LocalDateTime
-import java.util.*
 
 
 class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
@@ -23,24 +19,20 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
         lateinit var instance: CmCApiServiceImpl
             private set
 
-        //=  Properties().getProperty("cmc")//  "5d7e7efc-49a6-4381-8d50-240c10977a06"
         var lastPriceCheck: LocalDateTime? = null
         var lastPrice: Double = 0.0
         var conversionUnit = "USD"
 
-
     }
 
     override fun onCreate() {
-
         super.onCreate()
         instance = this
-
     }
 
     fun checkPrice(intent: Intent?) {
         Log.i("CMCSERVICE", "lastprice: $lastPrice")
-        if (lastPrice == 0.0 ) {
+        if (lastPrice == 0.0) {
             calculate(intent)
         }
         Log.i("CMCSERVICE", "check cache")
@@ -49,54 +41,62 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
             if (it.plusMinutes(5L).isBefore(LocalDateTime.now())) {
                 Log.i("CMCSERVICE", "renew cache - last checked $lastPriceCheck")
                 calculate(intent)
-            } else{
+            } else {
 
                 Log.i("CMCSERVICE", "using cached values")
                 sendAnswer(lastPrice)
             }
         } ?: run {
             Log.i("CMCSERVICE", "initial run")
-            calculate(intent)}
+            calculate(intent)
+        }
     }
 
     fun calculate(intent: Intent?) {
         Log.i("CMCSERVICE", "calculate")
         val client = OkHttpClient()
-        var cmcApiKey =  getString(R.string.cmc)
-        val request = cmcApiKey?.let {
+        // you will need a cmc-property in strings.xml oder add a file named keys.xml and add:
+        /*
+            <?xml version="1.0" encoding="utf-8"?>
+            <resources>
+            <string name="cmc">here comes your API key</string>
+            </resources>
+        */
+        var cmcApiKey = getString(R.string.cmc)
+        val request = cmcApiKey.let {
             Request.Builder()
-                .addHeader("X-CMC_PRO_API_KEY", it)
-                // .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=500&convert=USD")
-                .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SEM&convert=$conversionUnit")
-                .build()
+                    .addHeader("X-CMC_PRO_API_KEY", it)
+                    // .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=500&convert=USD")
+                    .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SEM&convert=$conversionUnit")
+                    .build()
         }
 
-        request?.let {
+        request.let {
             client.newCall(it).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println(call.toString())
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-
-                val res = response.body?.string()
-                println(res)
-                var contents = arrayOf<String>("", "SEM", conversionUnit)
-                val json = JSONObject(res)
-                if (json.isNull("data")) return
-                json.getJSONObject("data").let {
-                    if (StringUtils.isBlank(it.toString())) return
-                    println(it.toString())
-                    val currency = it.getJSONObject(contents[1].toUpperCase())
-                    val quote = currency.getJSONObject("quote")
-                    val myErg = quote.getJSONObject(contents[2].toUpperCase()).getDouble("price")
-                    lastPrice = myErg
-                    lastPriceCheck = LocalDateTime.now()
-                    Log.i("CMCSERVICE", "current Price {$myErg}")
-                    sendAnswer(myErg)
+                override fun onFailure(call: Call, e: IOException) {
+                    println(call.toString())
                 }
-            }
-        })
+
+                override fun onResponse(call: Call, response: Response) {
+
+                    val res = response.body?.string()
+                    println(res)
+                    var contents = arrayOf<String>("", "SEM", conversionUnit)
+                    val json = JSONObject(res)
+                    if (json.isNull("data")) return
+                    json.getJSONObject("data").let {
+                        if (StringUtils.isBlank(it.toString())) return
+                        println(it.toString())
+                        val currency = it.getJSONObject(contents[1].toUpperCase())
+                        val quote = currency.getJSONObject("quote")
+                        val myErg = quote.getJSONObject(contents[2].toUpperCase()).getDouble("price")
+                        lastPrice = myErg
+                        lastPriceCheck = LocalDateTime.now()
+                        Log.i("CMCSERVICE", "current Price {$myErg}")
+                        sendAnswer(myErg)
+                    }
+                }
+            })
         }
     }
 
