@@ -2,10 +2,11 @@ package de.phash.manuel.asw.integration.cmc.impl
 
 
 import android.app.IntentService
-import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
 import android.util.Log
+import android.view.inspector.PropertyReader
+import de.phash.manuel.asw.R
 import de.phash.manuel.asw.semux.APIService
 import okhttp3.*
 import org.apache.commons.lang3.StringUtils
@@ -17,21 +18,24 @@ import java.util.*
 
 
 class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
-    val cmcApiKey =  ""
 
     companion object {
         lateinit var instance: CmCApiServiceImpl
             private set
 
+        //=  Properties().getProperty("cmc")//  "5d7e7efc-49a6-4381-8d50-240c10977a06"
         var lastPriceCheck: LocalDateTime? = null
         var lastPrice: Double = 0.0
         var conversionUnit = "USD"
 
+
     }
 
     override fun onCreate() {
+
         super.onCreate()
         instance = this
+
     }
 
     fun checkPrice(intent: Intent?) {
@@ -58,14 +62,17 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
     fun calculate(intent: Intent?) {
         Log.i("CMCSERVICE", "calculate")
         val client = OkHttpClient()
-
-        val request = Request.Builder()
-                .addHeader("X-CMC_PRO_API_KEY", cmcApiKey)
+        var cmcApiKey =  getString(R.string.cmc)
+        val request = cmcApiKey?.let {
+            Request.Builder()
+                .addHeader("X-CMC_PRO_API_KEY", it)
                 // .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=500&convert=USD")
                 .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SEM&convert=$conversionUnit")
                 .build()
+        }
 
-        client.newCall(request).enqueue(object : Callback {
+        request?.let {
+            client.newCall(it).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 println(call.toString())
             }
@@ -90,6 +97,7 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
                 }
             }
         })
+        }
     }
 
     private fun sendAnswer(myErg: Double) {
