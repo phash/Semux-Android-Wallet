@@ -2,27 +2,31 @@ package de.phash.manuel.asw.integration.cmc.impl
 
 
 import android.app.IntentService
+import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
 import android.util.Log
 import de.phash.manuel.asw.semux.APIService
 import okhttp3.*
 import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
 import java.io.IOException
+import java.io.InputStream
 import java.time.LocalDateTime
+import java.util.*
+
 
 class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
+    val cmcApiKey =  ""
 
     companion object {
-
         lateinit var instance: CmCApiServiceImpl
             private set
 
         var lastPriceCheck: LocalDateTime? = null
-
         var lastPrice: Double = 0.0
-
         var conversionUnit = "USD"
+
     }
 
     override fun onCreate() {
@@ -54,8 +58,9 @@ class CmCApiServiceImpl : IntentService("CmCApiServiceImpl") {
     fun calculate(intent: Intent?) {
         Log.i("CMCSERVICE", "calculate")
         val client = OkHttpClient()
+
         val request = Request.Builder()
-                .addHeader("X-CMC_PRO_API_KEY", "")
+                .addHeader("X-CMC_PRO_API_KEY", cmcApiKey)
                 // .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=500&convert=USD")
                 .url("https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SEM&convert=$conversionUnit")
                 .build()
