@@ -45,6 +45,7 @@ import de.phash.manuel.asw.semux.APIService.Companion.SEMUXMULTIPLICATOR
 import de.phash.manuel.asw.semux.json.CheckBalance
 import de.phash.manuel.asw.semux.json.transactionraw.RawTransaction
 import de.phash.manuel.asw.semux.key.*
+import de.phash.manuel.asw.semux.sendTransaction
 import de.phash.manuel.asw.util.*
 import kotlinx.android.synthetic.main.activity_send.*
 import kotlinx.android.synthetic.main.password_prompt.view.*
@@ -140,7 +141,7 @@ class SendActivity : AppCompatActivity() {
     }
 
 
-    private fun createTransaction(password: String) {
+    public fun createTransaction(password: String) {
         try {
 
             val receiver = Hex.decode0x(sendReceivingAddressEditView.text.toString())
@@ -158,7 +159,7 @@ class SendActivity : AppCompatActivity() {
 
             val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
             val signedTx = transaction.sign(senderPkey)
-            sendTransaction(signedTx)
+            sendTransaction(signedTx, this)
 
 
         } catch (e: CryptoException) {
@@ -171,18 +172,7 @@ class SendActivity : AppCompatActivity() {
     }
 
 
-    private fun sendTransaction(transaction: Transaction) {
-        var raw = Hex.encode0x(transaction.toBytes())
-        Log.i("SEND", raw)
-        val intent = Intent(this, APIService::class.java)
-        // add infos for the service which file to download and where to store
-        intent.putExtra(APIService.FORCE, true)
-        intent.putExtra(APIService.TRANSACTION_RAW, raw)
-        intent.putExtra(APIService.TYP,
-                APIService.transfer)
-        startService(intent)
 
-    }
 
     fun onScanClicked(view: View) {
         scanActivity(this, address)
