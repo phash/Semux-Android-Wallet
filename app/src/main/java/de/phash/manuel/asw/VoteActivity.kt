@@ -59,6 +59,7 @@ class VoteActivity : AppCompatActivity() {
     var address = ""
     var nonce = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
         setSupportActionBar(findViewById(R.id.my_toolbar))
