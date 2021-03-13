@@ -32,13 +32,16 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
-        app:titleTextColor="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@drawable/toolbar"
         android:elevation="4dp"
         android:theme="@style/Widget.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="#FFFFFF" />
 
     <Button
         android:id="@+id/readQRButton"
@@ -76,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="48dp"
         android:contentDescription="@string/address"
         android:lines="2"
         android:maxLines="2"
@@ -137,14 +140,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/AmountTOVote"
-        android:inputType="numberDecimal"
         android:importantForAutofill="no"
+        android:inputType="numberDecimal"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/textView60"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     <TextView
@@ -176,10 +179,14 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="@string/delegatesAddress"
-        android:inputType="text"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <TextView
@@ -243,6 +250,7 @@
         android:id="@+id/imageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/selectDelegate"
         android:onClick="onChoseDelegateClick"
