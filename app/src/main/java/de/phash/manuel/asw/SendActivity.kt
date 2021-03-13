@@ -54,14 +54,14 @@ import java.math.BigDecimal
 class SendActivity : AppCompatActivity() {
 
     var address = ""
-    private var nonce: String? = null
+    private var nonce = 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        setTitle(if (APIService.NETWORK == Network.MAINNET)  R.string.semuxMain else R.string.semuxTest)
+        setTitle(if (APIService.NETWORK == Network.MAINNET) R.string.semuxMain else R.string.semuxTest)
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(sendReceivingAddressEditView, InputMethodManager.SHOW_FORCED)
         imm.showSoftInput(sendAmountEditView, InputMethodManager.SHOW_FORCED)
@@ -72,7 +72,7 @@ class SendActivity : AppCompatActivity() {
 
         address = intent.getStringExtra("address").toString()
 
-        sendReceivingAddressEditView.setText( intent.getStringExtra("targetAddress")?:"")
+        sendReceivingAddressEditView.setText(intent.getStringExtra("targetAddress") ?: "")
 
         checkAccount()
     }
@@ -156,12 +156,9 @@ class SendActivity : AppCompatActivity() {
             val type = TransactionType.TRANSFER
             Log.i("SENDTX", "type = ${type.name}")
 
-            nonce.let {
-                val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
-                val signedTx = transaction.sign(senderPkey)
-                sendTransaction(signedTx)
-
-            }
+            val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+            val signedTx = transaction.sign(senderPkey)
+            sendTransaction(signedTx)
 
 
         } catch (e: CryptoException) {
@@ -186,7 +183,8 @@ class SendActivity : AppCompatActivity() {
         startService(intent)
 
     }
-    fun onScanClicked(view: View){
+
+    fun onScanClicked(view: View) {
         scanActivity(this, address)
     }
 
@@ -208,7 +206,7 @@ class SendActivity : AppCompatActivity() {
         val intent = Intent(this, APIService::class.java)
         // add infos for the service which file to download and where to store
         intent.putExtra(APIService.ADDRESS, address)
-        intent.putExtra(APIService.FORCE,true)
+        intent.putExtra(APIService.FORCE, true)
         intent.putExtra(APIService.TYP,
                 APIService.check)
         startService(intent)
@@ -246,12 +244,10 @@ class SendActivity : AppCompatActivity() {
                     Toast.makeText(this@SendActivity,
                             tx.message,
                             Toast.LENGTH_LONG).show()
-
                 }
             } else {
                 Toast.makeText(this@SendActivity, "transfer failed",
                         Toast.LENGTH_LONG).show()
-
             }
         }
 
@@ -263,7 +259,6 @@ class SendActivity : AppCompatActivity() {
                 val account = Gson().fromJson(json, CheckBalance::class.java)
                 json?.let { Log.i("RES", it) }
                 if (account.result.address.equals(address)) {
-
                     nonce = account.result.nonce
                     sendAddressTextView.text = address
                     sendAvailableTextView.text = "${APIService.SEMUXFORMAT.format(BigDecimal(account.result.available).divide(APIService.SEMUXMULTIPLICATOR))} SEM"

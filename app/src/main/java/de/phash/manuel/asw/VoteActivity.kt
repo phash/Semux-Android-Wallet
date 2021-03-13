@@ -57,7 +57,7 @@ import java.math.BigDecimal
 class VoteActivity : AppCompatActivity() {
 
     var address = ""
-    var nonce: String? = null
+    var nonce = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
@@ -157,7 +157,7 @@ class VoteActivity : AppCompatActivity() {
             Log.i("VOTETX", "type = ${type.name}")
 
             nonce.let {
-                val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, nonce!!.toLong(), System.currentTimeMillis(), Bytes.EMPTY_BYTES)
+                val transaction = Transaction(APIService.NETWORK, type, receiver, amount, FEE, it, System.currentTimeMillis(), Bytes.EMPTY_BYTES)
                 val signedTx = transaction.sign(senderPkey)
                 voteTransaction(signedTx)
             }
